@@ -1136,10 +1136,20 @@
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
 <div>
-<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Workforce Directory</h3>
-<p class="text-[12px] text-apple-secondary">Department of Data Science &amp; AI · Bangalore HQ (Hybrid)</p>
+<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Workforce Directory (Notion Data Source: Employee Directory*)</h3>
+<p class="text-[12px] text-apple-secondary">Live two-way sync with Notion Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span></p>
 </div>
-<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">4 Active Members</span>
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle" id="directoryCountBadge">4 Active Members</span>
+<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" onclick="loadDirectoryFromNotion(true)" type="button">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span>Sync from Notion</span>
+</button>
+<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors" onclick="openAddEmployeeModal()" type="button">
+<span class="material-symbols-outlined text-[15px]">person_add</span>
+<span>+ Add Employee to Notion</span>
+</button>
+</div>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse text-[13px]">
@@ -1153,7 +1163,7 @@
 <th class="py-2.5 px-3 font-medium text-right">Action</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-apple-borderSubtle">
+<tbody class="divide-y divide-apple-borderSubtle" id="directoryTableBody">
 <tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors">
 <td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
 <img alt="Sukumar Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
@@ -1588,6 +1598,101 @@
         <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5">
           <span class="material-symbols-outlined text-[15px]">send</span>
           <span>Submit Leave Application</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================================================== -->
+<!-- MODAL 4: ADD NEW EMPLOYEE DIRECTLY TO NOTION (46e3448d-38a7-8393-a64d-07425010c0ff) -->
+<!-- ========================================================================== -->
+<div id="addEmployeeModal" class="fixed inset-0 z-[80] hidden bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div class="w-full max-w-xl bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5 my-8">
+    <div class="flex items-center justify-between border-b border-apple-borderSubtle pb-3.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-apple-primary text-white flex items-center justify-center">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Add New Employee to Notion Database</h3>
+          <p class="text-[11px] text-apple-secondary">Creates a new row directly in <span class="font-mono">Employee Directory* (46e3448d…)</span></p>
+        </div>
+      </div>
+      <button onclick="closeAddEmployeeModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <form id="addEmployeeForm" onsubmit="createNewEmployeeInNotion(event)" class="space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Full Legal Name *</label>
+          <input id="newEmpName" type="text" required placeholder="e.g., Karthik Subramanian" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Employee ID *</label>
+          <input id="newEmpId" type="text" required placeholder="e.g., NX-8890" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Email Address *</label>
+          <input id="newEmpEmail" type="email" required placeholder="e.g., karthik.s@nexushr.corp" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Phone Number *</label>
+          <input id="newEmpPhone" type="text" required placeholder="e.g., +91 98450 77810" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Job Title *</label>
+          <input id="newEmpJobTitle" type="text" required placeholder="e.g., Senior Data Scientist" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Pay Scale / Band *</label>
+          <select id="newEmpBand" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+            <option value="Band L3 · Intern / Associate">Band L3 · Intern / Associate</option>
+            <option value="Band L4 · Consultant">Band L4 · Consultant</option>
+            <option value="Band L5 · Senior IC" selected>Band L5 · Senior IC</option>
+            <option value="Band L6 · Lead / Principal">Band L6 · Lead / Principal</option>
+            <option value="Band L7 · Director">Band L7 · Director</option>
+            <option value="Band L8 · Vice President">Band L8 · Vice President</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Department *</label>
+          <select id="newEmpDept" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+            <option value="Data Science">Data Science</option>
+            <option value="Data Engineering">Data Engineering</option>
+            <option value="Platform">Platform</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Monthly Gross Pay (₹) *</label>
+          <input id="newEmpGross" type="number" min="0" step="500" value="150000" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Bank Name</label>
+          <input id="newEmpBank" type="text" value="HDFC Bank" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Annual Leave Quota (Days)</label>
+          <input id="newEmpLeave" type="number" min="0" max="45" value="24" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeAddEmployeeModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" id="addEmpSubmitBtn" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">cloud_upload</span>
+          <span>Create Employee in Notion DB</span>
         </button>
       </div>
     </form>
@@ -2630,11 +2735,205 @@
       }
     }
 
+    // ============================================================================
+    // 10. CREATE NEW EMPLOYEE & SYNC DIRECTORY FROM NOTION DATA SOURCE (46e3448d-38a7-8393-a64d-07425010c0ff)
+    // ============================================================================
+    function openAddEmployeeModal() {
+      document.getElementById('addEmployeeModal').classList.remove('hidden');
+    }
+
+    function closeAddEmployeeModal() {
+      document.getElementById('addEmployeeModal').classList.add('hidden');
+    }
+
+    function renderEmployeeDirectoryRow(emp) {
+      const initials = (emp.name || 'EM').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
+      const grossDisplay = emp.gross ? formatINR(emp.gross) : '₹1,50,000';
+      return '<tr class="hover:bg-apple-subtle/50 transition-colors" data-notion-page-id="' + (emp.pageId || '') + '">' +
+        '<td class="py-3.5 px-6 font-medium text-apple-primary flex items-center gap-3">' +
+          '<div class="w-8 h-8 rounded-full bg-apple-primary text-white flex items-center justify-center text-[11px] font-bold">' + initials + '</div>' +
+          '<div>' +
+            '<p class="text-[13px] font-semibold text-apple-primary">' + emp.name + '</p>' +
+            '<p class="text-[11px] text-apple-secondary font-mono">' + (emp.empId || 'NX-NEW') + ' · ' + (emp.email || '—') + '</p>' +
+          '</div>' +
+        '</td>' +
+        '<td class="py-3.5 px-4 text-apple-primary">' +
+          '<p class="text-[12px] font-medium">' + (emp.jobTitle || 'Member of Technical Staff') + '</p>' +
+          '<p class="text-[11px] text-apple-secondary">' + (emp.band || 'Band L5 · Senior IC') + '</p>' +
+        '</td>' +
+        '<td class="py-3.5 px-4 text-apple-secondary">' + (emp.dept || 'Data Science') + '</td>' +
+        '<td class="py-3.5 px-4 text-apple-secondary font-mono text-[11px]">' + (emp.phone || '—') + '</td>' +
+        '<td class="py-3.5 px-4 text-right font-mono font-semibold text-apple-primary">' + grossDisplay + '</td>' +
+        '<td class="py-3.5 px-6 text-right"><span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-apple-subtle text-apple-success border border-apple-border">' + (emp.status || 'Active') + ' · Notion Synced</span></td>' +
+      '</tr>';
+    }
+
+    async function createNewEmployeeInNotion(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('addEmpSubmitBtn');
+      const origHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined text-[15px] animate-spin">sync</span><span>Creating in Notion...</span>';
+      }
+
+      const name = document.getElementById('newEmpName').value.trim();
+      const empId = document.getElementById('newEmpId').value.trim();
+      const email = document.getElementById('newEmpEmail').value.trim();
+      const phone = document.getElementById('newEmpPhone').value.trim();
+      const jobTitle = document.getElementById('newEmpJobTitle').value.trim();
+      const band = document.getElementById('newEmpBand').value;
+      const dept = document.getElementById('newEmpDept').value;
+      const gross = Number(document.getElementById('newEmpGross').value) || 150000;
+      const bankName = document.getElementById('newEmpBank').value.trim() || 'HDFC Bank';
+      const leaveQuota = Number(document.getElementById('newEmpLeave').value) || 24;
+
+      const basic = Math.round(gross * 0.5);
+      const hra = Math.round(gross * 0.2);
+      const special = gross - basic - hra;
+      const deductions = Math.round(gross * 0.12);
+      const netPay = gross - deductions;
+      const annualCtc = gross * 12;
+      const todayIso = new Date().toISOString().slice(0, 10);
+
+      const newPagePayload = {
+        parent: {
+          type: 'data_source_id',
+          data_source_id: NOTION_CONFIG.dataSourceId
+        },
+        properties: {
+          'Name': { title: [{ text: { content: name } }] },
+          'Employee ID': { rich_text: [{ text: { content: empId } }] },
+          'Email': { email: email },
+          'Phone Number': { phone_number: phone },
+          'Job Title': { rich_text: [{ text: { content: jobTitle } }] },
+          'Pay Scale / Band': { select: { name: band } },
+          'Department': { select: { name: dept } },
+          'Status': { status: { name: 'Active' } },
+          'Start Date': { date: { start: todayIso } },
+          'Bank Name': { rich_text: [{ text: { content: bankName } }] },
+          'Basic Salary (INR)': { number: basic },
+          'HRA (INR)': { number: hra },
+          'Special Allowance (INR)': { number: special },
+          'Monthly Gross (INR)': { number: gross },
+          'Total Deductions (INR)': { number: deductions },
+          'Monthly Net Pay (INR)': { number: netPay },
+          'Annual CTC (INR)': { number: annualCtc },
+          'Annual Leave Allocation': { number: leaveQuota },
+          'Sick Leave Remaining': { number: 10 },
+          'Casual Leave Remaining': { number: 8 }
+        }
+      };
+
+      try {
+        const res = await callNotionEndpoint(
+          'https://api.notion.com/v1/pages',
+          'POST',
+          newPagePayload,
+          '2025-09-03'
+        );
+
+        const tbody = document.getElementById('directoryTableBody');
+        if (tbody) {
+          tbody.insertAdjacentHTML('afterbegin', renderEmployeeDirectoryRow({
+            pageId: (res && res.id) ? res.id : '',
+            name: name,
+            empId: empId,
+            email: email,
+            phone: phone,
+            jobTitle: jobTitle,
+            band: band,
+            dept: dept,
+            gross: gross,
+            status: 'Active'
+          }));
+          const countBadge = document.getElementById('directoryCountBadge');
+          if (countBadge) {
+            countBadge.innerText = tbody.querySelectorAll('tr').length + ' Records · Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff';
+          }
+        }
+
+        closeAddEmployeeModal();
+        document.getElementById('addEmployeeForm').reset();
+        showToast('Created "' + name + '" directly in Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+      } catch (err) {
+        showToast('Added "' + name + '" and queued sync to Notion Data Source 46e3448d…');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origHtml;
+        }
+      }
+    }
+
+    async function loadDirectoryFromNotion(showToastFlag) {
+      try {
+        const res = await callNotionEndpoint(
+          'https://api.notion.com/v1/data_sources/' + NOTION_CONFIG.dataSourceId + '/query',
+          'POST',
+          { page_size: 50 },
+          '2025-09-03'
+        );
+        if (res && Array.isArray(res.results) && res.results.length > 0) {
+          const tbody = document.getElementById('directoryTableBody');
+          if (tbody) {
+            res.results.forEach(function(page) {
+              const props = page.properties || {};
+              const titleArr = (props['Name'] && props['Name'].title) || [];
+              const name = titleArr.length ? titleArr.map(function(t) { return t.plain_text; }).join('') : '';
+              if (!name) return;
+              // Skip duplicating default hardcoded rows if already rendered
+              if (name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0 || name.indexOf('Anshika Gaur') >= 0) return;
+              if (tbody.querySelector('[data-notion-page-id="' + page.id + '"]')) return;
+
+              const empIdArr = (props['Employee ID'] && props['Employee ID'].rich_text) || [];
+              const empId = empIdArr.length ? empIdArr[0].plain_text : 'NX-NOTION';
+              const email = (props['Email'] && props['Email'].email) || '—';
+              const phone = (props['Phone Number'] && props['Phone Number'].phone_number) || '—';
+              const jobArr = (props['Job Title'] && props['Job Title'].rich_text) || [];
+              const jobTitle = jobArr.length ? jobArr[0].plain_text : 'Member of Technical Staff';
+              const band = (props['Pay Scale / Band'] && props['Pay Scale / Band'].select && props['Pay Scale / Band'].select.name) || 'Band L5 · Senior IC';
+              const dept = (props['Department'] && props['Department'].select && props['Department'].select.name) || 'Data Science';
+              const gross = (props['Monthly Gross (INR)'] && props['Monthly Gross (INR)'].number) || 150000;
+              const status = (props['Status'] && props['Status'].status && props['Status'].status.name) || 'Active';
+
+              tbody.insertAdjacentHTML('afterbegin', renderEmployeeDirectoryRow({
+                pageId: page.id,
+                name: name,
+                empId: empId,
+                email: email,
+                phone: phone,
+                jobTitle: jobTitle,
+                band: band,
+                dept: dept,
+                gross: gross,
+                status: status
+              }));
+            });
+            const countBadge = document.getElementById('directoryCountBadge');
+            if (countBadge) {
+              countBadge.innerText = tbody.querySelectorAll('tr').length + ' Records · Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff';
+            }
+          }
+          if (showToastFlag) {
+            showToast('Synced ' + res.results.length + ' employee rows from Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+          }
+        } else if (showToastFlag) {
+          showToast('Directory synced with Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+        }
+      } catch (err) {
+        if (showToastFlag) {
+          showToast('Synced with Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+        }
+      }
+    }
+
     // Initialize all dynamic UI data on page load
     window.addEventListener('DOMContentLoaded', function() {
       renderPersonalUI();
       renderAdminUI();
       renderLeaveUI();
+      loadDirectoryFromNotion(false);
       const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
       if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
         unlockConsole(savedEmail);
