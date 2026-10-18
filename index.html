@@ -61,6 +61,164 @@
   </script>
 </head>
 <body class="bg-apple-bg text-apple-primary antialiased selection:bg-apple-blue selection:text-white">
+<!-- PASSWORDLESS EMPLOYEE EMAIL + GOOGLE AUTHENTICATOR (TOTP) LOGIN GATE -->
+<div class="min-h-screen w-full flex flex-col justify-between bg-apple-bg px-4 py-8" id="authGateScreen">
+<!-- Top Brand Header -->
+<div class="max-w-md w-full mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-apple-primary text-white flex items-center justify-center font-semibold text-xs tracking-tight shadow-sm">N</div>
+<div>
+<span class="text-[14px] font-semibold tracking-tight text-apple-primary block leading-none">Nexus HR</span>
+<span class="text-[11px] text-apple-secondary">Enterprise Identity Gateway</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-surface border border-apple-border text-[11px] font-medium text-apple-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Passwordless TOTP
+</span>
+</div>
+
+<!-- Center Login Card -->
+<div class="max-w-md w-full mx-auto my-auto py-8">
+<div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6">
+<!-- STEP 1: APPROVED COMPANY EMAIL -->
+<div class="space-y-5" id="loginStepEmail">
+<div class="space-y-1.5">
+<div class="w-10 h-10 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary mb-3">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+</div>
+<h1 class="text-[20px] font-semibold text-apple-primary tracking-tight">Employee Sign In</h1>
+<p class="text-[13px] text-apple-secondary leading-relaxed">
+              Enter your approved corporate email address. No password is required — identity is verified via <strong class="text-apple-primary font-medium">Google Authenticator</strong>.
+            </p>
+</div>
+
+<!-- Error Banner -->
+<div class="hidden p-3.5 rounded-xl bg-red-50 border border-red-200 text-[12px] text-red-700 space-y-1" id="emailErrorBox">
+<div class="font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">error</span>
+<span id="emailErrorTitle">Access Restricted</span>
+</div>
+<p class="text-[11px] text-red-600 leading-relaxed" id="emailErrorDesc">This email address is not on the approved employee allowlist.</p>
+</div>
+
+<form class="space-y-4" onsubmit="handleEmailSubmit(event)">
+<div class="space-y-1.5">
+<label class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary block" for="loginEmailInput">Approved Employee Email</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-apple-tertiary text-[18px]">mail</span>
+<input autocomplete="email" class="w-full h-10 pl-10 pr-3.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" id="loginEmailInput" placeholder="name@nexushr.corp or registered email" required="" type="email"/>
+</div>
+</div>
+<button class="w-full h-10 bg-apple-primary hover:bg-black text-white rounded-xl text-[13px] font-medium transition-all flex items-center justify-center gap-2 shadow-sm" type="submit">
+<span>Continue with Google Authenticator</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</form>
+
+<!-- Approved Employees Quick-Select Info -->
+<div class="pt-3 border-t border-apple-borderSubtle space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Approved Employee Directory Allowlist</span>
+<span class="text-[10px] text-apple-tertiary">Click to autofill</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-primary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('premkumarrss669@gmail.com')" type="button">premkumarrss669@gmail.com</button>
+<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-primary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('prem.kumar@nexushr.corp')" type="button">prem.kumar@nexushr.corp</button>
+<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-secondary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('ananya.sharma@nexushr.corp')" type="button">ananya.sharma@nexushr.corp</button>
+<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-secondary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('rohit.k@nexushr.corp')" type="button">rohit.k@nexushr.corp</button>
+</div>
+</div>
+</div>
+
+<!-- STEP 2: GOOGLE AUTHENTICATOR 6-DIGIT TOTP VERIFICATION -->
+<div class="hidden space-y-5" id="loginStepTotp">
+<div class="flex items-center justify-between">
+<button class="inline-flex items-center gap-1 text-[12px] text-apple-secondary hover:text-apple-primary font-medium transition-colors" onclick="backToEmailStep()" type="button">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Change Email</span>
+</button>
+<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="verifiedEmployeeBadge">NX-8842</span>
+</div>
+
+<div class="space-y-1">
+<h2 class="text-[19px] font-semibold text-apple-primary tracking-tight">Google Authenticator</h2>
+<p class="text-[12px] text-apple-secondary">
+              Signing in as <strong class="text-apple-primary font-medium" id="verifiedEmailText">premkumarrss669@gmail.com</strong>
+</p>
+</div>
+
+<!-- TOTP Error Banner -->
+<div class="hidden p-3 rounded-xl bg-red-50 border border-red-200 text-[12px] text-red-700 flex items-center gap-2" id="totpErrorBox">
+<span class="material-symbols-outlined text-[16px]">gpp_bad</span>
+<span id="totpErrorText">Invalid 6-digit Google Authenticator code. Please try again.</span>
+</div>
+
+<!-- 6-Digit Code Form -->
+<form class="space-y-4" onsubmit="handleTotpSubmit(event)">
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary" for="totpCodeInput">6-Digit Authenticator Code</label>
+<span class="text-[11px] font-mono text-apple-secondary" id="totpTimerLabel">Refreshes in 30s</span>
+</div>
+<input autocomplete="one-time-code" class="w-full h-12 px-4 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-center font-mono text-[22px] font-semibold tracking-[0.35em] text-apple-primary placeholder:text-apple-tertiary placeholder:tracking-normal placeholder:text-[14px] placeholder:font-normal outline-none transition-all" id="totpCodeInput" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required="" type="text"/>
+</div>
+
+<button class="w-full h-10 bg-apple-primary hover:bg-black text-white rounded-xl text-[13px] font-medium transition-all flex items-center justify-center gap-2 shadow-sm" type="submit">
+<span class="material-symbols-outlined text-[16px]">lock_open</span>
+<span>Verify with Google Authenticator</span>
+</button>
+</form>
+
+<!-- Pair Google Authenticator App (QR Code + Setup Key) -->
+<div class="pt-3 border-t border-apple-borderSubtle space-y-3">
+<button class="w-full flex items-center justify-between text-[12px] font-medium text-apple-primary hover:opacity-80 transition-opacity" onclick="toggleQrSetupDrawer()" type="button">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-apple-secondary">qr_code_2</span>
+<span>First time? Pair Google Authenticator App</span>
+</span>
+<span class="material-symbols-outlined text-[16px] text-apple-secondary" id="qrToggleChevron">expand_more</span>
+</button>
+
+<div class="hidden p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-3" id="qrSetupDrawer">
+<p class="text-[11px] text-apple-secondary leading-relaxed">
+                Open the <strong class="text-apple-primary">Google Authenticator</strong> app on your phone, tap <strong class="text-apple-primary">+</strong> &rarr; <strong class="text-apple-primary">Scan a QR code</strong> (or enter setup key manually):
+              </p>
+<div class="flex flex-col sm:flex-row items-center gap-4">
+<div class="p-2 bg-white rounded-xl border border-apple-border shrink-0">
+<img alt="Google Authenticator QR Code" class="w-32 h-32 object-contain" id="totpQrImage" src=""/>
+</div>
+<div class="space-y-2 text-[11px] w-full">
+<div>
+<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Account</span>
+<span class="font-mono text-apple-primary font-medium break-all" id="qrAccountLabel">Nexus HR:premkumarrss669@gmail.com</span>
+</div>
+<div>
+<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Base32 Setup Key (RFC 6238)</span>
+<div class="flex items-center justify-between bg-apple-surface px-2.5 py-1.5 rounded-lg border border-apple-border mt-0.5">
+<span class="font-mono font-semibold text-apple-primary tracking-wider" id="qrSecretKeyLabel">JBSWY3DPEHPK3PXP</span>
+<button class="text-[10px] font-medium text-apple-primary hover:underline" onclick="navigator.clipboard.writeText(currentTotpSecret)" type="button">Copy</button>
+</div>
+</div>
+<div class="pt-1 flex items-center justify-between">
+<span class="text-apple-secondary">Current TOTP Code:</span>
+<button class="px-2 py-0.5 rounded bg-apple-surface border border-apple-border font-mono font-semibold text-apple-primary hover:bg-apple-hover transition-colors" id="liveTotpPreviewBtn" onclick="autofillCurrentTotp()" title="Click to autofill current Google Authenticator code" type="button">••••••</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Footer Security Note -->
+<div class="max-w-md w-full mx-auto text-center text-[11px] text-apple-secondary">
+    Protected by Nexus Enterprise Zero-Password Policy · RFC 6238 TOTP (Google Authenticator)
+  </div>
+</div>
+
+<!-- AUTHENTICATED ENTERPRISE CONSOLE WRAPPER -->
+<div class="hidden" id="appConsoleWrapper">
 <!-- Minimalist Sidebar (Apple Human Interface Guidelines style) -->
 <aside class="fixed left-0 top-0 h-full w-60 bg-apple-surface border-r border-apple-border z-50 flex flex-col justify-between">
 <div class="flex flex-col">
@@ -113,12 +271,16 @@
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">tune</span>
 <span>Settings</span>
 </a>
+<button class="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-destructive hover:bg-apple-subtle transition-colors text-[13px] cursor-pointer text-left" onclick="logoutSession()" type="button">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span>Sign Out</span>
+</button>
 <div class="px-2.5 py-2 rounded-lg bg-apple-subtle/70 flex items-center justify-between text-[11px] text-apple-secondary">
 <span class="flex items-center gap-1.5">
 <span class="w-1.5 h-1.5 rounded-full bg-apple-primary/80"></span>
 <span>v4.8.2 Live</span>
 </span>
-<span class="font-medium text-apple-primary/90">SSO Active</span>
+<span class="font-medium text-apple-primary/90">TOTP Verified</span>
 </div>
 </div>
 </aside>
@@ -145,11 +307,12 @@
 <div class="h-4 w-px bg-apple-border mx-1"></div>
 <div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
-<span class="text-[12px] font-medium text-apple-primary leading-tight">Prem Kumar</span>
-<span class="text-[10px] text-apple-secondary">HR Admin</span>
+<span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">Prem Kumar</span>
+<span class="text-[10px] text-apple-secondary" id="topBarUserRole">HR Admin</span>
 </div>
 <img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 </div>
+<button class="h-7 px-2.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-[11px] font-medium text-apple-secondary hover:text-apple-primary border border-apple-border transition-colors" onclick="logoutSession()" title="Lock &amp; Sign Out" type="button">Sign Out</button>
 </div>
 </header>
 <!-- Page Body -->
@@ -1022,8 +1185,234 @@
 </div>
 </main>
 </div>
+</div>
 <!-- Interactive JavaScript -->
 <script>
+    // ============================================================================
+    // 1. APPROVED EMPLOYEE ALLOWLIST & RFC 6238 GOOGLE AUTHENTICATOR (TOTP) ENGINE
+    // ============================================================================
+    const APPROVED_EMPLOYEES = {
+      'premkumarrss669@gmail.com': {
+        name: 'Prem Kumar',
+        id: 'NX-8842',
+        role: 'Senior Consultant (L5)',
+        secret: 'JBSWY3DPEHPK3PXP'
+      },
+      'prem.kumar@nexushr.corp': {
+        name: 'Prem Kumar',
+        id: 'NX-8842',
+        role: 'Senior Consultant (L5)',
+        secret: 'JBSWY3DPEHPK3PXP'
+      },
+      'ananya.sharma@nexushr.corp': {
+        name: 'Ananya Sharma',
+        id: 'NX-1040',
+        role: 'VP, Data & Analytics (L8)',
+        secret: 'JBSWY3DPEHPK3PXP'
+      },
+      'rohit.k@nexushr.corp': {
+        name: 'Rohit Kulkarni',
+        id: 'NX-2190',
+        role: 'HR Business Partner (L6)',
+        secret: 'JBSWY3DPEHPK3PXP'
+      }
+    };
+
+    let pendingAuthEmail = '';
+    let currentTotpSecret = 'JBSWY3DPEHPK3PXP';
+    let totpIntervalId = null;
+
+    // Decode RFC 4648 Base32 secret to Uint8Array
+    function base32ToBytes(base32) {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+      const cleaned = base32.toUpperCase().replace(/[^A-Z2-7]/g, '');
+      let bits = '';
+      for (let i = 0; i < cleaned.length; i++) {
+        const val = alphabet.indexOf(cleaned[i]);
+        if (val >= 0) bits += val.toString(2).padStart(5, '0');
+      }
+      const bytes = new Uint8Array(Math.floor(bits.length / 8));
+      for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(bits.slice(i * 8, i * 8 + 8), 2);
+      }
+      return bytes;
+    }
+
+    // Generate 6-digit RFC 6238 TOTP using Web Crypto HMAC-SHA1
+    async function generateTotpCode(secretBase32, timeStepOffset = 0) {
+      const keyBytes = base32ToBytes(secretBase32);
+      const epochSeconds = Math.floor(Date.now() / 1000);
+      const counter = Math.floor(epochSeconds / 30) + timeStepOffset;
+
+      const counterBytes = new Uint8Array(8);
+      let temp = counter;
+      for (let i = 7; i >= 0; i--) {
+        counterBytes[i] = temp & 0xff;
+        temp = Math.floor(temp / 256);
+      }
+
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw',
+        keyBytes,
+        { name: 'HMAC', hash: 'SHA-1' },
+        false,
+        ['sign']
+      );
+      const signature = await crypto.subtle.sign('HMAC', cryptoKey, counterBytes);
+      const hmac = new Uint8Array(signature);
+      const offset = hmac[hmac.length - 1] & 0x0f;
+      const binary =
+        ((hmac[offset] & 0x7f) << 24) |
+        ((hmac[offset + 1] & 0xff) << 16) |
+        ((hmac[offset + 2] & 0xff) << 8) |
+        (hmac[offset + 3] & 0xff);
+      const otp = (binary % 1000000).toString().padStart(6, '0');
+      return otp;
+    }
+
+    function fillApprovedEmail(email) {
+      const input = document.getElementById('loginEmailInput');
+      const errBox = document.getElementById('emailErrorBox');
+      if (input) input.value = email;
+      if (errBox) errBox.classList.add('hidden');
+    }
+
+    function handleEmailSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('loginEmailInput');
+      const errBox = document.getElementById('emailErrorBox');
+      const errDesc = document.getElementById('emailErrorDesc');
+      const email = (input.value || '').trim().toLowerCase();
+
+      const employee = APPROVED_EMPLOYEES[email];
+      if (!employee) {
+        if (errDesc) {
+          errDesc.innerText = '"' + email + '" is not on the Nexus HR approved employee allowlist. Only pre-approved company emails can sign in.';
+        }
+        if (errBox) errBox.classList.remove('hidden');
+        return;
+      }
+
+      if (errBox) errBox.classList.add('hidden');
+      pendingAuthEmail = email;
+      currentTotpSecret = employee.secret;
+
+      // Transition to Step 2 (Google Authenticator TOTP)
+      document.getElementById('loginStepEmail').classList.add('hidden');
+      document.getElementById('loginStepTotp').classList.remove('hidden');
+      document.getElementById('verifiedEmailText').innerText = email;
+      document.getElementById('verifiedEmployeeBadge').innerText = employee.id + ' · ' + employee.name;
+      document.getElementById('totpErrorBox').classList.add('hidden');
+      document.getElementById('totpCodeInput').value = '';
+      document.getElementById('totpCodeInput').focus();
+
+      // Update Google Authenticator QR Code & Setup Key
+      const otpauthUri = 'otpauth://totp/Nexus%20HR:' + encodeURIComponent(email) + '?secret=' + currentTotpSecret + '&issuer=Nexus%20HR&algorithm=SHA1&digits=6&period=30';
+      document.getElementById('totpQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=' + encodeURIComponent(otpauthUri);
+      document.getElementById('qrAccountLabel').innerText = 'Nexus HR (' + email + ')';
+      document.getElementById('qrSecretKeyLabel').innerText = currentTotpSecret;
+
+      startTotpTimer();
+    }
+
+    function backToEmailStep() {
+      if (totpIntervalId) clearInterval(totpIntervalId);
+      document.getElementById('loginStepTotp').classList.add('hidden');
+      document.getElementById('loginStepEmail').classList.remove('hidden');
+    }
+
+    function toggleQrSetupDrawer() {
+      const drawer = document.getElementById('qrSetupDrawer');
+      const chevron = document.getElementById('qrToggleChevron');
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        chevron.innerText = 'expand_less';
+      } else {
+        drawer.classList.add('hidden');
+        chevron.innerText = 'expand_more';
+      }
+    }
+
+    async function updateTotpTimerAndPreview() {
+      const remaining = 30 - (Math.floor(Date.now() / 1000) % 30);
+      const timerLabel = document.getElementById('totpTimerLabel');
+      if (timerLabel) {
+        timerLabel.innerText = 'Code refreshes in ' + remaining + 's';
+      }
+      const previewBtn = document.getElementById('liveTotpPreviewBtn');
+      if (previewBtn && currentTotpSecret) {
+        const code = await generateTotpCode(currentTotpSecret, 0);
+        previewBtn.innerText = code + ' (Autofill)';
+      }
+    }
+
+    function startTotpTimer() {
+      if (totpIntervalId) clearInterval(totpIntervalId);
+      updateTotpTimerAndPreview();
+      totpIntervalId = setInterval(updateTotpTimerAndPreview, 1000);
+    }
+
+    async function autofillCurrentTotp() {
+      const code = await generateTotpCode(currentTotpSecret, 0);
+      const input = document.getElementById('totpCodeInput');
+      if (input) {
+        input.value = code;
+        input.focus();
+      }
+    }
+
+    async function handleTotpSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('totpCodeInput');
+      const errBox = document.getElementById('totpErrorBox');
+      const entered = (input.value || '').replace(/\s+/g, '');
+
+      // Check current 30s window and +/- 1 window for clock skew compatibility with Google Authenticator
+      const validPrev = await generateTotpCode(currentTotpSecret, -1);
+      const validCurr = await generateTotpCode(currentTotpSecret, 0);
+      const validNext = await generateTotpCode(currentTotpSecret, 1);
+
+      if (entered === validCurr || entered === validPrev || entered === validNext) {
+        if (errBox) errBox.classList.add('hidden');
+        if (totpIntervalId) clearInterval(totpIntervalId);
+        sessionStorage.setItem('nexus_hr_authenticated_email', pendingAuthEmail);
+        unlockConsole(pendingAuthEmail);
+      } else {
+        if (errBox) errBox.classList.remove('hidden');
+      }
+    }
+
+    function unlockConsole(email) {
+      const employee = APPROVED_EMPLOYEES[email] || APPROVED_EMPLOYEES['premkumarrss669@gmail.com'];
+      document.getElementById('authGateScreen').classList.add('hidden');
+      document.getElementById('appConsoleWrapper').classList.remove('hidden');
+      const nameEl = document.getElementById('topBarUserName');
+      const roleEl = document.getElementById('topBarUserRole');
+      if (nameEl) nameEl.innerText = employee.name;
+      if (roleEl) roleEl.innerText = employee.role;
+    }
+
+    function logoutSession() {
+      sessionStorage.removeItem('nexus_hr_authenticated_email');
+      if (totpIntervalId) clearInterval(totpIntervalId);
+      document.getElementById('appConsoleWrapper').classList.add('hidden');
+      document.getElementById('authGateScreen').classList.remove('hidden');
+      document.getElementById('loginStepTotp').classList.add('hidden');
+      document.getElementById('loginStepEmail').classList.remove('hidden');
+      document.getElementById('totpCodeInput').value = '';
+    }
+
+    // Restore session if already authenticated in current tab
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
+      if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
+        unlockConsole(savedEmail);
+      }
+    });
+
+    // ============================================================================
+    // 2. DASHBOARD SIDEBAR & TAB NAVIGATION
+    // ============================================================================
     const sidebarBannerMeta = {
       'directory': {
         icon: 'badge',
