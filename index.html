@@ -1140,7 +1140,7 @@
 <p class="text-[12px] text-apple-secondary">Live two-way sync with Notion Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span></p>
 </div>
 <div class="flex items-center gap-2">
-<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle" id="directoryCountBadge">4 Active Members</span>
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle" id="directoryCountBadge">2 Notion Records</span>
 <button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" onclick="loadDirectoryFromNotion(true)" type="button">
 <span class="material-symbols-outlined text-[14px]">refresh</span>
 <span>Sync from Notion</span>
@@ -1164,7 +1164,7 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-apple-borderSubtle" id="directoryTableBody">
-<tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors">
+<tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors" data-notion-page-id="3b63448d-38a7-8193-b60f-ffc05b1aad75">
 <td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
 <img alt="Sukumar Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 <div>
@@ -1184,7 +1184,7 @@
 <button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="navigateSidebar('employees')" type="button">View Dossier</button>
 </td>
 </tr>
-<tr class="hover:bg-apple-subtle/40 transition-colors">
+<tr class="hover:bg-apple-subtle/40 transition-colors" data-notion-page-id="3b93448d-38a7-8142-871e-ea21bfa03f04">
 <td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
 <div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">AG</div>
 <div>
@@ -1200,42 +1200,6 @@
 </td>
 <td class="py-3 px-3 text-right">
 <a class="text-[11px] font-medium text-apple-primary hover:underline" href="https://www.notion.so/Anshika-Gaur-3b93448d38a78142871eea21bfa03f04" target="_blank" rel="noopener noreferrer">Notion Record ↗</a>
-</td>
-</tr>
-<tr class="hover:bg-apple-subtle/40 transition-colors">
-<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
-<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">AS</div>
-<div>
-<div class="font-medium text-apple-primary">Ananya Sharma</div>
-<div class="text-[11px] text-apple-secondary">ananya.sharma@nexushr.corp</div>
-</div>
-</td>
-<td class="py-3 px-3 font-mono text-apple-secondary">NX-1040</td>
-<td class="py-3 px-3 text-apple-primary">VP, Data &amp; Analytics · <span class="text-apple-secondary">Band L8</span></td>
-<td class="py-3 px-3 text-apple-secondary">Data Science &amp; AI</td>
-<td class="py-3 px-3">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">Active</span>
-</td>
-<td class="py-3 px-3 text-right">
-<span class="text-[11px] text-apple-secondary">Reporting Manager</span>
-</td>
-</tr>
-<tr class="hover:bg-apple-subtle/40 transition-colors">
-<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
-<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">RK</div>
-<div>
-<div class="font-medium text-apple-primary">Rohit Kulkarni</div>
-<div class="text-[11px] text-apple-secondary">rohit.k@nexushr.corp</div>
-</div>
-</td>
-<td class="py-3 px-3 font-mono text-apple-secondary">NX-2190</td>
-<td class="py-3 px-3 text-apple-primary">HR Business Partner · <span class="text-apple-secondary">Band L6</span></td>
-<td class="py-3 px-3 text-apple-secondary">People Operations</td>
-<td class="py-3 px-3">
-<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">Active</span>
-</td>
-<td class="py-3 px-3 text-right">
-<span class="text-[11px] text-apple-secondary">Assigned HRBP</span>
 </td>
 </tr>
 </tbody>
@@ -2747,24 +2711,35 @@
     }
 
     function renderEmployeeDirectoryRow(emp) {
+      const isPrem = (emp.name || '').toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
       const initials = (emp.name || 'EM').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
-      const grossDisplay = emp.gross ? formatINR(emp.gross) : '₹1,50,000';
-      return '<tr class="hover:bg-apple-subtle/50 transition-colors" data-notion-page-id="' + (emp.pageId || '') + '">' +
-        '<td class="py-3.5 px-6 font-medium text-apple-primary flex items-center gap-3">' +
-          '<div class="w-8 h-8 rounded-full bg-apple-primary text-white flex items-center justify-center text-[11px] font-bold">' + initials + '</div>' +
+      const avatarHtml = isPrem
+        ? '<img alt="Sukumar Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
+        : '<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">' + initials + '</div>';
+      const shortBand = (emp.band || 'Band L5').split('·')[0].trim();
+      const statusBadge = (emp.status === 'Active')
+        ? '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active</span>'
+        : '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">' + (emp.status || 'Active') + '</span>';
+      const cleanPageId = (emp.pageId || '').replace(/-/g, '');
+      const actionHtml = isPrem
+        ? '<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="navigateSidebar(\'employees\')" type="button">View Dossier</button>'
+        : (cleanPageId
+            ? '<a class="text-[11px] font-medium text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion Record ↗</a>'
+            : '<span class="text-[11px] text-apple-secondary">Notion Synced</span>');
+
+      return '<tr class="' + (isPrem ? 'bg-apple-subtle/60 hover:bg-apple-subtle' : 'hover:bg-apple-subtle/40') + ' transition-colors" data-notion-page-id="' + (emp.pageId || '') + '">' +
+        '<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">' +
+          avatarHtml +
           '<div>' +
-            '<p class="text-[13px] font-semibold text-apple-primary">' + emp.name + '</p>' +
-            '<p class="text-[11px] text-apple-secondary font-mono">' + (emp.empId || 'NX-NEW') + ' · ' + (emp.email || '—') + '</p>' +
+            '<div class="' + (isPrem ? 'font-semibold' : 'font-medium') + ' text-apple-primary">' + emp.name + '</div>' +
+            '<div class="text-[11px] text-apple-secondary">' + (emp.email || '—') + '</div>' +
           '</div>' +
         '</td>' +
-        '<td class="py-3.5 px-4 text-apple-primary">' +
-          '<p class="text-[12px] font-medium">' + (emp.jobTitle || 'Member of Technical Staff') + '</p>' +
-          '<p class="text-[11px] text-apple-secondary">' + (emp.band || 'Band L5 · Senior IC') + '</p>' +
-        '</td>' +
-        '<td class="py-3.5 px-4 text-apple-secondary">' + (emp.dept || 'Data Science') + '</td>' +
-        '<td class="py-3.5 px-4 text-apple-secondary font-mono text-[11px]">' + (emp.phone || '—') + '</td>' +
-        '<td class="py-3.5 px-4 text-right font-mono font-semibold text-apple-primary">' + grossDisplay + '</td>' +
-        '<td class="py-3.5 px-6 text-right"><span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-apple-subtle text-apple-success border border-apple-border">' + (emp.status || 'Active') + ' · Notion Synced</span></td>' +
+        '<td class="py-3 px-3 font-mono text-apple-secondary">' + (emp.empId || 'NX-NEW') + '</td>' +
+        '<td class="py-3 px-3 text-apple-primary">' + (emp.jobTitle || 'Consultant') + ' · <span class="text-apple-secondary">' + shortBand + '</span></td>' +
+        '<td class="py-3 px-3 text-apple-secondary">' + (emp.dept || 'Data Science') + '</td>' +
+        '<td class="py-3 px-3">' + statusBadge + '</td>' +
+        '<td class="py-3 px-3 text-right">' + actionHtml + '</td>' +
       '</tr>';
     }
 
@@ -2849,7 +2824,7 @@
           }));
           const countBadge = document.getElementById('directoryCountBadge');
           if (countBadge) {
-            countBadge.innerText = tbody.querySelectorAll('tr').length + ' Records · Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff';
+            countBadge.innerText = tbody.querySelectorAll('tr').length + ' Notion Records';
           }
         }
 
@@ -2877,27 +2852,25 @@
         if (res && Array.isArray(res.results) && res.results.length > 0) {
           const tbody = document.getElementById('directoryTableBody');
           if (tbody) {
+            let rowsHtml = '';
             res.results.forEach(function(page) {
               const props = page.properties || {};
               const titleArr = (props['Name'] && props['Name'].title) || [];
               const name = titleArr.length ? titleArr.map(function(t) { return t.plain_text; }).join('') : '';
               if (!name) return;
-              // Skip duplicating default hardcoded rows if already rendered
-              if (name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0 || name.indexOf('Anshika Gaur') >= 0) return;
-              if (tbody.querySelector('[data-notion-page-id="' + page.id + '"]')) return;
 
               const empIdArr = (props['Employee ID'] && props['Employee ID'].rich_text) || [];
-              const empId = empIdArr.length ? empIdArr[0].plain_text : 'NX-NOTION';
+              const empId = empIdArr.length ? empIdArr[0].plain_text : (name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0 ? 'NX-8842' : 'NX-8845');
               const email = (props['Email'] && props['Email'].email) || '—';
               const phone = (props['Phone Number'] && props['Phone Number'].phone_number) || '—';
               const jobArr = (props['Job Title'] && props['Job Title'].rich_text) || [];
-              const jobTitle = jobArr.length ? jobArr[0].plain_text : 'Member of Technical Staff';
-              const band = (props['Pay Scale / Band'] && props['Pay Scale / Band'].select && props['Pay Scale / Band'].select.name) || 'Band L5 · Senior IC';
+              const jobTitle = jobArr.length ? jobArr[0].plain_text : 'Consultant';
+              const band = (props['Pay Scale / Band'] && props['Pay Scale / Band'].select && props['Pay Scale / Band'].select.name) || 'Band L5';
               const dept = (props['Department'] && props['Department'].select && props['Department'].select.name) || 'Data Science';
               const gross = (props['Monthly Gross (INR)'] && props['Monthly Gross (INR)'].number) || 150000;
               const status = (props['Status'] && props['Status'].status && props['Status'].status.name) || 'Active';
 
-              tbody.insertAdjacentHTML('afterbegin', renderEmployeeDirectoryRow({
+              rowsHtml += renderEmployeeDirectoryRow({
                 pageId: page.id,
                 name: name,
                 empId: empId,
@@ -2908,11 +2881,14 @@
                 dept: dept,
                 gross: gross,
                 status: status
-              }));
+              });
             });
+            if (rowsHtml) {
+              tbody.innerHTML = rowsHtml;
+            }
             const countBadge = document.getElementById('directoryCountBadge');
             if (countBadge) {
-              countBadge.innerText = tbody.querySelectorAll('tr').length + ' Records · Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff';
+              countBadge.innerText = tbody.querySelectorAll('tr').length + ' Notion Records';
             }
           }
           if (showToastFlag) {
