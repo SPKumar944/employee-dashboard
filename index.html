@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>Nexus HR — Enterprise Console</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", sans-serif;
+        letter-spacing: -0.011em;
+        background-color: #fafafc;
+        color: #1d1d1f;
+      }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .apple-shadow-sm {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .apple-shadow-tab {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0.5px 1px rgba(0, 0, 0, 0.04);
+    }
+    .apple-border {
+      border: 1px solid #e5e5ea;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            apple: {
+              bg: "#fafafc",
+              surface: "#ffffff",
+              card: "#ffffff",
+              subtle: "#f5f5f7",
+              hover: "#efeff2",
+              border: "#e5e5ea",
+              borderSubtle: "#f0f0f2",
+              primary: "#1d1d1f",
+              secondary: "#86868b",
+              tertiary: "#a1a1a6",
+              blue: "#0071e3",
+              blueHover: "#0077ed",
+              blueSubtle: "#f0f6ff",
+              destructive: "#ff3b30"
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-apple-bg text-apple-primary antialiased selection:bg-apple-blue selection:text-white">
+<!-- Minimalist Sidebar (Apple Human Interface Guidelines style) -->
+<aside class="fixed left-0 top-0 h-full w-60 bg-apple-surface border-r border-apple-border z-50 flex flex-col justify-between">
+<div class="flex flex-col">
+<!-- App Brandmark -->
+<div class="h-16 px-5 flex items-center gap-3 border-b border-apple-border">
+<div class="w-7 h-7 rounded-lg bg-apple-primary text-white flex items-center justify-center font-semibold text-xs tracking-tight shadow-sm">
+          N
+        </div>
+<div class="flex flex-col">
+<span class="text-[14px] font-semibold tracking-tight text-apple-primary leading-tight">Nexus HR</span>
+<span class="text-[11px] text-apple-secondary tracking-normal">Enterprise Console</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="px-3 py-4">
+<span class="text-[10px] font-medium tracking-wider uppercase text-apple-secondary px-2.5 mb-2 block">
+          Workforce
+        </span>
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
+<span>Directory</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-apple-subtle text-apple-primary font-medium text-[13px] transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-primary">group</span>
+<span>Employees</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">credit_card</span>
+<span>Payroll &amp; Comp</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">calendar_today</span>
+<span>Leave &amp; Attendance</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">verified_user</span>
+<span>Compliance &amp; Records</span>
+</a>
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">bar_chart</span>
+<span>Reports</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Sidebar Bottom Status & Settings -->
+<div class="px-3 py-3 border-t border-apple-border space-y-1.5">
+<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px] text-apple-secondary">tune</span>
+<span>Settings</span>
+</a>
+<div class="px-2.5 py-2 rounded-lg bg-apple-subtle/70 flex items-center justify-between text-[11px] text-apple-secondary">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary/80"></span>
+<span>v4.8.2 Live</span>
+</span>
+<span class="font-medium text-apple-primary/90">SSO Active</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="pl-60">
+<!-- Clean Minimalist Top App Bar -->
+<header class="fixed top-0 left-60 right-0 h-16 bg-apple-surface/80 backdrop-blur-md border-b border-apple-border z-40 px-8 flex items-center justify-between">
+<!-- Search Input (Clean iOS/macOS search style) -->
+<div class="flex items-center gap-3 w-full max-w-md">
+<div class="relative w-full flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-apple-tertiary text-[18px]">search</span>
+<input class="w-full h-8 pl-9 pr-3 bg-apple-subtle hover:bg-apple-hover/80 focus:bg-apple-surface border border-transparent focus:border-apple-border rounded-full text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" placeholder="Search employee, ID, role or document…" type="text"/>
+</div>
+</div>
+<!-- Action items -->
+<div class="flex items-center gap-3">
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>New Request</span>
+</button>
+<button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors" type="button">
+<span class="material-symbols-outlined text-[19px]">notifications</span>
+</button>
+<div class="h-4 w-px bg-apple-border mx-1"></div>
+<div class="flex items-center gap-2.5 pl-1">
+<div class="flex flex-col text-right">
+<span class="text-[12px] font-medium text-apple-primary leading-tight">Prem Kumar</span>
+<span class="text-[10px] text-apple-secondary">HR Admin</span>
+</div>
+<img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+</div>
+</div>
+</header>
+<!-- Page Body -->
+<main class="relative pt-16 min-h-screen">
+<div class="max-w-6xl mx-auto px-8 py-8 space-y-6">
+<!-- Breadcrumb / Context Navigation -->
+<div class="flex items-center justify-between text-[12px] text-apple-secondary">
+<div class="flex items-center gap-1.5">
+<a class="hover:text-apple-primary transition-colors" href="#">Directory</a>
+<span class="text-apple-tertiary">/</span>
+<a class="hover:text-apple-primary transition-colors" href="#">Data Science &amp; AI</a>
+<span class="text-apple-tertiary">/</span>
+<span class="text-apple-primary font-medium">Prem Kumar</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium">Confidential</span>
+<span class="text-apple-tertiary text-[11px]">Last sync: Today, 09:42 IST</span>
+</div>
+</div>
+<!-- 1. Apple-Style Employee Profile Header Card -->
+<div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<!-- Left Profile Identity -->
+<div class="flex items-center gap-5">
+<div class="relative">
+<img alt="Prem Kumar" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2.5">
+<h1 class="text-[22px] font-semibold text-apple-primary tracking-tight">Prem Kumar</h1>
+<span class="text-[12px] font-mono text-apple-secondary px-2 py-0.5 rounded bg-apple-subtle">NX-8842</span>
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>
+<span>Active</span>
+</div>
+</div>
+<p class="text-[14px] text-apple-secondary">
+                  Consultant <span class="text-apple-tertiary mx-1.5">·</span> Department of Data Science &amp; AI <span class="text-apple-tertiary mx-1.5">·</span> <span class="text-apple-primary font-medium">Band L5 (Senior Consultant)</span>
+</p>
+<div class="flex flex-wrap items-center gap-x-5 gap-y-1 pt-1 text-[12px] text-apple-secondary">
+<span>Joining: <strong class="text-apple-primary font-medium">17/08/2026</strong></span>
+<span class="text-apple-tertiary">·</span>
+<span>Location: <strong class="text-apple-primary font-medium">Hybrid (Bangalore HQ)</strong></span>
+<span class="text-apple-tertiary">·</span>
+<span>Reporting: <strong class="text-apple-primary font-medium">Ananya Sharma</strong> (VP, Data &amp; Analytics)</span>
+</div>
+</div>
+</div>
+<!-- Right Profile Actions -->
+<div class="flex items-center gap-2.5 self-start md:self-center">
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" type="button">
+<span class="material-symbols-outlined text-[15px] text-apple-secondary">download</span>
+<span>Export Dossier</span>
+</button>
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+<span>Edit Profile</span>
+</button>
+</div>
+</div>
+<!-- Apple Segmented Control Bar -->
+<div class="p-1 bg-apple-subtle rounded-xl flex items-center gap-1 overflow-x-auto">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all" onclick="switchTab('tab-overview', this)">
+              Overview
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-compensation', this)">
+              Compensation &amp; Payroll
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-bank', this)">
+              Bank &amp; Tax
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-documents', this)">
+              Documents
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-leave', this)">
+              Leave &amp; Attendance
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-appraisals', this)">
+              Appraisals &amp; Training
+            </button>
+</div>
+</div>
+<!-- TAB 1: OVERVIEW & PROFILE -->
+<section class="tab-content block space-y-6" id="tab-overview">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Core Details (2 columns) -->
+<div class="lg:col-span-2 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<h2 class="text-[15px] font-semibold text-apple-primary">Core Identification &amp; Contact</h2>
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-0.5 rounded-full border border-apple-borderSubtle">Verified Record</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Corporate Email -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Corporate Email</span>
+<div class="flex items-center justify-between">
+<span class="text-[13px] font-medium text-apple-primary truncate">premkumarrss669@gmail.com</span>
+<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText('premkumarrss669@gmail.com')" title="Copy email">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Primary Phone -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Primary Phone</span>
+<div class="flex items-center justify-between">
+<span class="text-[13px] font-medium text-apple-primary">+91 74179 92482</span>
+<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText('+917417992482')" title="Copy phone">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Emergency Contact -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Emergency Contact</span>
+<div class="text-[13px] font-medium text-apple-primary">Suresh Kumar <span class="text-apple-secondary font-normal">(Father)</span></div>
+<div class="text-[12px] text-apple-secondary font-mono">+91 98390 12455</div>
+</div>
+<!-- Nationality & Blood Group -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Nationality &amp; Blood Group</span>
+<div class="flex items-center justify-between pt-0.5">
+<span class="text-[13px] font-medium text-apple-primary">Indian</span>
+<span class="text-[12px] font-medium text-apple-secondary px-2 py-0.5 rounded bg-apple-surface border border-apple-border">B+ Positive</span>
+</div>
+</div>
+<!-- Permanent Address -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle sm:col-span-2 space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Permanent Residential Address</span>
+<button class="text-apple-secondary hover:text-apple-primary p-0.5 rounded transition-colors" onclick="navigator.clipboard.writeText('Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Bangalore 560048')">
+<span class="material-symbols-outlined text-[15px]">content_copy</span>
+</button>
+</div>
+<p class="text-[13px] text-apple-primary leading-relaxed">
+                    Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048
+                  </p>
+</div>
+<!-- Campus & Physical Desk -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle sm:col-span-2 flex items-center justify-between">
+<div>
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary block">Workstation &amp; Campus</span>
+<span class="text-[13px] font-medium text-apple-primary">Tower B, 4th Floor · Dedicated Workstation DS-402</span>
+</div>
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-surface px-2.5 py-1 rounded-full border border-apple-border">L5 Badge Access</span>
+</div>
+</div>
+</div>
+<!-- Organizational & Employment (1 column) -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-5">
+<div class="space-y-4">
+<h3 class="text-[15px] font-semibold text-apple-primary">Organizational Unit</h3>
+<div class="space-y-2 text-[13px]">
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<span class="text-apple-secondary">Cost Center:</span>
+<span class="font-mono text-apple-primary font-medium">CC-8820 (Analytics)</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<span class="text-apple-secondary">Legal Entity:</span>
+<span class="text-apple-primary font-medium text-right text-[12px]">Nexus Global Tech India Pvt Ltd</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<span class="text-apple-secondary">Notice Period:</span>
+<span class="text-apple-primary font-medium">60 Days (Standard)</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<span class="text-apple-secondary">Probation Status:</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary">Confirmed</span>
+</div>
+</div>
+<!-- Onboarding Progress -->
+<div class="pt-2 space-y-1.5">
+<div class="flex justify-between text-[12px]">
+<span class="text-apple-secondary">Tenure / Onboarding</span>
+<span class="font-medium text-apple-primary">100% Complete</span>
+</div>
+<div class="w-full bg-apple-subtle h-1.5 rounded-full overflow-hidden border border-apple-borderSubtle">
+<div class="bg-apple-primary h-full rounded-full" style="width: 100%;"></div>
+</div>
+<span class="text-[11px] text-apple-tertiary block">All IT provisions, identity audits &amp; policy agreements completed.</span>
+</div>
+</div>
+<!-- HR Partner Note -->
+<div class="p-3.5 bg-apple-subtle rounded-xl border border-apple-borderSubtle">
+<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block mb-1">HR Business Partner</span>
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-apple-surface border border-apple-border text-apple-primary flex items-center justify-center font-medium text-[11px]">
+                    RK
+                  </div>
+<div class="flex flex-col">
+<span class="text-[12px] font-medium text-apple-primary leading-tight">Rohit Kulkarni</span>
+<span class="text-[11px] text-apple-secondary">rohit.k@nexushr.corp</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TAB 2: COMPENSATION & PAYROLL -->
+<section class="tab-content hidden space-y-6" id="tab-compensation">
+<!-- Summary Metrics Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Gross Monthly Salary</span>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹1,85,000</div>
+<span class="text-[12px] text-apple-secondary block">Fixed base + monthly allowances</span>
+</div>
+<div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Total Deductions</span>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹18,400</div>
+<span class="text-[12px] text-apple-secondary block">PF, Professional Tax &amp; TDS</span>
+</div>
+<div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2 border-l-2 border-l-apple-primary">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Net Take-Home Pay</span>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary">Disbursed</span>
+</div>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹1,66,600</div>
+<span class="text-[12px] text-apple-secondary block">Credited on 30th of each month</span>
+</div>
+<div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Annual CTC</span>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹22,20,000</div>
+<span class="text-[12px] text-apple-secondary block">Senior Consultant Package (L5)</span>
+</div>
+</div>
+<!-- Detailed Itemized Table -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Itemized Monthly Compensation Structure</h3>
+<p class="text-[12px] text-apple-secondary">FY 2026–2027 Indian Tax Framework (New Tax Regime Section 115BAC)</p>
+</div>
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">Regime: 115BAC</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-[13px]">
+<thead>
+<tr class="border-b border-apple-border text-apple-secondary text-[11px] uppercase tracking-wider">
+<th class="py-2.5 px-3 font-medium">Component</th>
+<th class="py-2.5 px-3 font-medium">Type</th>
+<th class="py-2.5 px-3 font-medium text-right">Calculation Factor</th>
+<th class="py-2.5 px-3 font-medium text-right">Amount (₹)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-apple-borderSubtle">
+<!-- Section A -->
+<tr class="bg-apple-subtle/50 font-medium text-[11px] uppercase tracking-wider text-apple-secondary">
+<td class="py-2 px-3" colspan="4">A. Monthly Gross Earnings</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Basic Salary</td>
+<td class="py-2.5 px-3 text-apple-secondary">Core Base</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">45.9% of Gross</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹85,000</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">House Rent Allowance (HRA)</td>
+<td class="py-2.5 px-3 text-apple-secondary">Standard Statutory</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">50% of Basic</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹42,500</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Travel / Conveyance Allowance</td>
+<td class="py-2.5 px-3 text-apple-secondary">Fixed Commute</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Standard Monthly</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹8,000</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Medical Allowance</td>
+<td class="py-2.5 px-3 text-apple-secondary">Health Reimbursable</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Tier L5 Allowance</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹6,500</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Special Tech Allowance</td>
+<td class="py-2.5 px-3 text-apple-secondary">Domain Specialty (AI)</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Role Band</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹43,000</td>
+</tr>
+<tr class="bg-apple-subtle/70 font-semibold text-apple-primary">
+<td class="py-2.5 px-3" colspan="3">Total Monthly Gross (A)</td>
+<td class="py-2.5 px-3 text-right font-mono">₹1,85,000</td>
+</tr>
+<!-- Section B -->
+<tr class="bg-apple-subtle/50 font-medium text-[11px] uppercase tracking-wider text-apple-secondary">
+<td class="py-2 px-3" colspan="4">B. Statutory Deductions</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Provident Fund (PF)</td>
+<td class="py-2.5 px-3 text-apple-secondary">EPFO Statutory</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">12% on Basic Cap</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹10,200</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">Professional Tax (PT)</td>
+<td class="py-2.5 px-3 text-apple-secondary">Karnataka State Law</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Fixed</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹200</td>
+</tr>
+<tr>
+<td class="py-2.5 px-3 font-medium text-apple-primary">TDS / Income Tax Withholding</td>
+<td class="py-2.5 px-3 text-apple-secondary">Section 192 (IT Act)</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Est. Annual Slab</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹8,000</td>
+</tr>
+<tr class="bg-apple-subtle/70 font-semibold text-apple-primary">
+<td class="py-2.5 px-3" colspan="3">Total Deductions (B)</td>
+<td class="py-2.5 px-3 text-right font-mono">₹18,400</td>
+</tr>
+<!-- Net Take Home -->
+<tr class="bg-apple-subtle border-t-2 border-apple-border font-semibold">
+<td class="py-3 px-3 text-apple-primary text-[14px]" colspan="3">Net Disbursement (A − B)</td>
+<td class="py-3 px-3 text-right font-mono text-[15px] text-apple-primary">₹1,66,600</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- TAB 3: BANK & TAX -->
+<section class="tab-content hidden space-y-6" id="tab-bank">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Bank Details (2 cols) -->
+<div class="lg:col-span-2 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Direct Deposit Account</h3>
+<p class="text-[12px] text-apple-secondary">Configured for Real-time NEFT &amp; RTGS salary settlement</p>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>
+<span>Primary</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Bank Institution</span>
+<div class="text-[13px] font-semibold text-apple-primary">IDFC FIRST BANK LIMITED</div>
+</div>
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Beneficiary Name</span>
+<div class="text-[13px] font-semibold text-apple-primary">Prem Kumar</div>
+</div>
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Account Number</span>
+<button class="text-[11px] text-apple-primary font-medium hover:underline" id="accToggleText" onclick="toggleAccountNumber()" type="button">Reveal</button>
+</div>
+<div class="text-[14px] font-mono font-medium text-apple-primary" id="bankAccVal">•••• •••• 5174</div>
+</div>
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">IFSC Code</span>
+<button class="text-apple-secondary hover:text-apple-primary p-0.5 rounded" onclick="navigator.clipboard.writeText('IDFB0080135')" title="Copy IFSC">
+<span class="material-symbols-outlined text-[15px]">content_copy</span>
+</button>
+</div>
+<div class="text-[13px] font-mono font-semibold text-apple-primary">IDFB0080135</div>
+</div>
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle md:col-span-2 space-y-1">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Branch &amp; Account Category</span>
+<div class="text-[13px] text-apple-primary">
+                    Whitefield Main Road Branch, Prestige Sigma Tech Zone, Bangalore 560066 · <span class="text-apple-secondary">Corporate Salary (Zero-Balance)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tax Identification (1 col) -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-5">
+<div class="space-y-4">
+<h3 class="text-[15px] font-semibold text-apple-primary">Tax &amp; Statutory Identifiers</h3>
+<div class="space-y-2.5 text-[13px]">
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block">PAN (Income Tax)</span>
+<span class="font-mono font-semibold text-apple-primary">ABZPK4921D</span>
+</div>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary">Active</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block">Universal PF (UAN)</span>
+<span class="font-mono font-semibold text-apple-primary">1019 9283 4012</span>
+</div>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary">Linked</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block">Aadhaar (UIDAI Masked)</span>
+<span class="font-mono font-semibold text-apple-primary">•••• •••• 8291</span>
+</div>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary">Verified</span>
+</div>
+</div>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl text-[11px] text-apple-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-apple-primary">lock</span>
+<span>Encrypted with hardware-backed KMS tokens.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- TAB 4: DOCUMENTS -->
+<section class="tab-content hidden space-y-6" id="tab-documents">
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Verified Compliance &amp; Academic Documents</h3>
+<p class="text-[12px] text-apple-secondary">All required records counter-signed &amp; stored with SHA-256 verification</p>
+</div>
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" type="button">
+<span class="material-symbols-outlined text-[15px] text-apple-secondary">upload_file</span>
+<span>Upload Document</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Doc 1 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
+<span class="text-[10px] font-medium text-apple-primary">Verified</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">Aadhaar Card (Masked UID)</div>
+<p class="text-[11px] text-apple-secondary">UID: •••• •••• 8291 · Identity Proof</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>1.4 MB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+<!-- Doc 2 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
+<span class="text-[10px] font-medium text-apple-primary">Verified</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">PAN Card (Tax Record)</div>
+<p class="text-[11px] text-apple-secondary">Permanent Account No: ABZPK4921D</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>890 KB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+<!-- Doc 3 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
+<span class="text-[10px] font-medium text-apple-primary">Verified</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">M.S. in Data Analytics &amp; ML</div>
+<p class="text-[11px] text-apple-secondary">Postgraduate Degree Certificate &amp; Transcripts</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>3.1 MB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+<!-- Doc 4 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
+<span class="text-[10px] font-medium text-apple-primary">Verified</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">B.Tech in Computer Science</div>
+<p class="text-[11px] text-apple-secondary">Undergraduate Degree Certificate</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>2.8 MB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+<!-- Doc 5 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">DOCX</span>
+<span class="text-[10px] font-medium text-apple-primary">Verified</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">Consultant Resume &amp; Matrix</div>
+<p class="text-[11px] text-apple-secondary">Updated Technical Competency Record</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>640 KB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+<!-- Doc 6 -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
+<span class="text-[10px] font-medium text-apple-primary">Signed</span>
+</div>
+<div class="text-[13px] font-medium text-apple-primary">Non-Disclosure &amp; IP Agreement</div>
+<p class="text-[11px] text-apple-secondary">Digital Signature verified via DocuSign</p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
+<span>1.1 MB</span>
+<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TAB 5: LEAVE & ATTENDANCE -->
+<section class="tab-content hidden space-y-6" id="tab-leave">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Quotas (2 cols) -->
+<div class="lg:col-span-2 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Leave Accrual &amp; Quotas</h3>
+<p class="text-[12px] text-apple-secondary">Cycle: Jan 2026 – Dec 2026 (Annual Allocation)</p>
+</div>
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all" type="button">
+                  Apply for Leave
+                </button>
+</div>
+<!-- 3 Quota Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
+<div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
+<span>Annual Leave</span>
+<span class="text-apple-primary">0 Taken</span>
+</div>
+<div>
+<div class="text-[26px] font-semibold text-apple-primary">9 <span class="text-[14px] font-normal text-apple-secondary">/ 9 Days</span></div>
+<span class="text-[12px] text-apple-secondary">Remaining AL: 9 / 9</span>
+</div>
+<div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
+<div class="bg-apple-primary h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
+<div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
+<span>Sick Leave</span>
+<span class="text-apple-primary">0 Taken</span>
+</div>
+<div>
+<div class="text-[26px] font-semibold text-apple-primary">6 <span class="text-[14px] font-normal text-apple-secondary">/ 6 Days</span></div>
+<span class="text-[12px] text-apple-secondary">Remaining SL: 6 / 6</span>
+</div>
+<div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
+<div class="bg-apple-secondary h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
+<div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
+<span>Casual Leave</span>
+<span class="text-apple-primary">Full Balance</span>
+</div>
+<div>
+<div class="text-[26px] font-semibold text-apple-primary">4 <span class="text-[14px] font-normal text-apple-secondary">/ 4 Days</span></div>
+<span class="text-[12px] text-apple-secondary">Remaining: 4 / 4</span>
+</div>
+<div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
+<div class="bg-apple-secondary h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<!-- Attendance Track -->
+<div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-apple-surface border border-apple-border flex items-center justify-center font-semibold text-[13px] text-apple-primary">
+                    100%
+                  </div>
+<div>
+<div class="text-[13px] font-medium text-apple-primary">Present in Current Billing Cycle</div>
+<span class="text-[12px] text-apple-secondary">Biometric turnstile logs &amp; remote sprint check-ins validated</span>
+</div>
+</div>
+<span class="text-[11px] font-medium px-2.5 py-1 rounded bg-apple-surface border border-apple-border text-apple-primary">0 Absences</span>
+</div>
+</div>
+<!-- Holidays Calendar (1 col) -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-[15px] font-semibold text-apple-primary">Upcoming Holidays</h3>
+<span class="text-[11px] text-apple-secondary font-medium">Bangalore Hub</span>
+</div>
+<div class="space-y-2 text-[13px]">
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">Ganesh Chaturthi</div>
+<span class="text-[11px] text-apple-secondary">15 September 2026</span>
+</div>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">Public</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">Gandhi Jayanti</div>
+<span class="text-[11px] text-apple-secondary">02 October 2026</span>
+</div>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">National</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">Kannada Rajyotsava</div>
+<span class="text-[11px] text-apple-secondary">01 November 2026</span>
+</div>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">State</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">Deepavali (Diwali)</div>
+<span class="text-[11px] text-apple-secondary">08 November 2026</span>
+</div>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">Public</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- TAB 6: APPRAISALS & TRAINING -->
+<section class="tab-content hidden space-y-6" id="tab-appraisals">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Appraisal Review (7 cols) -->
+<div class="lg:col-span-7 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Performance Appraisals</h3>
+<p class="text-[12px] text-apple-secondary">Cumulative Assessment Score: <strong class="text-apple-primary">4.8 / 5.0</strong></p>
+</div>
+<span class="text-[11px] font-medium px-2.5 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle">Exceeds Expectations</span>
+</div>
+<!-- Cycle Review Note -->
+<div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
+<div class="flex items-center justify-between text-[12px]">
+<span class="font-medium text-apple-primary">Q4 Annual Performance Review</span>
+<span class="text-apple-secondary">Published: 15/01/2026</span>
+</div>
+<p class="text-[13px] text-apple-primary leading-relaxed italic border-l-2 border-apple-primary pl-3">
+                  “Exceptional delivery on predictive machine learning architectures and collaborative leadership. Prem consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”
+                </p>
+<div class="text-[12px] text-apple-secondary flex justify-between pt-1">
+<span>Evaluator: <strong class="text-apple-primary font-medium">Ananya Sharma</strong> (VP Data &amp; Analytics)</span>
+<span class="font-mono">Score: 96%</span>
+</div>
+</div>
+<!-- Training Modules -->
+<div class="pt-3 border-t border-apple-border space-y-3">
+<div class="flex justify-between items-center">
+<h4 class="text-[13px] font-semibold text-apple-primary">Mandatory Compliance Training</h4>
+<span class="text-[11px] text-apple-secondary">2 of 3 Completed</span>
+</div>
+<div class="space-y-2 text-[13px]">
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">MT 2024: Information Security &amp; Data Privacy</div>
+<span class="text-[11px] text-apple-secondary">Score: 98% · Completed</span>
+</div>
+<span class="text-[11px] font-medium text-apple-primary px-2 py-0.5 rounded bg-apple-surface border border-apple-border">Passed</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">MT 2025: Anti-Harassment &amp; Workplace Ethics</div>
+<span class="text-[11px] text-apple-secondary">Score: 100% · Completed</span>
+</div>
+<span class="text-[11px] font-medium text-apple-primary px-2 py-0.5 rounded bg-apple-surface border border-apple-border">Passed</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
+<div>
+<div class="font-medium text-apple-primary">MT 2026: AI Governance &amp; Enterprise Data Handling</div>
+<span class="text-[11px] text-apple-secondary">Enrolled · Due: October 2026</span>
+</div>
+<button class="h-7 px-3 bg-apple-primary text-white rounded-full text-[11px] font-medium hover:bg-black transition-colors" type="button">
+                      Resume
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Health & Occupational (5 cols) -->
+<div class="lg:col-span-5 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-5">
+<div class="space-y-4">
+<h3 class="text-[15px] font-semibold text-apple-primary">Occupational Health &amp; Safety</h3>
+<div class="space-y-2.5 text-[13px]">
+<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Executive Health Check</span>
+<span class="text-[11px] text-apple-primary font-medium">Cleared</span>
+</div>
+<div class="font-medium text-apple-primary">Max Healthcare Bangalore</div>
+<span class="text-[11px] text-apple-secondary">Valid through August 2027</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Vaccinations</span>
+<span class="text-[11px] text-apple-primary font-medium">Up to Date</span>
+</div>
+<div class="font-medium text-apple-primary">COVID-19 Booster &amp; Annual Flu</div>
+<span class="text-[11px] text-apple-secondary">Administered Sept 2025</span>
+</div>
+<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Ergonomic Provision</span>
+<span class="text-[11px] text-apple-primary font-medium">Approved</span>
+</div>
+<div class="font-medium text-apple-primary">Home Office Setup Dispatched</div>
+<span class="text-[11px] text-apple-secondary">Lumbar support chair + dual monitor arms</span>
+</div>
+</div>
+</div>
+<div class="p-3.5 bg-apple-subtle rounded-xl border border-apple-borderSubtle flex items-center justify-between text-[12px]">
+<span class="text-apple-secondary font-medium">Group Medical Insurance Cover</span>
+<span class="font-semibold text-apple-primary">₹15,00,000</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Interactive JavaScript -->
+<script>
+    // Tab switching for Apple-style segmented control
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-content').forEach(function(content) {
+        content.classList.add('hidden');
+      });
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) {
+        activeTab.classList.remove('hidden');
+      }
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('bg-apple-surface', 'text-apple-primary', 'apple-shadow-tab');
+        btn.classList.add('text-apple-secondary');
+      });
+      el.classList.add('bg-apple-surface', 'text-apple-primary', 'apple-shadow-tab');
+      el.classList.remove('text-apple-secondary');
+    }
+
+    // Toggle Masked Account Number
+    let isRevealed = false;
+    function toggleAccountNumber() {
+      const accElem = document.getElementById('bankAccVal');
+      const toggleText = document.getElementById('accToggleText');
+      if (!isRevealed) {
+        accElem.innerText = '10205355174';
+        toggleText.innerText = 'Hide';
+        isRevealed = true;
+      } else {
+        accElem.innerText = '•••• •••• 5174';
+        toggleText.innerText = 'Reveal';
+        isRevealed = false;
+      }
+    }
+  </script>
+</body></html>
