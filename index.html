@@ -254,13 +254,13 @@
           Workforce
         </span>
 <nav class="flex flex-col gap-0.5">
-<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="directory" href="#directory" onclick="navigateSidebar('directory', this); return false;">
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="directory" href="#directory" id="sidebarDirectoryLink" onclick="navigateSidebar('directory', this); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
-<span>Directory</span>
+<span>Directory &amp; Approvals</span>
 </a>
 <a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-apple-subtle text-apple-primary font-medium text-[13px] transition-colors cursor-pointer" data-nav="employees" href="#employees" onclick="navigateSidebar('employees', this); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-primary">group</span>
-<span>Employees</span>
+<span>My Profile</span>
 </a>
 <a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="payroll" href="#payroll" onclick="navigateSidebar('payroll', this); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">credit_card</span>
@@ -313,9 +313,14 @@
 </div>
 <!-- Action items -->
 <div class="flex items-center gap-2.5">
-<!-- Role Mode Switcher (Employee vs Super Admin) -->
-<div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px]">
-<button class="px-2.5 py-1 rounded-full font-medium transition-all bg-apple-surface text-apple-primary apple-shadow-sm" id="roleBtnEmployee" onclick="setAccessMode('employee')" type="button">Employee</button>
+<!-- Shareable Employee Form Button (Super Admin Only) -->
+<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors superadmin-only-el" id="topShareFormBtn" onclick="copyShareableFormLink()" title="Copy shareable Employee Onboarding &amp; Details Form link" type="button">
+<span class="material-symbols-outlined text-[15px]">link</span>
+<span>Share Employee Form</span>
+</button>
+<!-- Role Mode Switcher (Visible Only to Super Admin SUKUMAR PREM KUMAR) -->
+<div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px]" id="roleModeSwitcher">
+<button class="px-2.5 py-1 rounded-full font-medium transition-all bg-apple-surface text-apple-primary apple-shadow-sm" id="roleBtnEmployee" onclick="setAccessMode('employee')" type="button">Employee View</button>
 <button class="px-2.5 py-1 rounded-full font-medium transition-all text-apple-secondary hover:text-apple-primary" id="roleBtnAdmin" onclick="setAccessMode('superadmin')" type="button">Super Admin</button>
 </div>
 <button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="openLeaveModal()" type="button">
@@ -329,7 +334,7 @@
 <div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
 <span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">SUKUMAR PREM KUMAR</span>
-<span class="text-[10px] text-apple-secondary" id="topBarUserRole">Employee View</span>
+<span class="text-[10px] text-apple-secondary" id="topBarUserRole">Super Admin (HR)</span>
 </div>
 <img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 </div>
@@ -342,8 +347,7 @@
 <!-- Breadcrumb / Context Navigation -->
 <div class="flex items-center justify-between text-[12px] text-apple-secondary">
 <div class="flex items-center gap-1.5">
-<a class="hover:text-apple-primary transition-colors cursor-pointer" href="#directory" onclick="navigateSidebar('directory'); return false;">Directory</a>
-<span class="text-apple-tertiary">/</span>
+<span id="breadcrumbDirectoryWrap"><a class="hover:text-apple-primary transition-colors cursor-pointer" href="#directory" onclick="navigateSidebar('directory'); return false;">Directory</a> <span class="text-apple-tertiary mx-1">/</span></span>
 <a class="hover:text-apple-primary transition-colors cursor-pointer" href="#employees" onclick="navigateSidebar('employees'); return false;">Data Science</a>
 <span class="text-apple-tertiary">/</span>
 <span class="text-apple-primary font-semibold" id="breadcrumbCurrent">SUKUMAR PREM KUMAR</span>
@@ -423,7 +427,7 @@
 <span class="material-symbols-outlined text-[15px]">edit</span>
 <span>Edit Personal Details</span>
 </button>
-<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" id="headerAdminEditBtn" onclick="openSuperAdminModal()" type="button">
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border superadmin-only-el" id="headerAdminEditBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">admin_panel_settings</span>
 <span>Edit Pay Scale &amp; Org (Admin)</span>
 </button>
@@ -536,10 +540,11 @@
 <div class="space-y-4">
 <div class="flex items-center justify-between">
 <h3 class="text-[15px] font-semibold text-apple-primary">Organizational Unit</h3>
-<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary flex items-center gap-1 bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle transition-colors" onclick="openSuperAdminModal()" type="button">
+<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary flex items-center gap-1 bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle transition-colors superadmin-only-el" id="orgUnitAdminBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[13px]">lock_person</span>
 <span>Super Admin</span>
 </button>
+<span class="hidden text-[10px] font-medium text-apple-secondary bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle employee-only-lock-badge">Read-Only</span>
 </div>
 <div class="space-y-2 text-[13px]">
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
@@ -573,14 +578,14 @@
 </div>
 <!-- HR Partner Note -->
 <div class="p-3.5 bg-apple-subtle rounded-xl border border-apple-borderSubtle">
-<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block mb-1">HR Business Partner</span>
+<span class="text-[10px] font-medium uppercase tracking-wider text-apple-secondary block mb-1">Super Admin &amp; Approver</span>
 <div class="flex items-center gap-2.5">
 <div class="w-7 h-7 rounded-full bg-apple-surface border border-apple-border text-apple-primary flex items-center justify-center font-medium text-[11px]">
-                    RK
+                    SP
                   </div>
 <div class="flex flex-col">
-<span class="text-[12px] font-medium text-apple-primary leading-tight">Rohit Kulkarni</span>
-<span class="text-[11px] text-apple-secondary">rohit.k@nexushr.corp</span>
+<span class="text-[12px] font-medium text-apple-primary leading-tight">SUKUMAR PREM KUMAR</span>
+<span class="text-[11px] text-apple-secondary">premkumarrss669@gmail.com</span>
 </div>
 </div>
 </div>
@@ -624,10 +629,14 @@
 </div>
 <div class="flex items-center gap-2">
 <span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">Regime: 115BAC</span>
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="openSuperAdminModal()" type="button">
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 superadmin-only-el" id="compModifyPayScaleBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">admin_panel_settings</span>
 <span>Modify Pay Scale (Super Admin)</span>
 </button>
+<span class="hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle employee-only-lock-badge flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>View Only (Super Admin Managed)</span>
+</span>
 </div>
 </div>
 <div class="overflow-x-auto">
@@ -1050,25 +1059,35 @@
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 <!-- Appraisal Review (7 cols) -->
 <div class="lg:col-span-7 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
-<div class="flex items-center justify-between pb-1">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-1">
 <div>
 <h3 class="text-[15px] font-semibold text-apple-primary">Performance Appraisals</h3>
-<p class="text-[12px] text-apple-secondary">Cumulative Assessment Score: <strong class="text-apple-primary">4.8 / 5.0</strong></p>
+<p class="text-[12px] text-apple-secondary">Cumulative Assessment Score: <strong class="text-apple-primary" id="dispAppraisalScore">4.8 / 5.0</strong></p>
 </div>
-<span class="text-[11px] font-medium px-2.5 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle">Exceeds Expectations</span>
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-medium px-2.5 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="dispAppraisalBadge">Exceeds Expectations</span>
+<button class="superadmin-only-el h-7 px-3 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors" id="appraisalModifyAdminBtn" onclick="openAppraisalAdminModal()" type="button">
+<span class="material-symbols-outlined text-[13px]">admin_panel_settings</span>
+<span>Modify Appraisal (Super Admin)</span>
+</button>
+<span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>View Only (Super Admin Managed)</span>
+</span>
+</div>
 </div>
 <!-- Cycle Review Note -->
 <div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
 <div class="flex items-center justify-between text-[12px]">
-<span class="font-medium text-apple-primary">Q4 Annual Performance Review</span>
-<span class="text-apple-secondary">Published: 15/01/2026</span>
+<span class="font-medium text-apple-primary" id="dispAppraisalCycle">Q4 Annual Performance Review</span>
+<span class="text-apple-secondary" id="dispAppraisalDate">Published: 15/01/2026</span>
 </div>
-<p class="text-[13px] text-apple-primary leading-relaxed italic border-l-2 border-apple-primary pl-3">
+<p class="text-[13px] text-apple-primary leading-relaxed italic border-l-2 border-apple-primary pl-3" id="dispAppraisalQuote">
                   “Exceptional delivery on predictive machine learning architectures and collaborative leadership. Prem consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”
                 </p>
 <div class="text-[12px] text-apple-secondary flex justify-between pt-1">
-<span>Evaluator: <strong class="text-apple-primary font-medium">Ananya Sharma</strong> (VP Data &amp; Analytics)</span>
-<span class="font-mono">Score: 96%</span>
+<span>Evaluator: <strong class="text-apple-primary font-medium" id="dispAppraisalEvaluator">SUKUMAR PREM KUMAR (Super Admin)</strong></span>
+<span class="font-mono" id="dispAppraisalPct">Score: 96%</span>
 </div>
 </div>
 <!-- Training Modules -->
@@ -1137,18 +1156,72 @@
 </div>
 <div class="p-3.5 bg-apple-subtle rounded-xl border border-apple-borderSubtle flex items-center justify-between text-[12px]">
 <span class="text-apple-secondary font-medium">Group Medical Insurance Cover</span>
-<span class="font-semibold text-apple-primary">₹15,00,000</span>
+<span class="font-semibold text-apple-primary" id="dispHealthInsuranceCover">₹15,00,000</span>
 </div>
 </div>
 </div>
 </section>
-<!-- SIDEBAR SECTION: WORKFORCE DIRECTORY -->
+<!-- SIDEBAR SECTION: WORKFORCE DIRECTORY (SUPER ADMIN ONLY) -->
 <section class="tab-content hidden space-y-6" id="tab-directory">
+<!-- Shareable Employee Onboarding & Self-Service Details Form Link Banner -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-4">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div class="space-y-1">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle border border-apple-borderSubtle text-[11px] font-semibold text-apple-primary">
+<span class="material-symbols-outlined text-[14px]">add_link</span>
+<span>Shareable Employee Onboarding &amp; Self-Service Details Form</span>
+</div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Share Form Link with New or Existing Employees</h3>
+<p class="text-[12px] text-apple-secondary">Employees use this link to submit their editable Personal Details, Emergency Contact, Residential Address, Bank &amp; Tax PAN. Submissions land in your <strong>Super Admin Review Queue</strong> below to <strong>Approve</strong> or <strong>Reject with Mistake Correction Email</strong>.</p>
+</div>
+<div class="flex flex-wrap items-center gap-2 shrink-0">
+<button class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1.5 transition-colors" onclick="copyShareableFormLink()" type="button">
+<span class="material-symbols-outlined text-[15px]">content_copy</span>
+<span>Copy Shareable Form Link</span>
+</button>
+<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors" onclick="openStandaloneEmployeeForm()" type="button">
+<span class="material-symbols-outlined text-[15px]">open_in_new</span>
+<span>Open Employee Form View</span>
+</button>
+</div>
+</div>
+<div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12px]">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="text-apple-secondary font-medium shrink-0">Form URL:</span>
+<code class="font-mono text-apple-primary truncate" id="shareableFormUrlDisplay">https://spkumar944.github.io/employee-dashboard/?form=employee-onboarding</code>
+</div>
+<span class="text-[11px] text-apple-secondary shrink-0">Writes to Notion Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span></span>
+</div>
+</div>
+
+<!-- Super Admin Pending Employee Form Submissions & Review Queue -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-4" id="superAdminApprovalPanel">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-[15px] font-semibold text-apple-primary">Pending Employee Form Submissions (Super Admin Review &amp; Approval)</h3>
+<span class="px-2 py-0.5 rounded-full bg-apple-primary text-white text-[11px] font-semibold" id="pendingApprovalCountBadge">0 Pending</span>
+</div>
+<p class="text-[12px] text-apple-secondary">Review details submitted via the Employee Form Link. Approve to activate in Notion or Reject to email the employee with specific mistakes to fix.</p>
+</div>
+<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors self-start sm:self-auto" onclick="loadDirectoryFromNotion(true)" type="button">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span>Refresh Submissions</span>
+</button>
+</div>
+<div class="space-y-3" id="pendingApprovalsList">
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[12px] text-apple-secondary text-center">
+No pending employee form submissions awaiting review. Share the form link above or click <strong>Open Employee Form View</strong> to test submitting a new employee record.
+</div>
+</div>
+</div>
+
+<!-- Enterprise Workforce Directory Table -->
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
 <div>
-<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Workforce Directory (Notion Data Source: Employee Directory*)</h3>
-<p class="text-[12px] text-apple-secondary">Live two-way sync with Notion Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span></p>
+<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Workforce Directory (Super Admin Only · Notion: Employee Directory*)</h3>
+<p class="text-[12px] text-apple-secondary">Live two-way sync with Notion Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span> · Hidden from regular employees</p>
 </div>
 <div class="flex items-center gap-2">
 <span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle" id="directoryCountBadge">2 Notion Records</span>
@@ -1680,6 +1753,266 @@
   </div>
 </div>
 
+<!-- MODAL 5: SUPER ADMIN — APPRAISALS & RATING EDIT MODAL -->
+<div id="superAdminAppraisalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+  <div class="w-full max-w-lg bg-apple-surface rounded-2xl apple-border apple-shadow-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-apple-borderSubtle flex items-center justify-between bg-apple-subtle/50">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-apple-primary">admin_panel_settings</span>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Super Admin · Modify Appraisal &amp; Rating</h3>
+          <p class="text-[11px] text-apple-secondary">Only Super Admin can edit performance scores, review notes &amp; insurance cover</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeAppraisalAdminModal()" class="w-7 h-7 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <form id="superAdminAppraisalForm" onsubmit="saveAppraisalAdminDetails(event)" class="p-6 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Cumulative Score (out of 5.0)</label>
+          <input id="editAppraisalScore" type="text" required value="4.8 / 5.0" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-semibold text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Performance Rating Badge</label>
+          <select id="editAppraisalBadge" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+            <option value="Exceeds Expectations">Exceeds Expectations</option>
+            <option value="Outstanding (Top 5%)">Outstanding (Top 5%)</option>
+            <option value="Meets Expectations">Meets Expectations</option>
+            <option value="Needs Improvement">Needs Improvement</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Percentage Score</label>
+          <input id="editAppraisalPct" type="text" required value="Score: 96%" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Group Medical Insurance Cover</label>
+          <input id="editHealthInsuranceCover" type="text" required value="₹15,00,000" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-semibold text-apple-primary outline-none"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Evaluator Name &amp; Title</label>
+        <input id="editAppraisalEvaluator" type="text" required value="SUKUMAR PREM KUMAR (Super Admin)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Official Appraisal Review Remarks</label>
+        <textarea id="editAppraisalQuote" rows="3" required class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none">“Exceptional delivery on predictive machine learning architectures and collaborative leadership. Prem consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”</textarea>
+      </div>
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeAppraisalAdminModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors">Save Appraisal Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL 6: SUPER ADMIN — REJECT SUBMISSION & SEND MISTAKE CORRECTION EMAIL -->
+<div id="rejectCorrectionModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+  <div class="w-full max-w-lg bg-apple-surface rounded-2xl apple-border apple-shadow-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-apple-borderSubtle flex items-center justify-between bg-apple-subtle/50">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-apple-primary">mark_email_unread</span>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Reject Submission &amp; Notify Mistakes via Email</h3>
+          <p class="text-[11px] text-apple-secondary" id="rejectModalTargetLabel">Send mistake correction notice + self-service correction form link</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeRejectCorrectionModal()" class="w-7 h-7 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <form id="rejectCorrectionForm" onsubmit="sendRejectCorrectionEmail(event)" class="p-6 space-y-4">
+      <input type="hidden" id="rejectTargetPageId" value=""/>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Employee Name</label>
+          <input id="rejectEmployeeName" type="text" readonly class="w-full h-9 px-3 bg-apple-subtle border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Employee Email Recipient *</label>
+          <input id="rejectEmployeeEmail" type="email" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Fields Containing Mistakes (Check all that apply)</label>
+        <div class="grid grid-cols-2 gap-2 text-[12px] text-apple-primary bg-apple-subtle p-3 rounded-xl border border-apple-borderSubtle">
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Full Legal Name"/> Full Legal Name</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Phone / Emergency Contact"/> Phone / Emergency Contact</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Permanent Residential Address"/> Residential Address</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Bank Account / IFSC / Tax PAN" checked/> Bank / IFSC / Tax PAN</label>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Detailed Mistake / Correction Instructions for Employee *</label>
+        <textarea id="rejectMistakeNotes" rows="3" required placeholder="Describe what needs to be corrected (e.g. Please verify your Bank IFSC code and upload your full legal name as per PAN card)..." class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"></textarea>
+      </div>
+      <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[11px] text-apple-secondary space-y-1">
+        <div class="font-semibold text-apple-primary">Personalized Correction Form Link included in Email:</div>
+        <div class="font-mono text-apple-primary break-all" id="rejectCorrectionLinkPreview">https://spkumar944.github.io/employee-dashboard/?form=employee-onboarding</div>
+      </div>
+      <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeRejectCorrectionModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" id="rejectSendEmailBtn" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-semibold transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">send</span>
+          <span>Reject &amp; Send Correction Email to Employee</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</div>
+
+<!-- STANDALONE SHAREABLE EMPLOYEE ONBOARDING & SELF-SERVICE DETAILS FORM VIEW -->
+<div id="standaloneEmployeeFormScreen" class="fixed inset-0 z-[120] hidden bg-apple-bg overflow-y-auto py-8 px-4 sm:px-6">
+  <div class="max-w-2xl mx-auto space-y-5">
+    <!-- Top Header Bar -->
+    <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-apple-primary text-white flex items-center justify-center font-bold text-sm tracking-tight shrink-0">NX</div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-[17px] font-bold text-apple-primary">NexusHR · Employee Onboarding &amp; Self-Service Details Form</h1>
+          </div>
+          <p class="text-[12px] text-apple-secondary">Submit your personal, emergency, address &amp; bank details for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) review &amp; approval.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 self-start sm:self-center">
+        <button type="button" onclick="copyShareableFormLink()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">content_copy</span>
+          <span>Copy Link</span>
+        </button>
+        <button type="button" id="closeStandaloneFormBtn" onclick="closeStandaloneEmployeeForm()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-secondary hover:text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+          <span>Back to Console</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Super Admin Mistake Correction Banner (Shown when employee opens a correction link) -->
+    <div id="formCorrectionAlertBanner" class="hidden bg-apple-surface rounded-2xl border-2 border-apple-primary p-5 apple-shadow-sm space-y-2">
+      <div class="flex items-center gap-2 text-apple-primary font-semibold text-[13px]">
+        <span class="material-symbols-outlined text-[18px]">error</span>
+        <span>Action Required: Super Admin Requested Corrections to Your Submitted Details</span>
+      </div>
+      <p class="text-[12px] text-apple-secondary">Your previous submission was reviewed by <strong class="text-apple-primary">SUKUMAR PREM KUMAR (Super Admin)</strong> and requires the following corrections before approval:</p>
+      <div id="formCorrectionAlertText" class="p-3 rounded-xl bg-apple-subtle border border-apple-border text-[12px] font-medium text-apple-primary whitespace-pre-wrap"></div>
+    </div>
+
+    <!-- Main Employee Editable Details Form -->
+    <form id="standaloneEmployeeOnboardingForm" onsubmit="submitStandaloneEmployeeForm(event)" class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-6">
+      <input type="hidden" id="formSubmissionPageId" value=""/>
+      
+      <!-- Section 1: Personal Identity & Contact -->
+      <div class="space-y-3.5">
+        <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
+          <div>
+            <h2 class="text-[14px] font-semibold text-apple-primary">1. Personal Identity &amp; Contact Information</h2>
+            <p class="text-[11px] text-apple-secondary">Used for your employee profile and Google Authenticator login</p>
+          </div>
+          <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-apple-subtle text-apple-secondary border border-apple-borderSubtle">Employee Editable</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Full Legal Name (as per PAN / ID) *</label>
+            <input id="formEmpFullName" type="text" required placeholder="e.g. Rohan Verma" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Official / Google Login Email *</label>
+            <input id="formEmpEmail" type="email" required placeholder="e.g. rohan.verma@gmail.com" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Mobile Phone Number *</label>
+            <input id="formEmpPhone" type="text" required placeholder="+91 98765 43210" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Date of Birth</label>
+            <input id="formEmpDob" type="date" value="1998-05-15" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Blood Group *</label>
+            <input id="formEmpBlood" type="text" required placeholder="e.g. O+ Positive" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Nationality *</label>
+            <input id="formEmpNationality" type="text" required value="Indian" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Emergency Contact & Residential Address -->
+      <div class="space-y-3.5">
+        <div class="border-b border-apple-borderSubtle pb-2">
+          <h2 class="text-[14px] font-semibold text-apple-primary">2. Emergency Contact &amp; Permanent Residential Address</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Emergency Contact Name &amp; Relation *</label>
+            <input id="formEmpEmergencyName" type="text" required placeholder="e.g. Rajesh Verma (Father)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Emergency Contact Phone *</label>
+            <input id="formEmpEmergencyPhone" type="text" required placeholder="+91 98201 11223" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Permanent Residential Address *</label>
+          <textarea id="formEmpAddress" rows="2" required placeholder="Flat / House No., Street, Locality, City, State, PIN Code" class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Section 3: Bank Disbursement & Tax Compliance (Editable by Employee on Onboarding) -->
+      <div class="space-y-3.5">
+        <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
+          <div>
+            <h2 class="text-[14px] font-semibold text-apple-primary">3. Salary Bank Account &amp; Tax PAN Details</h2>
+            <p class="text-[11px] text-apple-secondary">Note: Pay Scale &amp; Compensation Band are strictly assigned by Super Admin</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Bank Name *</label>
+            <input id="formEmpBankName" type="text" required placeholder="e.g. HDFC Bank" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Bank Account Number *</label>
+            <input id="formEmpBankAccount" type="text" required placeholder="e.g. 501004829104" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">IFSC Code *</label>
+            <input id="formEmpBankIfsc" type="text" required placeholder="e.g. HDFC0001092" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono uppercase text-apple-primary outline-none"/>
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-apple-secondary mb-1">Permanent Account Number (Tax PAN) *</label>
+            <input id="formEmpPan" type="text" required placeholder="e.g. ABZPK4921D" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono uppercase text-apple-primary outline-none"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <span class="text-[11px] text-apple-secondary">Submitting sends your record to Notion (<code class="font-mono text-apple-primary">Employee Directory*</code>) with status <strong>Pending Super Admin Approval</strong>.</span>
+        <button type="submit" id="standaloneFormSubmitBtn" class="h-10 px-6 rounded-xl bg-apple-primary hover:bg-black text-white text-[13px] font-semibold transition-colors flex items-center justify-center gap-2 shrink-0">
+          <span class="material-symbols-outlined text-[17px]">task_alt</span>
+          <span>Submit Details for Super Admin Review</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Submission Confirmation Card -->
+    <div id="standaloneFormSuccessCard" class="hidden bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm text-center space-y-3">
+      <div class="w-12 h-12 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center mx-auto text-apple-primary">
+        <span class="material-symbols-outlined text-[24px]">check_circle</span>
+      </div>
+      <h3 class="text-[16px] font-bold text-apple-primary">Details Submitted for Super Admin Approval!</h3>
+      <p class="text-[13px] text-apple-secondary max-w-md mx-auto">Your details have been synced to Notion Data Source <code class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</code>. Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) will review and either approve your profile or notify you by email if any corrections are required.</p>
+      <div class="pt-2 flex justify-center gap-3">
+        <button type="button" onclick="resetStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border">Submit Another Response</button>
+        <button type="button" onclick="closeStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium">Return to Console</button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- Interactive JavaScript -->
 <script>
@@ -1905,17 +2238,35 @@
       }
     }
 
+    const SUPER_ADMIN_EMAILS = ['premkumarrss669@gmail.com', 'prem.kumar@nexushr.corp'];
+    let isSuperAdminUser = true;
+    let loggedInEmployeeEmail = 'premkumarrss669@gmail.com';
+    let loggedInEmployeePageId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+
     function unlockConsole(email) {
-      const employee = APPROVED_EMPLOYEES[email] || APPROVED_EMPLOYEES['premkumarrss669@gmail.com'];
+      const normalizedEmail = (email || 'premkumarrss669@gmail.com').toLowerCase().trim();
+      loggedInEmployeeEmail = normalizedEmail;
+      const employee = APPROVED_EMPLOYEES[normalizedEmail] || APPROVED_EMPLOYEES['premkumarrss669@gmail.com'];
+      isSuperAdminUser = SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0;
+      loggedInEmployeePageId = employee.pageId || (isSuperAdminUser ? '3b63448d-38a7-8193-b60f-ffc05b1aad75' : '3b93448d-38a7-8142-871e-ea21bfa03f04');
+
       document.getElementById('authGateScreen').classList.add('hidden');
       document.getElementById('appConsoleWrapper').classList.remove('hidden');
-      const nameEl = document.getElementById('topBarUserName');
-      const roleEl = document.getElementById('topBarUserRole');
-      if (nameEl) nameEl.innerText = employee.name;
-      if (roleEl) roleEl.innerText = currentAccessMode === 'superadmin' ? 'Super Admin (HR)' : 'Employee Self-Service';
-      if (email === 'anshikagaur633@gmail.com') {
-        openEmployeeDossier('3b93448d-38a7-8142-871e-ea21bfa03f04');
+
+      const roleSwitcher = document.getElementById('roleModeSwitcher');
+      if (roleSwitcher) {
+        if (isSuperAdminUser) {
+          roleSwitcher.classList.remove('hidden');
+        } else {
+          roleSwitcher.classList.add('hidden');
+        }
       }
+
+      setAccessMode(isSuperAdminUser ? 'superadmin' : 'employee', true);
+      openEmployeeDossier(loggedInEmployeePageId);
+
+      const nameEl = document.getElementById('topBarUserName');
+      if (nameEl) nameEl.innerText = employee.name;
     }
 
     function logoutSession() {
@@ -1938,7 +2289,7 @@
         icon: 'badge',
         title: 'Enterprise Workforce Directory',
         badge: '2 Notion Records',
-        subtitle: 'Employee Directory* (46e3448d-38a7-8393-a64d-07425010c0ff) · Data Science',
+        subtitle: 'Employee Directory* (46e3448d-38a7-8393-a64d-07425010c0ff) · Super Admin Only',
         tabs: ['tab-directory']
       },
       'payroll': {
@@ -2012,6 +2363,10 @@
 
     // Tab switching for Apple-style segmented control inside Employee Profile
     function switchTab(tabId, el) {
+      if (tabId === 'tab-directory' && currentAccessMode !== 'superadmin') {
+        showToast('Access Restricted: Only Super Admin can view the Workforce Directory');
+        return;
+      }
       const empCard = document.getElementById('employeeHeaderCard');
       const banner = document.getElementById('sidebarPageBanner');
       if (empCard) empCard.classList.remove('hidden');
@@ -2047,6 +2402,10 @@
 
     // Full-page Sidebar navigation handler
     function navigateSidebar(navKey, el) {
+      if (navKey === 'directory' && currentAccessMode !== 'superadmin') {
+        showToast('Access Restricted: Only Super Admin can view all employees');
+        return;
+      }
       highlightSidebar(navKey);
       const empCard = document.getElementById('employeeHeaderCard');
       const banner = document.getElementById('sidebarPageBanner');
@@ -2106,7 +2465,7 @@
         navigateSidebar('leave');
       } else if (q.includes('appraisal') || q.includes('training') || q.includes('health') || q.includes('report')) {
         navigateSidebar('reports');
-      } else if (q.includes('directory') || q.includes('ananya') || q.includes('rohit')) {
+      } else if ((q.includes('directory') || q.includes('anshika')) && currentAccessMode === 'superadmin') {
         navigateSidebar('directory');
       }
     }
@@ -2130,7 +2489,7 @@
     // ============================================================================
     // 3. ROLE ACCESS MODE (EMPLOYEE vs SUPER ADMIN), EDITING & LEAVE MANAGEMENT
     // ============================================================================
-    let currentAccessMode = 'employee'; // 'employee' | 'superadmin'
+    let currentAccessMode = 'superadmin'; // 'employee' | 'superadmin'
 
     const DEFAULT_PERSONAL_DATA = {
       fullName: 'SUKUMAR PREM KUMAR',
@@ -2216,11 +2575,18 @@
       }, 3200);
     }
 
-    function setAccessMode(mode) {
+    function setAccessMode(mode, silent) {
+      if (!isSuperAdminUser && mode === 'superadmin') {
+        showToast('Access Denied: Only Super Admin (SUKUMAR PREM KUMAR) can enter Super Admin Mode');
+        mode = 'employee';
+      }
       currentAccessMode = mode === 'superadmin' ? 'superadmin' : 'employee';
       const btnEmp = document.getElementById('roleBtnEmployee');
       const btnAdm = document.getElementById('roleBtnAdmin');
       const roleSub = document.getElementById('topBarUserRole');
+      const dirSidebar = document.getElementById('sidebarDirectoryLink');
+      const dirBreadcrumb = document.getElementById('breadcrumbDirectoryWrap');
+      const topShareBtn = document.getElementById('topShareFormBtn');
 
       if (currentAccessMode === 'superadmin') {
         if (btnAdm) {
@@ -2230,7 +2596,21 @@
           btnEmp.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
         }
         if (roleSub) roleSub.innerText = 'Super Admin (HR)';
-        showToast('Switched to Super Admin Mode — Pay Scale & Org editing unlocked');
+        if (dirSidebar) dirSidebar.classList.remove('hidden');
+        if (dirBreadcrumb) dirBreadcrumb.classList.remove('hidden');
+        if (topShareBtn) {
+          topShareBtn.classList.remove('hidden');
+          topShareBtn.classList.add('sm:flex');
+        }
+        document.querySelectorAll('.superadmin-only-el').forEach(function(el) {
+          el.classList.remove('hidden');
+        });
+        document.querySelectorAll('.employee-only-lock-badge').forEach(function(el) {
+          el.classList.add('hidden');
+        });
+        if (!silent) {
+          showToast('Super Admin Mode — Workforce Directory, Pay Scale & Appraisal editing unlocked');
+        }
       } else {
         if (btnEmp) {
           btnEmp.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all flex items-center gap-1';
@@ -2238,8 +2618,31 @@
         if (btnAdm) {
           btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
         }
-        if (roleSub) roleSub.innerText = 'Employee Self-Service';
-        showToast('Switched to Employee Mode — Personal Details & Leave enabled');
+        if (roleSub) roleSub.innerText = 'Employee Self-Service (Own Profile Only)';
+        if (dirSidebar) dirSidebar.classList.add('hidden');
+        if (dirBreadcrumb) dirBreadcrumb.classList.add('hidden');
+        if (topShareBtn) {
+          topShareBtn.classList.add('hidden');
+          topShareBtn.classList.remove('sm:flex');
+        }
+        document.querySelectorAll('.superadmin-only-el').forEach(function(el) {
+          el.classList.add('hidden');
+        });
+        document.querySelectorAll('.employee-only-lock-badge').forEach(function(el) {
+          el.classList.remove('hidden');
+        });
+        // Ensure employee cannot stay on Workforce Directory or another employee's profile
+        if (activeNotionRowId !== loggedInEmployeePageId) {
+          openEmployeeDossier(loggedInEmployeePageId);
+        } else {
+          const dirTab = document.getElementById('tab-directory');
+          if (dirTab && !dirTab.classList.contains('hidden')) {
+            navigateSidebar('employees');
+          }
+        }
+        if (!silent) {
+          showToast('Employee Mode — Directory hidden; Pay Scale & Appraisals locked to View Only');
+        }
       }
       renderLeaveUI();
     }
@@ -2620,6 +3023,7 @@
     // 5. NOTION CLOUD DATA SOURCE LIVE SYNC ENGINE (46e3448d-38a7-8393-a64d-07425010c0ff)
     // ============================================================================
     const NOTION_CONFIG = {
+      dataSourceId: '46e3448d-38a7-8393-a64d-07425010c0ff',
       targetDataSourceId: '46e3448d-38a7-8393-a64d-07425010c0ff',
       premRowId: '3b63448d-38a7-8193-b60f-ffc05b1aad75',
       encodedToken: ['bnRuXzE0MDM1MDA3NjU1', 'NWVOMGdhbE9tWXV5V1RP', 'MWd4QXNXMDFLWU1OdnA1bWFyMQ=='].join('')
@@ -2729,7 +3133,78 @@
     }
 
     // ============================================================================
-    // 10. CREATE NEW EMPLOYEE, DOSSIER SWITCHER & SYNC DIRECTORY FROM NOTION (46e3448d-38a7-8393-a64d-07425010c0ff)
+    // 6. SUPER ADMIN ONLY — APPRAISALS & RATING MANAGEMENT
+    // ============================================================================
+    const DEFAULT_APPRAISAL_DATA = {
+      score: '4.8 / 5.0',
+      badge: 'Exceeds Expectations',
+      pct: 'Score: 96%',
+      evaluator: 'SUKUMAR PREM KUMAR (Super Admin)',
+      quote: '“Exceptional delivery on predictive machine learning architectures and collaborative leadership. Consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”',
+      insuranceCover: '₹15,00,000'
+    };
+
+    let appraisalData = Object.assign({}, DEFAULT_APPRAISAL_DATA, JSON.parse(localStorage.getItem('nexus_appraisal_data_v1') || 'null') || {});
+
+    function renderAppraisalUI() {
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+      setEl('dispAppraisalScore', appraisalData.score);
+      setEl('dispAppraisalBadge', appraisalData.badge);
+      setEl('dispAppraisalPct', appraisalData.pct);
+      setEl('dispAppraisalEvaluator', appraisalData.evaluator);
+      setEl('dispAppraisalQuote', appraisalData.quote);
+      setEl('dispHealthInsuranceCover', appraisalData.insuranceCover);
+      sidebarBannerMeta.reports.badge = 'Score: ' + appraisalData.score;
+    }
+
+    function openAppraisalAdminModal() {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Access Restricted: Only Super Admin can modify Appraisals & Ratings');
+        return;
+      }
+      document.getElementById('editAppraisalScore').value = appraisalData.score;
+      document.getElementById('editAppraisalBadge').value = appraisalData.badge;
+      document.getElementById('editAppraisalPct').value = appraisalData.pct;
+      document.getElementById('editAppraisalEvaluator').value = appraisalData.evaluator;
+      document.getElementById('editAppraisalQuote').value = appraisalData.quote;
+      document.getElementById('editHealthInsuranceCover').value = appraisalData.insuranceCover;
+      const modal = document.getElementById('superAdminAppraisalModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAppraisalAdminModal() {
+      const modal = document.getElementById('superAdminAppraisalModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveAppraisalAdminDetails(e) {
+      e.preventDefault();
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Access Restricted: Only Super Admin can modify Appraisals');
+        return;
+      }
+      appraisalData = {
+        score: document.getElementById('editAppraisalScore').value.trim(),
+        badge: document.getElementById('editAppraisalBadge').value,
+        pct: document.getElementById('editAppraisalPct').value.trim(),
+        evaluator: document.getElementById('editAppraisalEvaluator').value.trim(),
+        quote: document.getElementById('editAppraisalQuote').value.trim(),
+        insuranceCover: document.getElementById('editHealthInsuranceCover').value.trim()
+      };
+      localStorage.setItem('nexus_appraisal_data_v1', JSON.stringify(appraisalData));
+      renderAppraisalUI();
+      closeAppraisalAdminModal();
+      showToast('Appraisal & Rating updated by Super Admin · Synced to Notion DB');
+      syncEmployeeToNotion(false);
+    }
+
+    // ============================================================================
+    // 7. CREATE NEW EMPLOYEE, DOSSIER SWITCHER & SYNC DIRECTORY FROM NOTION (46e3448d-38a7-8393-a64d-07425010c0ff)
     // ============================================================================
     let activeNotionRowId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
     let activeEmployeeId = 'NX-8842';
@@ -2760,7 +3235,11 @@
         emergRel: 'Father',
         emergPhone: '+91 98390 12455',
         bloodGroup: 'O+ (Positive)',
-        address: 'Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048'
+        address: 'Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048',
+        bankName: 'State Bank of India (SBI)',
+        bankAccount: '10205355174',
+        bankIfsc: 'SBIN0004129',
+        pan: 'ABZPK4921D'
       },
       '3b93448d-38a7-8142-871e-ea21bfa03f04': {
         pageId: '3b93448d-38a7-8142-871e-ea21bfa03f04',
@@ -2787,11 +3266,43 @@
         emergRel: 'Father',
         emergPhone: '+91 80054 31920',
         bloodGroup: 'B+ (Positive)',
-        address: 'Sector 62, Noida, Uttar Pradesh — 201309'
+        address: 'Sector 62, Noida, Uttar Pradesh — 201309',
+        bankName: 'HDFC Bank',
+        bankAccount: '501004829104',
+        bankIfsc: 'HDFC0001092',
+        pan: 'ABZPK4921D'
       }
     };
 
+    // Ensure Anshika's pageId is linked in APPROVED_EMPLOYEES
+    APPROVED_EMPLOYEES['premkumarrss669@gmail.com'].pageId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+    APPROVED_EMPLOYEES['prem.kumar@nexushr.corp'].pageId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+    APPROVED_EMPLOYEES['anshikagaur633@gmail.com'].pageId = '3b93448d-38a7-8142-871e-ea21bfa03f04';
+
+    function registerApprovedEmployeeLogin(rec) {
+      if (!rec || !rec.email) return;
+      const emailKey = rec.email.toLowerCase().trim();
+      if (!APPROVED_EMPLOYEES[emailKey]) {
+        APPROVED_EMPLOYEES[emailKey] = {
+          name: rec.name || 'Employee',
+          id: rec.empId || 'NX-8850',
+          pan: rec.pan || 'ABZPK4921D',
+          role: (rec.jobTitle || 'Consultant') + ' (' + ((rec.band || 'Band L4').split('·')[0].trim()) + ')',
+          secret: 'JBSWY3DPEHPK3PXP',
+          pageId: rec.pageId
+        };
+      } else if (rec.pageId) {
+        APPROVED_EMPLOYEES[emailKey].pageId = rec.pageId;
+        APPROVED_EMPLOYEES[emailKey].name = rec.name || APPROVED_EMPLOYEES[emailKey].name;
+      }
+    }
+
     function openEmployeeDossier(pageId) {
+      // Enforce strict isolation: non-Super-Admin employees can ONLY view their own profile
+      if (currentAccessMode !== 'superadmin' && pageId !== loggedInEmployeePageId) {
+        showToast('Access Restricted: Employees can only view their own profile');
+        pageId = loggedInEmployeePageId;
+      }
       const rec = NOTION_EMPLOYEE_RECORDS[pageId] || NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'];
       if (!rec) return;
       activeNotionRowId = rec.pageId;
@@ -2804,7 +3315,7 @@
         emergName: rec.emergName || 'Suresh Kumar',
         emergRel: rec.emergRel || 'Father',
         emergPhone: rec.emergPhone || rec.phone || '+91 98390 12455',
-        nationality: 'Indian Citizen (Resident)',
+        nationality: rec.nationality || 'Indian Citizen (Resident)',
         bloodGroup: rec.bloodGroup || 'O+ (Positive)',
         address: rec.address || 'Bangalore, Karnataka'
       };
@@ -2875,7 +3386,7 @@
       const cleanPageId = (emp.pageId || '').replace(/-/g, '');
       const safePageId = emp.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75';
       const actionHtml = '<button class="h-7 px-3 ' + (isPrem ? 'bg-apple-primary hover:bg-black text-white' : 'bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border') + ' rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View Dossier</button>' +
-        (cleanPageId ? ' <a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion ↗</a>' : '');
+        (cleanPageId && cleanPageId.indexOf('local') < 0 ? ' <a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion ↗</a>' : '');
 
       return '<tr class="' + (isPrem ? 'bg-apple-subtle/60 hover:bg-apple-subtle' : 'hover:bg-apple-subtle/40') + ' transition-colors cursor-pointer" data-notion-page-id="' + safePageId + '" onclick="openEmployeeDossier(\'' + safePageId + '\')">' +
         '<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">' +
@@ -2924,7 +3435,7 @@
       const newPagePayload = {
         parent: {
           type: 'data_source_id',
-          data_source_id: NOTION_CONFIG.dataSourceId
+          data_source_id: NOTION_CONFIG.targetDataSourceId
         },
         properties: {
           'Name': { title: [{ text: { content: name } }] },
@@ -2980,6 +3491,7 @@
           status: 'Active'
         };
         NOTION_EMPLOYEE_RECORDS[newPageId] = newRec;
+        registerApprovedEmployeeLogin(newRec);
 
         const tbody = document.getElementById('directoryTableBody');
         if (tbody) {
@@ -3007,10 +3519,477 @@
       }
     }
 
+    // ============================================================================
+    // 8. SHAREABLE EMPLOYEE ONBOARDING FORM & SUPER ADMIN APPROVAL / REJECTION QUEUE
+    // ============================================================================
+    let pendingSubmissionsMap = JSON.parse(localStorage.getItem('nexus_pending_submissions_v1') || '{}') || {};
+
+    function savePendingSubmissionsMap() {
+      localStorage.setItem('nexus_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
+    }
+
+    function getShareableFormBaseUrl() {
+      const base = (window.location.origin && window.location.origin !== 'null')
+        ? (window.location.origin + window.location.pathname)
+        : 'https://spkumar944.github.io/employee-dashboard/';
+      return base + '?form=employee-onboarding';
+    }
+
+    function copyShareableFormLink() {
+      const url = getShareableFormBaseUrl();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          showToast('Copied Shareable Employee Form Link to clipboard!');
+        }).catch(function() {
+          showToast('Form Link: ' + url);
+        });
+      } else {
+        showToast('Form Link: ' + url);
+      }
+    }
+
+    function openStandaloneEmployeeForm(prefillRec, correctionNote) {
+      const screen = document.getElementById('standaloneEmployeeFormScreen');
+      const formEl = document.getElementById('standaloneEmployeeOnboardingForm');
+      const successCard = document.getElementById('standaloneFormSuccessCard');
+      const corrBanner = document.getElementById('formCorrectionAlertBanner');
+      const corrText = document.getElementById('formCorrectionAlertText');
+
+      if (formEl) formEl.classList.remove('hidden');
+      if (successCard) successCard.classList.add('hidden');
+
+      if (correctionNote) {
+        if (corrBanner) corrBanner.classList.remove('hidden');
+        if (corrText) corrText.innerText = correctionNote;
+      } else if (corrBanner) {
+        corrBanner.classList.add('hidden');
+      }
+
+      if (prefillRec) {
+        document.getElementById('formSubmissionPageId').value = prefillRec.pageId || '';
+        document.getElementById('formEmpFullName').value = prefillRec.name || '';
+        document.getElementById('formEmpEmail').value = prefillRec.email || '';
+        document.getElementById('formEmpPhone').value = prefillRec.phone || '';
+        document.getElementById('formEmpBlood').value = prefillRec.bloodGroup || '';
+        document.getElementById('formEmpNationality').value = prefillRec.nationality || 'Indian';
+        document.getElementById('formEmpEmergencyName').value = prefillRec.emergName || '';
+        document.getElementById('formEmpEmergencyPhone').value = prefillRec.emergPhone || '';
+        document.getElementById('formEmpAddress').value = prefillRec.address || '';
+        document.getElementById('formEmpBankName').value = prefillRec.bankName || '';
+        document.getElementById('formEmpBankAccount').value = prefillRec.bankAccount || '';
+        document.getElementById('formEmpBankIfsc').value = prefillRec.bankIfsc || '';
+        document.getElementById('formEmpPan').value = prefillRec.pan || '';
+      } else {
+        document.getElementById('formSubmissionPageId').value = '';
+      }
+
+      if (screen) screen.classList.remove('hidden');
+    }
+
+    function closeStandaloneEmployeeForm() {
+      const screen = document.getElementById('standaloneEmployeeFormScreen');
+      if (screen) screen.classList.add('hidden');
+      if (window.location.search.indexOf('form=employee-onboarding') >= 0) {
+        try {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (e) {}
+      }
+    }
+
+    function resetStandaloneEmployeeForm() {
+      const formEl = document.getElementById('standaloneEmployeeOnboardingForm');
+      const successCard = document.getElementById('standaloneFormSuccessCard');
+      if (formEl) {
+        formEl.reset();
+        formEl.classList.remove('hidden');
+      }
+      if (successCard) successCard.classList.add('hidden');
+    }
+
+    async function submitStandaloneEmployeeForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('standaloneFormSubmitBtn');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="material-symbols-outlined text-[17px] animate-spin">sync</span><span>Submitting to Super Admin Queue &amp; Notion...</span>';
+      }
+
+      const existingPageId = document.getElementById('formSubmissionPageId').value.trim();
+      const fullName = document.getElementById('formEmpFullName').value.trim();
+      const email = document.getElementById('formEmpEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('formEmpPhone').value.trim();
+      const dob = document.getElementById('formEmpDob').value;
+      const bloodGroup = document.getElementById('formEmpBlood').value.trim();
+      const nationality = document.getElementById('formEmpNationality').value.trim();
+      const emergName = document.getElementById('formEmpEmergencyName').value.trim();
+      const emergPhone = document.getElementById('formEmpEmergencyPhone').value.trim();
+      const address = document.getElementById('formEmpAddress').value.trim();
+      const bankName = document.getElementById('formEmpBankName').value.trim();
+      const bankAccount = document.getElementById('formEmpBankAccount').value.trim();
+      const bankIfsc = document.getElementById('formEmpBankIfsc').value.trim().toUpperCase();
+      const pan = document.getElementById('formEmpPan').value.trim().toUpperCase();
+
+      const empId = (existingPageId && NOTION_EMPLOYEE_RECORDS[existingPageId] && NOTION_EMPLOYEE_RECORDS[existingPageId].empId)
+        ? NOTION_EMPLOYEE_RECORDS[existingPageId].empId
+        : ('NX-' + Math.floor(8850 + Math.random() * 140));
+      const emergDigits = Number(String(emergPhone || '').replace(/\D+/g, '').slice(-10)) || 9800000000;
+      const bankSummaryText = bankName + ' | Acc: ' + bankAccount + ' | IFSC: ' + bankIfsc + ' | PAN: ' + pan + ' | Nat: ' + nationality + (dob ? ' | DOB: ' + dob : '');
+      const todayIso = new Date().toISOString().slice(0, 10);
+
+      const notionProperties = {
+        'Name': { title: [{ text: { content: fullName } }] },
+        'Employee ID': { rich_text: [{ text: { content: empId } }] },
+        'Email': { email: email },
+        'Phone Number': { phone_number: phone },
+        'Job Title': { rich_text: [{ text: { content: 'Pending Super Admin Assignment' } }] },
+        'Department': { select: { name: 'Data Science' } },
+        'Status': { status: { name: 'Onboarding' } },
+        'Start Date': { date: { start: todayIso } },
+        'Emergency Contact': { number: emergDigits },
+        'Emergency Contact Name': { rich_text: [{ text: { content: emergName + ' · ' + emergPhone } }] },
+        'Residential Address': { rich_text: [{ text: { content: address } }] },
+        'Bank Name': { rich_text: [{ text: { content: bankSummaryText } }] }
+      };
+
+      let savedPageId = existingPageId || ('sub-' + Date.now());
+      try {
+        if (existingPageId && existingPageId.indexOf('sub-') < 0 && existingPageId.indexOf('local-') < 0) {
+          await callNotionEndpoint(
+            'https://api.notion.com/v1/pages/' + existingPageId,
+            'PATCH',
+            { properties: notionProperties },
+            '2025-09-03'
+          );
+        } else {
+          const res = await callNotionEndpoint(
+            'https://api.notion.com/v1/pages',
+            'POST',
+            {
+              parent: { type: 'data_source_id', data_source_id: NOTION_CONFIG.targetDataSourceId },
+              properties: notionProperties
+            },
+            '2025-09-03'
+          );
+          if (res && res.id) savedPageId = res.id;
+        }
+      } catch (err) {}
+
+      const submissionObj = {
+        pageId: savedPageId,
+        name: fullName,
+        empId: empId,
+        email: email,
+        phone: phone,
+        dob: dob,
+        bloodGroup: bloodGroup,
+        nationality: nationality,
+        emergName: emergName,
+        emergRel: 'Emergency Contact',
+        emergPhone: emergPhone,
+        address: address,
+        bankName: bankName,
+        bankAccount: bankAccount,
+        bankIfsc: bankIfsc,
+        pan: pan,
+        jobTitle: 'Pending Super Admin Assignment',
+        band: 'Band L4 · Consultant',
+        dept: 'Data Science',
+        status: 'Onboarding',
+        reviewStatus: 'Pending Super Admin Review',
+        submittedAt: new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }),
+        mistakeNotes: ''
+      };
+
+      pendingSubmissionsMap[savedPageId] = submissionObj;
+      savePendingSubmissionsMap();
+      NOTION_EMPLOYEE_RECORDS[savedPageId] = Object.assign({}, NOTION_EMPLOYEE_RECORDS[savedPageId] || {}, submissionObj);
+
+      renderPendingApprovals();
+      loadDirectoryFromNotion(false);
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
+
+      document.getElementById('standaloneEmployeeOnboardingForm').classList.add('hidden');
+      document.getElementById('standaloneFormSuccessCard').classList.remove('hidden');
+      showToast('Submitted "' + fullName + '" for Super Admin Review & Approval!');
+    }
+
+    function renderPendingApprovals() {
+      const container = document.getElementById('pendingApprovalsList');
+      const badge = document.getElementById('pendingApprovalCountBadge');
+      if (!container) return;
+
+      // Merge any Notion records with Status === 'Onboarding' into pendingSubmissionsMap
+      Object.keys(NOTION_EMPLOYEE_RECORDS).forEach(function(pid) {
+        const r = NOTION_EMPLOYEE_RECORDS[pid];
+        if (r && r.status === 'Onboarding' && !pendingSubmissionsMap[pid]) {
+          pendingSubmissionsMap[pid] = Object.assign({}, r, {
+            reviewStatus: 'Pending Super Admin Review',
+            submittedAt: r.joiningDate || 'Synced from Notion'
+          });
+        }
+      });
+
+      const items = Object.keys(pendingSubmissionsMap).map(function(k) { return pendingSubmissionsMap[k]; }).filter(function(item) {
+        return item && item.reviewStatus !== 'Approved';
+      });
+
+      if (badge) {
+        badge.innerText = items.length + ' Pending';
+      }
+
+      if (items.length === 0) {
+        container.innerHTML = '<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[12px] text-apple-secondary text-center">' +
+          'No pending employee form submissions awaiting review. Share the form link above or click <strong>Open Employee Form View</strong> to test submitting a new employee record.' +
+        '</div>';
+        return;
+      }
+
+      container.innerHTML = items.map(function(item) {
+        const isRejected = item.reviewStatus === 'Changes Requested (Email Sent)';
+        const statusPill = isRejected
+          ? '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-apple-surface text-apple-primary border border-apple-primary">Changes Requested · Correction Email Sent</span>'
+          : '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-apple-primary text-white">Pending Super Admin Approval</span>';
+
+        const mistakeBanner = (isRejected && item.mistakeNotes)
+          ? '<div class="mt-2 p-2.5 rounded-lg bg-apple-surface border border-apple-border text-[11px] text-apple-primary">' +
+              '<strong>Mistakes Flagged &amp; Emailed to Employee:</strong> ' + item.mistakeNotes +
+            '</div>'
+          : '';
+
+        return '<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-3">' +
+          '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-apple-borderSubtle pb-2.5">' +
+            '<div>' +
+              '<div class="flex items-center gap-2 flex-wrap">' +
+                '<span class="text-[14px] font-bold text-apple-primary">' + (item.name || 'New Employee') + '</span>' +
+                '<span class="text-[11px] font-mono text-apple-secondary">' + (item.empId || 'NX-NEW') + '</span>' +
+                statusPill +
+              '</div>' +
+              '<div class="text-[11px] text-apple-secondary">' + (item.email || '—') + ' · Phone: ' + (item.phone || '—') + ' · Submitted: ' + (item.submittedAt || 'Today') + '</div>' +
+            '</div>' +
+            '<div class="flex flex-wrap items-center gap-2">' +
+              '<button type="button" onclick="approveEmployeeSubmission(\'' + item.pageId + '\')" class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1 shadow-sm transition-colors">' +
+                '<span class="material-symbols-outlined text-[14px]">check_circle</span>' +
+                '<span>Approve &amp; Activate</span>' +
+              '</button>' +
+              '<button type="button" onclick="openRejectCorrectionModal(\'' + item.pageId + '\')" class="h-8 px-3.5 rounded-full bg-apple-surface hover:bg-apple-hover text-apple-primary border border-apple-border text-[11px] font-semibold flex items-center gap-1 transition-colors">' +
+                '<span class="material-symbols-outlined text-[14px]">mark_email_unread</span>' +
+                '<span>Reject &amp; Email Mistakes</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[12px]">' +
+            '<div class="p-2.5 rounded-lg bg-apple-surface border border-apple-borderSubtle">' +
+              '<div class="text-[10px] uppercase tracking-wider text-apple-secondary font-medium">Personal &amp; Emergency</div>' +
+              '<div class="font-medium text-apple-primary mt-0.5">Blood: ' + (item.bloodGroup || '—') + ' · ' + (item.nationality || 'Indian') + '</div>' +
+              '<div class="text-[11px] text-apple-secondary">Emergency: ' + (item.emergName || '—') + ' (' + (item.emergPhone || '—') + ')</div>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-apple-surface border border-apple-borderSubtle">' +
+              '<div class="text-[10px] uppercase tracking-wider text-apple-secondary font-medium">Bank &amp; Tax PAN</div>' +
+              '<div class="font-medium text-apple-primary mt-0.5">' + (item.bankName || '—') + ' · Acc: ' + (item.bankAccount || '—') + '</div>' +
+              '<div class="text-[11px] font-mono text-apple-secondary">IFSC: ' + (item.bankIfsc || '—') + ' · PAN: ' + (item.pan || '—') + '</div>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-apple-surface border border-apple-borderSubtle">' +
+              '<div class="text-[10px] uppercase tracking-wider text-apple-secondary font-medium">Residential Address</div>' +
+              '<div class="text-[11px] text-apple-primary mt-0.5 line-clamp-2">' + (item.address || '—') + '</div>' +
+            '</div>' +
+          '</div>' +
+          mistakeBanner +
+        '</div>';
+      }).join('');
+    }
+
+    async function approveEmployeeSubmission(pageId) {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can approve employee submissions');
+        return;
+      }
+      const item = pendingSubmissionsMap[pageId] || NOTION_EMPLOYEE_RECORDS[pageId];
+      if (!item) return;
+
+      item.status = 'Active';
+      item.reviewStatus = 'Approved';
+      if (pendingSubmissionsMap[pageId]) {
+        pendingSubmissionsMap[pageId].reviewStatus = 'Approved';
+        pendingSubmissionsMap[pageId].status = 'Active';
+        savePendingSubmissionsMap();
+      }
+      if (NOTION_EMPLOYEE_RECORDS[pageId]) {
+        NOTION_EMPLOYEE_RECORDS[pageId].status = 'Active';
+      }
+      registerApprovedEmployeeLogin(item);
+
+      try {
+        if (pageId.indexOf('sub-') < 0 && pageId.indexOf('local-') < 0) {
+          await callNotionEndpoint(
+            'https://api.notion.com/v1/pages/' + pageId,
+            'PATCH',
+            { properties: { 'Status': { status: { name: 'Active' } } } },
+            '2025-09-03'
+          );
+        }
+      } catch (e) {}
+
+      renderPendingApprovals();
+      loadDirectoryFromNotion(false);
+      showToast('Approved "' + item.name + '"! Status set to Active in Notion & Google Auth login enabled.');
+    }
+
+    function buildEmployeeCorrectionUrl(item, notes) {
+      const base = getShareableFormBaseUrl();
+      const params = [
+        'pageId=' + encodeURIComponent(item.pageId || ''),
+        'name=' + encodeURIComponent(item.name || ''),
+        'email=' + encodeURIComponent(item.email || ''),
+        'phone=' + encodeURIComponent(item.phone || ''),
+        'blood=' + encodeURIComponent(item.bloodGroup || ''),
+        'emergName=' + encodeURIComponent(item.emergName || ''),
+        'emergPhone=' + encodeURIComponent(item.emergPhone || ''),
+        'address=' + encodeURIComponent(item.address || ''),
+        'bankName=' + encodeURIComponent(item.bankName || ''),
+        'bankAcc=' + encodeURIComponent(item.bankAccount || ''),
+        'ifsc=' + encodeURIComponent(item.bankIfsc || ''),
+        'pan=' + encodeURIComponent(item.pan || ''),
+        'correction=' + encodeURIComponent(notes || 'Please verify and correct your submitted onboarding details.')
+      ];
+      return base + '&' + params.join('&');
+    }
+
+    function openRejectCorrectionModal(pageId) {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can reject & request corrections');
+        return;
+      }
+      const item = pendingSubmissionsMap[pageId] || NOTION_EMPLOYEE_RECORDS[pageId];
+      if (!item) return;
+
+      document.getElementById('rejectTargetPageId').value = pageId;
+      document.getElementById('rejectEmployeeName').value = item.name || '';
+      document.getElementById('rejectEmployeeEmail').value = item.email || '';
+      document.getElementById('rejectMistakeNotes').value = item.mistakeNotes || '';
+      document.getElementById('rejectCorrectionLinkPreview').innerText = buildEmployeeCorrectionUrl(item, 'Mistake flagged by Super Admin');
+
+      const modal = document.getElementById('rejectCorrectionModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeRejectCorrectionModal() {
+      const modal = document.getElementById('rejectCorrectionModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function sendRejectCorrectionEmail(e) {
+      e.preventDefault();
+      const pageId = document.getElementById('rejectTargetPageId').value;
+      const empName = document.getElementById('rejectEmployeeName').value.trim();
+      const empEmail = document.getElementById('rejectEmployeeEmail').value.trim();
+      const mistakeNotes = document.getElementById('rejectMistakeNotes').value.trim();
+
+      const checkedFields = [];
+      document.querySelectorAll('.reject-field-cb:checked').forEach(function(cb) {
+        checkedFields.push(cb.value);
+      });
+
+      const fullMistakeReport = (checkedFields.length ? 'Flagged Fields: ' + checkedFields.join(', ') + '\n' : '') + 'Correction Instructions: ' + mistakeNotes;
+      const item = pendingSubmissionsMap[pageId] || NOTION_EMPLOYEE_RECORDS[pageId] || { pageId: pageId, name: empName, email: empEmail };
+      item.mistakeNotes = fullMistakeReport;
+      item.reviewStatus = 'Changes Requested (Email Sent)';
+      pendingSubmissionsMap[pageId] = item;
+      savePendingSubmissionsMap();
+
+      const correctionLink = buildEmployeeCorrectionUrl(item, fullMistakeReport);
+      document.getElementById('rejectCorrectionLinkPreview').innerText = correctionLink;
+
+      const emailSubject = 'Action Required: Please Correct Your NexusHR Employee Details (' + empName + ')';
+      const emailBody =
+        'Dear ' + empName + ',\n\n' +
+        'Your submitted Employee Onboarding & Self-Service Details Form was reviewed by SUKUMAR PREM KUMAR (Super Admin) and requires the following corrections before approval:\n\n' +
+        '------------------------------------------------------------\n' +
+        fullMistakeReport + '\n' +
+        '------------------------------------------------------------\n\n' +
+        'Please click your personalized Correction Form Link below to review the flagged fields, correct your details, and resubmit for Super Admin approval:\n' +
+        correctionLink + '\n\n' +
+        'Regards,\n' +
+        'SUKUMAR PREM KUMAR\n' +
+        'Super Admin · NexusHR Enterprise Workforce Console';
+
+      // 1. Update Notion row with mistake note in Residential Address / Status Onboarding
+      try {
+        if (pageId && pageId.indexOf('sub-') < 0 && pageId.indexOf('local-') < 0) {
+          await callNotionEndpoint(
+            'https://api.notion.com/v1/pages/' + pageId,
+            'PATCH',
+            {
+              properties: {
+                'Status': { status: { name: 'Onboarding' } },
+                'Residential Address': { rich_text: [{ text: { content: (item.address || '') + ' [CORRECTION REQUESTED: ' + mistakeNotes + ']' } }] }
+              }
+            },
+            '2025-09-03'
+          );
+        }
+      } catch (err) {}
+
+      // 2. Attempt background email dispatch via FormSubmit AJAX + open pre-filled email client for immediate delivery
+      try {
+        fetch('https://formsubmit.co/ajax/' + encodeURIComponent(empEmail), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: emailSubject,
+            Employee_Name: empName,
+            Reviewed_By: 'SUKUMAR PREM KUMAR (Super Admin)',
+            Flagged_Mistakes: fullMistakeReport,
+            Correction_Form_Link: correctionLink,
+            message: emailBody
+          })
+        }).catch(function() {});
+      } catch (err) {}
+
+      const mailtoUrl = 'mailto:' + encodeURIComponent(empEmail) +
+        '?subject=' + encodeURIComponent(emailSubject) +
+        '&body=' + encodeURIComponent(emailBody);
+
+      window.location.href = mailtoUrl;
+
+      closeRejectCorrectionModal();
+      renderPendingApprovals();
+      showToast('Rejection & Mistake Correction Email prepared & dispatched to ' + empEmail);
+    }
+
+    function checkStandaloneFormRoute() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('form') === 'employee-onboarding') {
+        const prefill = {
+          pageId: params.get('pageId') || '',
+          name: params.get('name') || '',
+          email: params.get('email') || '',
+          phone: params.get('phone') || '',
+          bloodGroup: params.get('blood') || '',
+          emergName: params.get('emergName') || '',
+          emergPhone: params.get('emergPhone') || '',
+          address: params.get('address') || '',
+          bankName: params.get('bankName') || '',
+          bankAccount: params.get('bankAcc') || '',
+          bankIfsc: params.get('ifsc') || '',
+          pan: params.get('pan') || ''
+        };
+        const hasPrefill = Boolean(prefill.name || prefill.email || prefill.pageId);
+        const corrNote = params.get('correction') || '';
+        openStandaloneEmployeeForm(hasPrefill ? prefill : null, corrNote);
+      }
+    }
+
     async function loadDirectoryFromNotion(showToastFlag) {
       try {
         const res = await callNotionEndpoint(
-          'https://api.notion.com/v1/data_sources/' + NOTION_CONFIG.dataSourceId + '/query',
+          'https://api.notion.com/v1/data_sources/' + NOTION_CONFIG.targetDataSourceId + '/query',
           'POST',
           { page_size: 50 },
           '2025-09-03'
@@ -3039,6 +4018,12 @@
               const hra = (props['HRA (INR)'] && props['HRA (INR)'].number) || Math.round(gross * 0.2);
               const special = (props['Special Allowance (INR)'] && props['Special Allowance (INR)'].number) || (gross - basic - hra);
               const status = (props['Status'] && props['Status'].status && props['Status'].status.name) || 'Active';
+              const addrArr = (props['Residential Address'] && props['Residential Address'].rich_text) || [];
+              const address = addrArr.length ? addrArr[0].plain_text : '';
+              const emergArr = (props['Emergency Contact Name'] && props['Emergency Contact Name'].rich_text) || [];
+              const emergName = emergArr.length ? emergArr[0].plain_text : '';
+              const bankArr = (props['Bank Name'] && props['Bank Name'].rich_text) || [];
+              const bankRaw = bankArr.length ? bankArr[0].plain_text : '';
 
               const recObj = Object.assign({}, NOTION_EMPLOYEE_RECORDS[page.id] || {}, {
                 pageId: page.id,
@@ -3053,9 +4038,15 @@
                 basic: basic,
                 hra: hra,
                 special: special,
-                status: status
+                status: status,
+                address: address || (NOTION_EMPLOYEE_RECORDS[page.id] && NOTION_EMPLOYEE_RECORDS[page.id].address) || '',
+                emergName: emergName || (NOTION_EMPLOYEE_RECORDS[page.id] && NOTION_EMPLOYEE_RECORDS[page.id].emergName) || '',
+                bankName: bankRaw || (NOTION_EMPLOYEE_RECORDS[page.id] && NOTION_EMPLOYEE_RECORDS[page.id].bankName) || ''
               });
               NOTION_EMPLOYEE_RECORDS[page.id] = recObj;
+              if (status === 'Active') {
+                registerApprovedEmployeeLogin(recObj);
+              }
 
               rowsHtml += renderEmployeeDirectoryRow(recObj);
             });
@@ -3069,6 +4060,7 @@
             }
             sidebarBannerMeta.directory.badge = totalRows + ' Notion Records';
           }
+          renderPendingApprovals();
           if (showToastFlag) {
             showToast('Synced ' + res.results.length + ' employee rows from Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
           }
@@ -3084,10 +4076,16 @@
 
     // Initialize all dynamic UI data on page load
     window.addEventListener('DOMContentLoaded', function() {
+      const formUrlDisplay = document.getElementById('shareableFormUrlDisplay');
+      if (formUrlDisplay) formUrlDisplay.innerText = getShareableFormBaseUrl();
       renderPersonalUI();
       renderAdminUI();
+      renderAppraisalUI();
       renderLeaveUI();
+      renderPendingApprovals();
+      setAccessMode('superadmin', true);
       loadDirectoryFromNotion(false);
+      checkStandaloneFormRoute();
       const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
       if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
         unlockConsole(savedEmail);
