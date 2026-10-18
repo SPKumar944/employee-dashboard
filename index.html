@@ -327,16 +327,32 @@
 <span class="material-symbols-outlined text-[16px]">add</span>
 <span>Apply Leave</span>
 </button>
-<button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors" onclick="navigateSidebar('reports')" title="View Updates &amp; Appraisals" type="button">
+<div class="relative" id="notificationBellWrap">
+<button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors relative" id="notificationBellBtn" onclick="toggleNotificationDropdown()" title="Leave &amp; Approval Notifications" type="button">
 <span class="material-symbols-outlined text-[19px]">notifications</span>
+<span class="hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-apple-primary text-white text-[10px] font-bold flex items-center justify-center border border-apple-surface" id="notificationCountBadge">0</span>
 </button>
+<!-- Notification Dropdown Panel -->
+<div class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-apple-surface rounded-2xl apple-border apple-shadow-lg z-50 overflow-hidden" id="notificationDropdownPanel">
+<div class="px-4 py-3 border-b border-apple-borderSubtle flex items-center justify-between bg-apple-subtle/60">
+<div>
+<h4 class="text-[13px] font-semibold text-apple-primary" id="notificationDropdownTitle">Notifications</h4>
+<p class="text-[10px] text-apple-secondary" id="notificationDropdownSub">Leave requests &amp; Super Admin approvals</p>
+</div>
+<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary" onclick="markAllNotificationsRead()" type="button">Mark all read</button>
+</div>
+<div class="max-h-80 overflow-y-auto divide-y divide-apple-borderSubtle" id="notificationListContainer">
+<div class="p-4 text-center text-[12px] text-apple-secondary">No new notifications.</div>
+</div>
+</div>
+</div>
 <div class="h-4 w-px bg-apple-border mx-0.5"></div>
 <div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
 <span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">SUKUMAR PREM KUMAR</span>
 <span class="text-[10px] text-apple-secondary" id="topBarUserRole">Super Admin (HR)</span>
 </div>
-<img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+<img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" id="topBarAvatarImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 </div>
 <button class="h-7 px-2.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-[11px] font-medium text-apple-secondary hover:text-apple-primary border border-apple-border transition-colors" onclick="logoutSession()" title="Lock &amp; Sign Out" type="button">Sign Out</button>
 </div>
@@ -362,9 +378,16 @@
 <span class="material-symbols-outlined text-[13px]">sync</span>
 <span>Sync Notion</span>
 </button>
-<span class="px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle" id="accessModeStatusBadge">Mode: Employee Self-Service</span>
+<span class="px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle" id="accessModeStatusBadge">Mode: Super Admin</span>
 </div>
 </div>
+
+<!-- Live Role Notification Alert Banner (Super Admin Leave Requests / Employee Leave Approval Status) -->
+<div class="hidden bg-apple-surface rounded-2xl apple-border p-4 apple-shadow-sm" id="liveRoleNotificationBanner"></div>
+
+<!-- Hidden File Input for Super Admin Photograph Upload -->
+<input accept="image/*" class="hidden" id="adminAvatarFileInput" onchange="handleAdminAvatarFileUpload(event)" type="file"/>
+
 <!-- Dynamic Sidebar Page Header Banner (shown on Directory, Payroll, Leave, Compliance, Reports, Settings) -->
 <div class="hidden bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm" id="sidebarPageBanner">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -393,8 +416,13 @@
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 <!-- Left Profile Identity -->
 <div class="flex items-center gap-5">
-<div class="relative" id="empAvatarContainer">
+<div class="relative group">
+<div id="empAvatarContainer">
 <img alt="SUKUMAR PREM KUMAR" class="w-20 h-20 rounded-full object-cover border border-apple-border" id="dispEmpAvatarImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+</div>
+<button class="superadmin-only-el absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-apple-primary text-white flex items-center justify-center shadow-sm hover:bg-black transition-colors border-2 border-apple-surface" onclick="document.getElementById('adminAvatarFileInput').click()" title="Upload / Change Employee Photograph (Super Admin)" type="button">
+<span class="material-symbols-outlined text-[14px]">photo_camera</span>
+</button>
 </div>
 <div class="space-y-1">
 <div class="flex flex-wrap items-center gap-2.5">
@@ -423,14 +451,18 @@
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">download</span>
 <span>Export Dossier</span>
 </button>
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="openPersonalEditModal()" type="button">
+<button class="superadmin-only-el h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" id="headerPersonalEditBtn" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">edit</span>
-<span>Edit Personal Details</span>
+<span>Edit Personal Details (Admin)</span>
 </button>
 <button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border superadmin-only-el" id="headerAdminEditBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">admin_panel_settings</span>
 <span>Edit Pay Scale &amp; Org (Admin)</span>
 </button>
+<span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">verified_user</span>
+<span>Approved by Super Admin · Profile Locked</span>
+</span>
 </div>
 </div>
 <!-- Apple Segmented Control Bar -->
@@ -463,12 +495,16 @@
 <div class="flex items-center justify-between pb-1">
 <div>
 <h2 class="text-[15px] font-semibold text-apple-primary">Core Identification &amp; Personal Details</h2>
-<p class="text-[11px] text-apple-secondary">Editable by Employee (Self-Service) · Synced with Notion <span class="font-mono">46e3448d…</span></p>
+<p class="text-[11px] text-apple-secondary">Locked once Approved by Super Admin · Only Super Admin can modify · Synced with Notion <span class="font-mono">46e3448d…</span></p>
 </div>
-<button class="h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" onclick="openPersonalEditModal()" type="button">
+<button class="superadmin-only-el h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" id="overviewPersonalEditBtn" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[14px]">edit</span>
-<span>Edit Personal Info</span>
+<span>Edit Personal Info (Super Admin)</span>
 </button>
+<span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Locked (Approved by Super Admin)</span>
+</span>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <!-- Full Legal Name (Notion Title Property) -->
@@ -810,125 +846,24 @@
 <!-- TAB 4: DOCUMENTS -->
 <section class="tab-content hidden space-y-6" id="tab-documents">
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
-<div class="flex items-center justify-between pb-1">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-1">
 <div>
 <h3 class="text-[15px] font-semibold text-apple-primary">Verified Compliance &amp; Academic Documents</h3>
-<p class="text-[12px] text-apple-secondary">All required records counter-signed &amp; stored with SHA-256 verification</p>
+<p class="text-[12px] text-apple-secondary">Uploaded during onboarding · Once approved by Super Admin, only Super Admin can upload or replace records</p>
 </div>
-<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" type="button">
-<span class="material-symbols-outlined text-[15px] text-apple-secondary">upload_file</span>
-<span>Upload Document</span>
+<div class="flex items-center gap-2">
+<button class="superadmin-only-el h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" id="uploadDocTopBtn" onclick="openDocumentUploadModal()" type="button">
+<span class="material-symbols-outlined text-[15px]">upload_file</span>
+<span>Upload Document (Super Admin)</span>
 </button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-<!-- Doc 1 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
-<span class="text-[10px] font-medium text-apple-primary">Verified</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">Aadhaar Card (Masked UID)</div>
-<p class="text-[11px] text-apple-secondary">UID: •••• •••• 8291 · Identity Proof</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>1.4 MB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
+<span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Approved by Super Admin · Read-Only</span>
+</span>
 </div>
 </div>
-<!-- Doc 2 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
-<span class="text-[10px] font-medium text-apple-primary">Verified</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">PAN Card (Tax Record)</div>
-<p class="text-[11px] text-apple-secondary">Permanent Account No: ABZPK4921D</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>890 KB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
-</div>
-</div>
-<!-- Doc 3 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
-<span class="text-[10px] font-medium text-apple-primary">Verified</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">M.S. in Data Analytics &amp; ML</div>
-<p class="text-[11px] text-apple-secondary">Postgraduate Degree Certificate &amp; Transcripts</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>3.1 MB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
-</div>
-</div>
-<!-- Doc 4 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
-<span class="text-[10px] font-medium text-apple-primary">Verified</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">B.Tech in Computer Science</div>
-<p class="text-[11px] text-apple-secondary">Undergraduate Degree Certificate</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>2.8 MB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
-</div>
-</div>
-<!-- Doc 5 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">DOCX</span>
-<span class="text-[10px] font-medium text-apple-primary">Verified</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">Consultant Resume &amp; Matrix</div>
-<p class="text-[11px] text-apple-secondary">Updated Technical Competency Record</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>640 KB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
-</div>
-</div>
-<!-- Doc 6 -->
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col justify-between space-y-3">
-<div class="space-y-1">
-<div class="flex items-center justify-between">
-<span class="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">PDF</span>
-<span class="text-[10px] font-medium text-apple-primary">Signed</span>
-</div>
-<div class="text-[13px] font-medium text-apple-primary">Non-Disclosure &amp; IP Agreement</div>
-<p class="text-[11px] text-apple-secondary">Digital Signature verified via DocuSign</p>
-</div>
-<div class="flex items-center justify-between pt-2 border-t border-apple-border/50 text-[11px] text-apple-secondary">
-<span>1.1 MB</span>
-<button class="hover:text-apple-primary transition-colors flex items-center gap-1 font-medium">
-<span class="material-symbols-outlined text-[14px]">download</span>
-<span>Download</span>
-</button>
-</div>
-</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="documentsGridContainer">
+<!-- Rendered dynamically by renderDocumentsUI() -->
 </div>
 </div>
 </section>
@@ -1838,10 +1773,12 @@ No pending employee form submissions awaiting review. Share the form link above 
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Fields Containing Mistakes (Check all that apply)</label>
         <div class="grid grid-cols-2 gap-2 text-[12px] text-apple-primary bg-apple-subtle p-3 rounded-xl border border-apple-borderSubtle">
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Profile Photograph"/> Profile Photograph</label>
           <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Full Legal Name"/> Full Legal Name</label>
           <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Phone / Emergency Contact"/> Phone / Emergency Contact</label>
           <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Permanent Residential Address"/> Residential Address</label>
           <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Bank Account / IFSC / Tax PAN" checked/> Bank / IFSC / Tax PAN</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" class="reject-field-cb accent-apple-primary" value="Compliance & Academic Documents"/> Compliance Documents</label>
         </div>
       </div>
       <div>
@@ -1863,6 +1800,67 @@ No pending employee form submissions awaiting review. Share the form link above 
   </div>
 </div>
 
+<!-- MODAL 7: SUPER ADMIN — UPLOAD / REPLACE COMPLIANCE & ACADEMIC DOCUMENT -->
+<div id="documentUploadModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+  <div class="w-full max-w-lg bg-apple-surface rounded-2xl apple-border apple-shadow-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-apple-borderSubtle flex items-center justify-between bg-apple-subtle/50">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px] text-apple-primary">upload_file</span>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Super Admin · Upload / Replace Compliance Document</h3>
+          <p class="text-[11px] text-apple-secondary">Once an employee is approved, only Super Admin can upload or update verified documents</p>
+        </div>
+      </div>
+      <button type="button" onclick="closeDocumentUploadModal()" class="w-7 h-7 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <form id="documentUploadForm" onsubmit="saveUploadedDocument(event)" class="p-6 space-y-4">
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Document Slot / Category *</label>
+        <select id="uploadDocCategorySelect" onchange="handleDocCategoryChange(this.value)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+          <option value="doc-aadhaar">Aadhaar Card (Masked UID)</option>
+          <option value="doc-pan">PAN Card (Tax Record)</option>
+          <option value="doc-ms">M.S. in Data Analytics &amp; ML (Postgraduate Degree)</option>
+          <option value="doc-btech">B.Tech in Computer Science (Undergraduate Degree)</option>
+          <option value="doc-resume">Consultant Resume &amp; Matrix</option>
+          <option value="doc-nda">Non-Disclosure &amp; IP Agreement</option>
+          <option value="doc-custom">+ Add New Compliance / Academic Document</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Document Title *</label>
+          <input id="uploadDocTitleInput" type="text" required value="Aadhaar Card (Masked UID)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Verification Status</label>
+          <select id="uploadDocStatusInput" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+            <option value="Verified">Verified (SHA-256)</option>
+            <option value="Signed">Signed (DocuSign)</option>
+            <option value="Approved by Super Admin">Approved by Super Admin</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Subtitle / Identifier Note *</label>
+        <input id="uploadDocSubtitleInput" type="text" required value="UID: •••• •••• 8291 · Identity Proof" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+      </div>
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Select File to Upload (PDF, DOCX, PNG, JPG) *</label>
+        <input id="uploadDocFileInput" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required class="w-full p-2 bg-apple-subtle border border-apple-border rounded-xl text-[12px] text-apple-primary file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+      </div>
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeDocumentUploadModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-semibold transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">cloud_upload</span>
+          <span>Upload &amp; Verify Document</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </div>
 
 <!-- STANDALONE SHAREABLE EMPLOYEE ONBOARDING & SELF-SERVICE DETAILS FORM VIEW -->
@@ -1876,7 +1874,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           <div class="flex items-center gap-2">
             <h1 class="text-[17px] font-bold text-apple-primary">NexusHR · Employee Onboarding &amp; Self-Service Details Form</h1>
           </div>
-          <p class="text-[12px] text-apple-secondary">Submit your personal, emergency, address &amp; bank details for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) review &amp; approval.</p>
+          <p class="text-[12px] text-apple-secondary">Upload your photograph, personal details, bank info &amp; compliance documents for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) review. <strong class="text-apple-primary">Note: Once approved, details are locked and can only be edited by Super Admin.</strong></p>
         </div>
       </div>
       <div class="flex items-center gap-2 self-start sm:self-center">
@@ -1904,7 +1902,24 @@ No pending employee form submissions awaiting review. Share the form link above 
     <!-- Main Employee Editable Details Form -->
     <form id="standaloneEmployeeOnboardingForm" onsubmit="submitStandaloneEmployeeForm(event)" class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-6">
       <input type="hidden" id="formSubmissionPageId" value=""/>
-      
+      <input type="hidden" id="formEmpPhotoDataUrl" value=""/>
+
+      <!-- Employee Photograph Upload Box -->
+      <div class="p-4 rounded-2xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row items-center gap-4">
+        <div class="w-20 h-20 rounded-full bg-apple-surface border-2 border-apple-border flex items-center justify-center overflow-hidden shrink-0" id="formEmpPhotoPreviewWrap">
+          <span class="material-symbols-outlined text-[30px] text-apple-tertiary" id="formEmpPhotoPlaceholderIcon">add_a_photo</span>
+          <img id="formEmpPhotoPreviewImg" src="" alt="Employee Photograph Preview" class="hidden w-full h-full object-cover"/>
+        </div>
+        <div class="flex-1 space-y-1.5 text-center sm:text-left">
+          <div class="flex items-center justify-center sm:justify-start gap-2">
+            <span class="text-[13px] font-semibold text-apple-primary">Employee Profile Photograph *</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">Passport / Headshot</span>
+          </div>
+          <p class="text-[11px] text-apple-secondary">Upload a clear headshot photograph (JPG/PNG). Displayed on your Employee Dossier and ID card upon Super Admin approval.</p>
+          <input id="formEmpPhotoInput" type="file" accept="image/*" onchange="handleOnboardingPhotoSelect(event)" class="w-full sm:w-auto text-[11px] text-apple-primary file:mr-2.5 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+        </div>
+      </div>
+
       <!-- Section 1: Personal Identity & Contact -->
       <div class="space-y-3.5">
         <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
@@ -1912,7 +1927,7 @@ No pending employee form submissions awaiting review. Share the form link above 
             <h2 class="text-[14px] font-semibold text-apple-primary">1. Personal Identity &amp; Contact Information</h2>
             <p class="text-[11px] text-apple-secondary">Used for your employee profile and Google Authenticator login</p>
           </div>
-          <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-apple-subtle text-apple-secondary border border-apple-borderSubtle">Employee Editable</span>
+          <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-apple-subtle text-apple-secondary border border-apple-borderSubtle">Locked After Approval</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
@@ -1963,7 +1978,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Section 3: Bank Disbursement & Tax Compliance (Editable by Employee on Onboarding) -->
+      <!-- Section 3: Bank Disbursement & Tax Compliance -->
       <div class="space-y-3.5">
         <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
           <div>
@@ -1991,8 +2006,45 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
+      <!-- Section 4: Verified Compliance & Academic Documents Upload -->
+      <div class="space-y-3.5">
+        <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
+          <div>
+            <h2 class="text-[14px] font-semibold text-apple-primary">4. Verified Compliance &amp; Academic Documents Upload</h2>
+            <p class="text-[11px] text-apple-secondary">Upload PDF/DOCX/Image copies. Locked after Super Admin approval.</p>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle">SHA-256 Verified</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px]">
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">Aadhaar Card (Identity Proof)</label>
+            <input type="file" data-doc-slot="doc-aadhaar" data-doc-title="Aadhaar Card (Masked UID)" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">PAN Card (Tax Record)</label>
+            <input type="file" data-doc-slot="doc-pan" data-doc-title="PAN Card (Tax Record)" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">Postgraduate / Master's Degree</label>
+            <input type="file" data-doc-slot="doc-ms" data-doc-title="Postgraduate Degree & Transcripts" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">Undergraduate / B.Tech Degree</label>
+            <input type="file" data-doc-slot="doc-btech" data-doc-title="B.Tech / Undergraduate Certificate" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">Updated Resume / CV</label>
+            <input type="file" data-doc-slot="doc-resume" data-doc-title="Consultant Resume & Matrix" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-medium text-apple-primary">Signed Non-Disclosure (NDA)</label>
+            <input type="file" data-doc-slot="doc-nda" data-doc-title="Non-Disclosure & IP Agreement" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
+          </div>
+        </div>
+      </div>
+
       <div class="pt-3 border-t border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <span class="text-[11px] text-apple-secondary">Submitting sends your record to Notion (<code class="font-mono text-apple-primary">Employee Directory*</code>) with status <strong>Pending Super Admin Approval</strong>.</span>
+        <span class="text-[11px] text-apple-secondary">Submitting sends your record to Notion (<code class="font-mono text-apple-primary">Employee Directory*</code>) with status <strong>Pending Super Admin Approval</strong>. Once approved, editing is locked to Super Admin only.</span>
         <button type="submit" id="standaloneFormSubmitBtn" class="h-10 px-6 rounded-xl bg-apple-primary hover:bg-black text-white text-[13px] font-semibold transition-colors flex items-center justify-center gap-2 shrink-0">
           <span class="material-symbols-outlined text-[17px]">task_alt</span>
           <span>Submit Details for Super Admin Review</span>
@@ -2005,8 +2057,8 @@ No pending employee form submissions awaiting review. Share the form link above 
       <div class="w-12 h-12 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center mx-auto text-apple-primary">
         <span class="material-symbols-outlined text-[24px]">check_circle</span>
       </div>
-      <h3 class="text-[16px] font-bold text-apple-primary">Details Submitted for Super Admin Approval!</h3>
-      <p class="text-[13px] text-apple-secondary max-w-md mx-auto">Your details have been synced to Notion Data Source <code class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</code>. Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) will review and either approve your profile or notify you by email if any corrections are required.</p>
+      <h3 class="text-[16px] font-bold text-apple-primary">Details, Photograph &amp; Documents Submitted for Super Admin Approval!</h3>
+      <p class="text-[13px] text-apple-secondary max-w-md mx-auto">Your details have been synced to Notion Data Source <code class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</code>. Once <strong class="text-apple-primary">SUKUMAR PREM KUMAR (Super Admin)</strong> approves your record, your profile and documents will be activated and locked from self-editing.</p>
       <div class="pt-2 flex justify-center gap-3">
         <button type="button" onclick="resetStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border">Submit Another Response</button>
         <button type="button" onclick="closeStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium">Return to Console</button>
@@ -2596,6 +2648,11 @@ No pending employee form submissions awaiting review. Share the form link above 
           btnEmp.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
         }
         if (roleSub) roleSub.innerText = 'Super Admin (HR)';
+        const statusBadge = document.getElementById('accessModeStatusBadge');
+        if (statusBadge) {
+          statusBadge.innerText = 'Super Admin Mode · Full Edit & Approval Access';
+          statusBadge.className = 'hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-primary text-white text-[11px] font-medium';
+        }
         if (dirSidebar) dirSidebar.classList.remove('hidden');
         if (dirBreadcrumb) dirBreadcrumb.classList.remove('hidden');
         if (topShareBtn) {
@@ -2609,7 +2666,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           el.classList.add('hidden');
         });
         if (!silent) {
-          showToast('Super Admin Mode — Workforce Directory, Pay Scale & Appraisal editing unlocked');
+          showToast('Super Admin Mode — All employee details, documents & approvals unlocked');
         }
       } else {
         if (btnEmp) {
@@ -2618,7 +2675,12 @@ No pending employee form submissions awaiting review. Share the form link above 
         if (btnAdm) {
           btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
         }
-        if (roleSub) roleSub.innerText = 'Employee Self-Service (Own Profile Only)';
+        if (roleSub) roleSub.innerText = 'Employee Self-Service (Approved · Read-Only)';
+        const statusBadge = document.getElementById('accessModeStatusBadge');
+        if (statusBadge) {
+          statusBadge.innerText = 'Approved Employee · Details & Docs Locked (Super Admin Only)';
+          statusBadge.className = 'hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-subtle border border-apple-border text-[11px] font-medium text-apple-secondary';
+        }
         if (dirSidebar) dirSidebar.classList.add('hidden');
         if (dirBreadcrumb) dirBreadcrumb.classList.add('hidden');
         if (topShareBtn) {
@@ -2641,10 +2703,12 @@ No pending employee form submissions awaiting review. Share the form link above 
           }
         }
         if (!silent) {
-          showToast('Employee Mode — Directory hidden; Pay Scale & Appraisals locked to View Only');
+          showToast('Approved Employee Mode — Personal details, Pay Scale & Documents are locked (Super Admin only)');
         }
       }
       renderLeaveUI();
+      renderDocumentsUI();
+      renderNotificationsUI();
     }
 
     // Render Personal Details into DOM
@@ -2668,8 +2732,12 @@ No pending employee form submissions awaiting review. Share the form link above 
       setEl('dispAddress', personalData.address);
     }
 
-    // Open & Save Employee Personal Details Modal
+    // Open & Save Employee Personal Details Modal (Super Admin Only once employee is approved)
     function openPersonalEditModal() {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Profile Locked — Once approved by Super Admin, only Super Admin can edit employee details.');
+        return;
+      }
       const fnInput = document.getElementById('inputFullName');
       if (fnInput) fnInput.value = personalData.fullName || 'SUKUMAR PREM KUMAR';
       document.getElementById('inputPhone').value = personalData.phone;
@@ -2688,6 +2756,10 @@ No pending employee form submissions awaiting review. Share the form link above 
 
     function savePersonalDetails(e) {
       e.preventDefault();
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can modify approved employee details.');
+        return;
+      }
       const fnInput = document.getElementById('inputFullName');
       personalData = {
         fullName: fnInput && fnInput.value.trim() ? fnInput.value.trim() : 'SUKUMAR PREM KUMAR',
@@ -2702,8 +2774,196 @@ No pending employee form submissions awaiting review. Share the form link above 
       localStorage.setItem('nexus_personal_data_v2', JSON.stringify(personalData));
       renderPersonalUI();
       closePersonalEditModal();
-      showToast('Personal details updated & syncing to Notion DB…');
+      showToast('Personal details updated by Super Admin & syncing to Notion DB…');
       syncEmployeeToNotion(false);
+    }
+
+    // ============================================================================
+    // 3B. VERIFIED COMPLIANCE & ACADEMIC DOCUMENTS ENGINE (UPLOAD & LOCK)
+    // ============================================================================
+    const DEFAULT_COMPLIANCE_DOCS = [
+      { id: 'doc-aadhaar', title: 'Aadhaar National Identity Card', subtitle: 'UIDAI Govt of India ·XXXX-XXXX-8419 · PDF (1.2 MB)', status: 'Verified', uploadedOn: 'Oct 15, 2022', fileName: 'Aadhaar_Verified_8419.pdf' },
+      { id: 'doc-pan', title: 'Income Tax PAN Card', subtitle: 'NSDL Tax Dept · *****4821K · PDF (840 KB)', status: 'Verified', uploadedOn: 'Oct 15, 2022', fileName: 'PAN_Card_4821K.pdf' },
+      { id: 'doc-ms', title: 'Master of Science — Computer Science', subtitle: 'IIIT Hyderabad · Class of 2018 · Transcripts & Degree (4.1 MB)', status: 'Verified', uploadedOn: 'Oct 16, 2022', fileName: 'MS_CS_Degree_Transcript.pdf' },
+      { id: 'doc-btech', title: 'Bachelor of Technology — CSE', subtitle: 'NIT Trichy · Class of 2016 · First Class w/ Distinction (3.6 MB)', status: 'Verified', uploadedOn: 'Oct 16, 2022', fileName: 'BTech_CSE_Degree.pdf' },
+      { id: 'doc-resume', title: 'Curriculum Vitae & Architecture Matrix', subtitle: 'Updated Q3 2026 · System Design & Publications (1.8 MB)', status: 'Current', uploadedOn: 'Sep 02, 2026', fileName: 'CV_Architecture_Matrix_2026.pdf' },
+      { id: 'doc-nda', title: 'Signed Employment Contract & IP NDA', subtitle: 'DocuSign Envelope #DS-99412-A · Counter-signed by VP HR (2.4 MB)', status: 'Executed', uploadedOn: 'Oct 15, 2022', fileName: 'Signed_Employment_NDA.pdf' }
+    ];
+
+    function getEmployeeDocsKey(pageId) {
+      return 'nexus_compliance_docs_' + (pageId || activeNotionRowId || 'default');
+    }
+
+    function getActiveEmployeeDocuments() {
+      const key = getEmployeeDocsKey(activeNotionRowId);
+      const raw = JSON.parse(localStorage.getItem(key) || 'null');
+      if (Array.isArray(raw) && raw.length > 0) return raw;
+      return JSON.parse(JSON.stringify(DEFAULT_COMPLIANCE_DOCS));
+    }
+
+    function saveActiveEmployeeDocuments(docsList) {
+      const key = getEmployeeDocsKey(activeNotionRowId);
+      localStorage.setItem(key, JSON.stringify(docsList));
+    }
+
+    function renderDocumentsUI() {
+      const grid = document.getElementById('documentsGridContainer');
+      if (!grid) return;
+      const docs = getActiveEmployeeDocuments();
+      const isSuperAdmin = currentAccessMode === 'superadmin';
+
+      grid.innerHTML = docs.map(function(doc) {
+        const isSolidBadge = doc.status === 'Verified' || doc.status === 'Executed' || doc.status === 'Uploaded';
+        const badgeClass = isSolidBadge
+          ? 'bg-apple-primary text-white'
+          : 'bg-apple-subtle text-apple-primary border border-apple-border';
+
+        const replaceBtnHtml = isSuperAdmin
+          ? '<button type="button" onclick="openDocumentUploadModal(\'' + doc.id + '\')" class="h-8 px-3 rounded-lg bg-apple-subtle hover:bg-apple-borderSubtle text-[12px] font-medium text-apple-primary transition-colors flex items-center gap-1.5" title="Super Admin: Upload or Replace Document">' +
+              '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>' +
+              'Replace' +
+            '</button>'
+          : '';
+
+        return (
+          '<div class="bg-apple-surface rounded-2xl border border-apple-border apple-shadow p-5 flex items-start justify-between gap-4">' +
+            '<div class="flex items-start gap-3.5 min-w-0">' +
+              '<div class="w-10 h-10 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary shrink-0 font-mono text-xs font-semibold">PDF</div>' +
+              '<div class="min-w-0">' +
+                '<div class="flex items-center gap-2 flex-wrap">' +
+                  '<h4 class="text-[14px] font-semibold text-apple-primary">' + doc.title + '</h4>' +
+                  (doc.uploadedByOnboarding ? '<span class="px-1.5 py-0.5 rounded bg-apple-subtle border border-apple-border text-[9px] font-mono text-apple-secondary">Uploaded in Onboarding</span>' : '') +
+                '</div>' +
+                '<p class="text-[12px] text-apple-secondary mt-0.5 truncate">' + doc.subtitle + '</p>' +
+                '<div class="flex items-center gap-2 mt-2 flex-wrap">' +
+                  '<span class="px-2 py-0.5 rounded text-[10px] font-medium ' + badgeClass + '">' + doc.status + '</span>' +
+                  '<span class="text-[11px] text-apple-tertiary">Updated ' + (doc.uploadedOn || 'Today') + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex items-center gap-1.5 shrink-0">' +
+              replaceBtnHtml +
+              '<button type="button" onclick="downloadComplianceDocument(\'' + doc.id + '\')" class="h-8 px-3 rounded-lg bg-apple-subtle hover:bg-apple-borderSubtle text-[12px] font-medium text-apple-primary transition-colors">Download</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    const DOC_SLOT_PRESETS = {
+      'doc-aadhaar': { title: 'Aadhaar National Identity Card', subtitle: 'UIDAI Govt of India · Verified Copy' },
+      'doc-pan': { title: 'Income Tax PAN Card', subtitle: 'NSDL Tax Dept · Permanent Account Number' },
+      'doc-ms': { title: 'Master of Science — Computer Science', subtitle: 'Postgraduate Degree & Official Transcripts' },
+      'doc-btech': { title: 'Bachelor of Technology — CSE', subtitle: 'Undergraduate Degree & Marksheets' },
+      'doc-resume': { title: 'Curriculum Vitae & Architecture Matrix', subtitle: 'Updated Resume & System Portfolio' },
+      'doc-nda': { title: 'Signed Employment Contract & IP NDA', subtitle: 'Counter-signed HR Employment Agreement' }
+    };
+
+    function handleDocCategoryChange(slotId) {
+      const preset = DOC_SLOT_PRESETS[slotId];
+      const titleInput = document.getElementById('docUploadTitleInput');
+      const subInput = document.getElementById('docUploadSubtitleInput');
+      if (preset && titleInput && subInput) {
+        titleInput.value = preset.title;
+        subInput.value = preset.subtitle;
+      } else if (titleInput && subInput) {
+        titleInput.value = '';
+        subInput.value = '';
+      }
+    }
+
+    function openDocumentUploadModal(slotId) {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Document Vault Locked — Approved employees cannot modify compliance documents. Contact Super Admin.');
+        return;
+      }
+      const catSelect = document.getElementById('docUploadCategorySelect');
+      const fileInput = document.getElementById('docUploadFileInput');
+      if (fileInput) fileInput.value = '';
+      const chosenSlot = slotId || 'doc-aadhaar';
+      if (catSelect) catSelect.value = DOC_SLOT_PRESETS[chosenSlot] ? chosenSlot : 'custom';
+
+      const docs = getActiveEmployeeDocuments();
+      const existing = docs.find(function(d) { return d.id === chosenSlot; });
+      if (existing) {
+        document.getElementById('docUploadTitleInput').value = existing.title;
+        document.getElementById('docUploadSubtitleInput').value = existing.subtitle;
+        document.getElementById('docUploadStatusSelect').value = existing.status || 'Verified';
+      } else {
+        handleDocCategoryChange(chosenSlot);
+      }
+      document.getElementById('documentUploadModal').classList.remove('hidden');
+    }
+
+    function closeDocumentUploadModal() {
+      document.getElementById('documentUploadModal').classList.add('hidden');
+    }
+
+    function saveUploadedDocument(e) {
+      e.preventDefault();
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can upload or replace compliance documents for approved employees.');
+        return;
+      }
+      const slotId = document.getElementById('docUploadCategorySelect').value;
+      const title = document.getElementById('docUploadTitleInput').value.trim();
+      const subtitleRaw = document.getElementById('docUploadSubtitleInput').value.trim();
+      const status = document.getElementById('docUploadStatusSelect').value;
+      const fileInput = document.getElementById('docUploadFileInput');
+      const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+
+      if (!file) {
+        showToast('Please choose a document file to upload.');
+        return;
+      }
+
+      const sizeStr = file.size > 1048576
+        ? (file.size / 1048576).toFixed(1) + ' MB'
+        : Math.max(1, Math.round(file.size / 1024)) + ' KB';
+      const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+      const finalSubtitle = (subtitleRaw ? subtitleRaw + ' · ' : '') + file.name + ' (' + sizeStr + ')';
+
+      const docs = getActiveEmployeeDocuments();
+      const existingIdx = docs.findIndex(function(d) { return d.id === slotId; });
+      const newDocObj = {
+        id: slotId === 'custom' ? ('doc-custom-' + Date.now()) : slotId,
+        title: title,
+        subtitle: finalSubtitle,
+        status: status,
+        uploadedOn: todayStr,
+        fileName: file.name
+      };
+
+      if (existingIdx >= 0 && slotId !== 'custom') {
+        docs[existingIdx] = newDocObj;
+      } else {
+        docs.unshift(newDocObj);
+      }
+
+      saveActiveEmployeeDocuments(docs);
+      renderDocumentsUI();
+      closeDocumentUploadModal();
+      switchTab('tab-documents');
+      showToast('Uploaded "' + file.name + '" to ' + (personalData.fullName || 'Employee') + ' Compliance Vault');
+    }
+
+    function downloadComplianceDocument(docId) {
+      const docs = getActiveEmployeeDocuments();
+      const doc = docs.find(function(d) { return d.id === docId; });
+      if (!doc) return;
+      downloadDocument(
+        doc.title.toUpperCase() + ' — VERIFIED DOSSIER RECORD',
+        [
+          'Employee Name       : ' + (personalData.fullName || 'SUKUMAR PREM KUMAR'),
+          'Document Title      : ' + doc.title,
+          'File / Reference    : ' + (doc.fileName || doc.subtitle),
+          'Metadata            : ' + doc.subtitle,
+          'Verification Status : ' + doc.status,
+          'Last Updated        : ' + (doc.uploadedOn || 'Oct 2026'),
+          'Access Control      : Locked after Super Admin Approval (Read-Only for Employee)'
+        ],
+        (doc.fileName ? doc.fileName.replace(/\.[^.]+$/, '') : doc.id) + '_Verified_Record.txt'
+      );
     }
 
     // Render Super Admin Pay Scale, Compensation & Org Details into DOM
@@ -2830,8 +3090,182 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     // ============================================================================
-    // 4. APPLY FOR LEAVE WORKFLOW & QUOTA ENGINE
+    // 4. APPLY FOR LEAVE WORKFLOW, QUOTA ENGINE & ROLE NOTIFICATIONS
     // ============================================================================
+    function getNotificationsState() {
+      const saved = JSON.parse(localStorage.getItem('nexus_role_notifications_v1') || 'null');
+      if (Array.isArray(saved)) return saved;
+      // Seed initial notifications from any pending leave requests
+      const seeded = [];
+      if (leaveState && Array.isArray(leaveState.requests)) {
+        leaveState.requests.forEach(function(r) {
+          if (r.status === 'Pending Approval') {
+            seeded.push({
+              id: 'NOTIF-SEED-' + r.id,
+              targetRole: 'superadmin',
+              leaveReqId: r.id,
+              applicantName: r.applicantName || 'SUKUMAR PREM KUMAR',
+              applicantPageId: r.applicantPageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75',
+              title: 'Leave Approval Needed: ' + (r.applicantName || 'SUKUMAR PREM KUMAR'),
+              message: r.typeLabel + ' (' + r.days + (r.days === 1 ? ' day' : ' days') + ', ' + r.startDate + ' → ' + r.endDate + ') · "' + r.reason + '"',
+              status: 'Pending Approval',
+              createdAt: r.appliedOn || 'Oct 18, 2026',
+              read: false
+            });
+          }
+        });
+      }
+      localStorage.setItem('nexus_role_notifications_v1', JSON.stringify(seeded));
+      return seeded;
+    }
+
+    function saveNotificationsState(list) {
+      localStorage.setItem('nexus_role_notifications_v1', JSON.stringify(list));
+    }
+
+    function addRoleNotification(notif) {
+      const list = getNotificationsState();
+      list.unshift(notif);
+      saveNotificationsState(list);
+      renderNotificationsUI();
+    }
+
+    function toggleNotificationDropdown() {
+      const panel = document.getElementById('notificationDropdownPanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+      renderNotificationsUI();
+    }
+
+    function markAllNotificationsRead() {
+      const list = getNotificationsState();
+      const role = currentAccessMode === 'superadmin' ? 'superadmin' : 'employee';
+      list.forEach(function(n) {
+        if (n.targetRole === role) n.read = true;
+      });
+      saveNotificationsState(list);
+      renderNotificationsUI();
+      showToast('All notifications marked as read');
+    }
+
+    function dismissNotificationBanner(notifId) {
+      const list = getNotificationsState();
+      const item = list.find(function(n) { return n.id === notifId; });
+      if (item) item.read = true;
+      saveNotificationsState(list);
+      renderNotificationsUI();
+    }
+
+    function renderNotificationsUI() {
+      const list = getNotificationsState();
+      const role = currentAccessMode === 'superadmin' ? 'superadmin' : 'employee';
+      const currentEmpName = (personalData.fullName || 'SUKUMAR PREM KUMAR').toUpperCase();
+
+      const relevant = list.filter(function(n) {
+        if (role === 'superadmin') return n.targetRole === 'superadmin';
+        if (n.targetRole !== 'employee') return false;
+        // Match the logged-in/active employee
+        if (n.applicantPageId && activeNotionRowId && n.applicantPageId === activeNotionRowId) return true;
+        if (n.applicantName && n.applicantName.toUpperCase() === currentEmpName) return true;
+        return true;
+      });
+
+      const unread = relevant.filter(function(n) { return !n.read; });
+      const badge = document.getElementById('notificationCountBadge');
+      const subtext = document.getElementById('notificationHeaderSubtext');
+      const container = document.getElementById('notificationListContainer');
+      const banner = document.getElementById('liveRoleNotificationBanner');
+
+      if (badge) {
+        if (unread.length > 0) {
+          badge.innerText = unread.length;
+          badge.classList.remove('hidden');
+        } else {
+          badge.classList.add('hidden');
+        }
+      }
+
+      if (subtext) {
+        subtext.innerText = role === 'superadmin'
+          ? 'Super Admin Queue · Employee Leave Requests & Approvals'
+          : 'Employee Alerts · Your Leave Approval Updates from Super Admin';
+      }
+
+      if (container) {
+        if (relevant.length === 0) {
+          container.innerHTML = '<div class="px-4 py-8 text-center text-[12px] text-apple-secondary">No notifications for ' + (role === 'superadmin' ? 'Super Admin' : currentEmpName) + ' yet.</div>';
+        } else {
+          container.innerHTML = relevant.map(function(n) {
+            const isPendingLeave = role === 'superadmin' && n.leaveReqId && n.status === 'Pending Approval';
+            const decisionBadge = n.status === 'Approved'
+              ? '<span class="px-2 py-0.5 rounded-full bg-apple-primary text-white text-[10px] font-medium">Approved by Super Admin</span>'
+              : n.status === 'Rejected'
+              ? '<span class="px-2 py-0.5 rounded-full bg-apple-subtle border border-apple-destructive/30 text-apple-destructive text-[10px] font-medium">Rejected</span>'
+              : '<span class="px-2 py-0.5 rounded-full bg-apple-subtle border border-apple-border text-apple-primary text-[10px] font-medium">Pending Super Admin Approval</span>';
+
+            const actionBtns = isPendingLeave
+              ? '<div class="flex items-center gap-1.5 mt-2.5">' +
+                  '<button type="button" onclick="handleLeaveDecision(\'' + n.leaveReqId + '\', \'Approved\')" class="h-7 px-3 rounded-lg bg-apple-primary text-white text-[11px] font-medium hover:bg-black transition-colors">Approve Leave</button>' +
+                  '<button type="button" onclick="handleLeaveDecision(\'' + n.leaveReqId + '\', \'Rejected\')" class="h-7 px-3 rounded-lg bg-apple-surface border border-apple-border text-apple-destructive text-[11px] font-medium hover:bg-apple-subtle transition-colors">Reject</button>' +
+                  '<button type="button" onclick="switchTab(\'tab-leave\'); toggleNotificationDropdown();" class="h-7 px-2.5 rounded-lg text-[11px] font-medium text-apple-secondary hover:text-apple-primary">View in Leave Tab</button>' +
+                '</div>'
+              : '';
+
+            return (
+              '<div class="px-4 py-3.5 transition-colors ' + (n.read ? 'bg-apple-surface' : 'bg-apple-subtle/70') + '">' +
+                '<div class="flex items-start justify-between gap-2">' +
+                  '<div class="flex items-center gap-1.5 flex-wrap">' +
+                    (!n.read ? '<span class="w-2 h-2 rounded-full bg-apple-primary shrink-0"></span>' : '') +
+                    '<span class="text-[12px] font-semibold text-apple-primary">' + n.title + '</span>' +
+                  '</div>' +
+                  '<span class="text-[10px] font-mono text-apple-tertiary shrink-0">' + (n.createdAt || 'Just now') + '</span>' +
+                '</div>' +
+                '<p class="text-[12px] text-apple-secondary mt-1 leading-relaxed">' + n.message + '</p>' +
+                '<div class="flex items-center justify-between mt-2">' +
+                  decisionBadge +
+                '</div>' +
+                actionBtns +
+              '</div>'
+            );
+          }).join('');
+        }
+      }
+
+      // Render top live alert banner for unread notifications so neither Super Admin nor Employee misses it
+      if (banner) {
+        const topUnread = unread[0];
+        if (!topUnread) {
+          banner.classList.add('hidden');
+          banner.innerHTML = '';
+        } else {
+          banner.classList.remove('hidden');
+          const isSuperAdminPending = role === 'superadmin' && topUnread.leaveReqId && topUnread.status === 'Pending Approval';
+          banner.innerHTML =
+            '<div class="bg-apple-surface rounded-2xl border border-apple-primary/25 apple-shadow p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">' +
+              '<div class="flex items-start sm:items-center gap-3.5">' +
+                '<div class="w-9 h-9 rounded-xl bg-apple-primary text-white flex items-center justify-center shrink-0">' +
+                  '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>' +
+                '</div>' +
+                '<div>' +
+                  '<div class="flex items-center gap-2 flex-wrap">' +
+                    '<span class="px-2 py-0.5 rounded bg-apple-primary text-white text-[10px] font-semibold uppercase tracking-wider">' + (role === 'superadmin' ? 'Super Admin Leave Alert' : 'Leave Status Notification') + '</span>' +
+                    '<h4 class="text-[13px] font-semibold text-apple-primary">' + topUnread.title + '</h4>' +
+                  '</div>' +
+                  '<p class="text-[12px] text-apple-secondary mt-0.5">' + topUnread.message + '</p>' +
+                '</div>' +
+              '</div>' +
+              '<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">' +
+                (isSuperAdminPending
+                  ? '<button type="button" onclick="handleLeaveDecision(\'' + topUnread.leaveReqId + '\', \'Approved\')" class="h-8 px-3.5 rounded-lg bg-apple-primary text-white text-[12px] font-medium hover:bg-black transition-colors">Approve Leave</button>' +
+                    '<button type="button" onclick="handleLeaveDecision(\'' + topUnread.leaveReqId + '\', \'Rejected\')" class="h-8 px-3 rounded-lg bg-apple-surface border border-apple-border text-apple-destructive text-[12px] font-medium hover:bg-apple-subtle transition-colors">Reject</button>'
+                  : '<button type="button" onclick="switchTab(\'tab-leave\'); dismissNotificationBanner(\'' + topUnread.id + '\')" class="h-8 px-3.5 rounded-lg bg-apple-primary text-white text-[12px] font-medium hover:bg-black transition-colors">View Leave Status</button>') +
+                '<button type="button" onclick="dismissNotificationBanner(\'' + topUnread.id + '\')" class="h-8 px-2.5 rounded-lg bg-apple-subtle hover:bg-apple-borderSubtle text-[11px] font-medium text-apple-secondary transition-colors">Dismiss</button>' +
+              '</div>' +
+            '</div>';
+        }
+      }
+    }
+
     function renderLeaveUI() {
       const annualRem = Math.max(0, leaveState.annualTotal - leaveState.annualTaken);
       const sickRem = Math.max(0, leaveState.sickTotal - leaveState.sickTaken);
@@ -2877,6 +3311,16 @@ No pending employee form submissions awaiting review. Share the form link above 
           ? 'bg-apple-subtle text-apple-destructive border-apple-destructive/30'
           : 'bg-apple-primary text-white border-apple-primary';
 
+        const applicantChip = req.applicantName
+          ? '<span class="px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-[10px] font-medium text-apple-primary">' + req.applicantName + '</span>'
+          : '';
+
+        const approvedNotifChip = req.status === 'Approved'
+          ? '<span class="text-[10px] text-apple-secondary font-medium">✓ Approved by Super Admin & Notified Employee</span>'
+          : req.status === 'Rejected'
+          ? '<span class="text-[10px] text-apple-destructive font-medium">✕ Rejected by Super Admin & Notified Employee</span>'
+          : '<span class="text-[10px] text-apple-tertiary font-medium">Notified Super Admin for Approval</span>';
+
         const adminActions = (currentAccessMode === 'superadmin' && isPending)
           ? '<div class="flex items-center gap-1.5 ml-2">' +
               '<button type="button" onclick="handleLeaveDecision(\'' + req.id + '\', \'Approved\')" class="h-6 px-2.5 rounded-md bg-apple-primary text-white text-[10px] font-medium hover:bg-black">Approve</button>' +
@@ -2887,12 +3331,14 @@ No pending employee form submissions awaiting review. Share the form link above 
         return (
           '<div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
             '<div class="space-y-0.5">' +
-              '<div class="flex items-center gap-2">' +
+              '<div class="flex items-center gap-2 flex-wrap">' +
+                applicantChip +
                 '<span class="text-[13px] font-semibold text-apple-primary">' + req.typeLabel + '</span>' +
                 '<span class="text-[11px] font-mono text-apple-secondary">(' + req.days + (req.days === 1 ? ' Day' : ' Days') + ')</span>' +
                 '<span class="text-[10px] font-mono text-apple-tertiary">' + req.id + '</span>' +
               '</div>' +
               '<div class="text-[12px] text-apple-secondary">' + req.startDate + ' → ' + req.endDate + ' · ' + req.reason + '</div>' +
+              '<div class="pt-0.5">' + approvedNotifChip + '</div>' +
             '</div>' +
             '<div class="flex items-center gap-2 self-start sm:self-center">' +
               '<span class="text-[10px] text-apple-tertiary">Applied ' + req.appliedOn + '</span>' +
@@ -2982,8 +3428,11 @@ No pending employee form submissions awaiting review. Share the form link above 
         casual: 'Casual Leave (CL)'
       };
 
+      const applicantName = personalData.fullName || 'SUKUMAR PREM KUMAR';
       const newReq = {
         id: 'LV-2026-' + Math.floor(100 + Math.random() * 899),
+        applicantName: applicantName,
+        applicantPageId: activeNotionRowId,
         type: type,
         typeLabel: labels[type],
         startDate: start,
@@ -2997,14 +3446,33 @@ No pending employee form submissions awaiting review. Share the form link above 
       leaveState.requests.unshift(newReq);
       localStorage.setItem('nexus_leave_state_v1', JSON.stringify(leaveState));
 
+      // Notify Super Admin immediately
+      addRoleNotification({
+        id: 'NOTIF-ADM-' + Date.now(),
+        targetRole: 'superadmin',
+        leaveReqId: newReq.id,
+        applicantName: applicantName,
+        applicantPageId: activeNotionRowId,
+        title: 'New Leave Request from ' + applicantName,
+        message: labels[type] + ' · ' + days + (days === 1 ? ' day' : ' days') + ' (' + start + ' → ' + end + ') — "' + reason + '"',
+        status: 'Pending Approval',
+        createdAt: 'Just now',
+        read: false
+      });
+
       renderLeaveUI();
+      renderNotificationsUI();
       closeLeaveModal();
       switchTab('tab-leave');
-      showToast('Leave application (' + days + (days === 1 ? ' day' : ' days') + ') submitted & synced to Notion DB');
+      showToast('Leave request submitted! Super Admin has been notified for approval.');
       syncEmployeeToNotion(false);
     }
 
     function handleLeaveDecision(reqId, decision) {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can approve or reject leave applications.');
+        return;
+      }
       const target = leaveState.requests.find(function(r) { return r.id === reqId; });
       if (!target) return;
       if (decision === 'Rejected' && target.status !== 'Rejected') {
@@ -3014,8 +3482,34 @@ No pending employee form submissions awaiting review. Share the form link above 
       }
       target.status = decision;
       localStorage.setItem('nexus_leave_state_v1', JSON.stringify(leaveState));
+
+      // Update Super Admin notification status & push notification to the Employee who applied
+      const notifList = getNotificationsState();
+      notifList.forEach(function(n) {
+        if (n.leaveReqId === reqId && n.targetRole === 'superadmin') {
+          n.status = decision;
+          n.read = true;
+        }
+      });
+
+      const applicantName = target.applicantName || personalData.fullName || 'SUKUMAR PREM KUMAR';
+      notifList.unshift({
+        id: 'NOTIF-EMP-' + Date.now(),
+        targetRole: 'employee',
+        leaveReqId: target.id,
+        applicantName: applicantName,
+        applicantPageId: target.applicantPageId || activeNotionRowId,
+        title: 'Your Leave Application (' + target.id + ') was ' + decision,
+        message: 'Super Admin ' + decision.toLowerCase() + ' your ' + target.typeLabel + ' for ' + target.days + (target.days === 1 ? ' day' : ' days') + ' (' + target.startDate + ' → ' + target.endDate + ').',
+        status: decision,
+        createdAt: 'Just now',
+        read: false
+      });
+      saveNotificationsState(notifList);
+
       renderLeaveUI();
-      showToast('Leave request ' + reqId + ' marked as ' + decision + ' · Syncing to Notion DB');
+      renderNotificationsUI();
+      showToast('Leave ' + reqId + ' ' + decision + ' — Notification sent to ' + applicantName);
       syncEmployeeToNotion(false);
     }
 
@@ -3350,19 +3844,96 @@ No pending employee form submissions awaiting review. Share the form link above 
       setEl('personalModalSubtitle', 'Employee Self-Service · ' + rec.name + ' (' + (rec.empId || 'NX-8842') + ')');
       setEl('settingsNotionRowId', rec.pageId);
 
-      // Update avatar for Prem vs Initials for other employees
+      // Update avatar from uploaded photo (if any), Prem's photo, or Initials
+      const uploadedPhoto = getEmployeePhotoDataUrl(rec.pageId) || rec.photoDataUrl || '';
+      const isPrem = rec.name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
+      const defaultPremPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S';
+      const finalPhotoSrc = uploadedPhoto || (isPrem ? defaultPremPhoto : '');
+
       const avatarContainer = document.getElementById('empAvatarContainer');
       if (avatarContainer) {
-        const isPrem = rec.name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
         const initials = rec.name.split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
-        avatarContainer.innerHTML = isPrem
-          ? '<img alt="SUKUMAR PREM KUMAR" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
+        avatarContainer.innerHTML = finalPhotoSrc
+          ? '<img id="empMainAvatarImg" alt="' + rec.name + '" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="' + finalPhotoSrc + '"/>'
           : '<div class="w-20 h-20 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[24px] font-semibold text-apple-primary">' + initials + '</div>';
+      }
+
+      const topBarImg = document.getElementById('topBarAvatarImg');
+      if (topBarImg && finalPhotoSrc) {
+        topBarImg.src = finalPhotoSrc;
       }
 
       renderPersonalUI();
       renderAdminUI();
+      renderDocumentsUI();
+      renderNotificationsUI();
       navigateSidebar('employees');
+    }
+
+    // Per-employee photograph storage & compression helper
+    function getEmployeePhotoDataUrl(pageId) {
+      if (!pageId) return '';
+      return localStorage.getItem('nexus_emp_photo_' + pageId) || '';
+    }
+
+    function saveEmployeePhotoDataUrl(pageId, dataUrl) {
+      if (!pageId || !dataUrl) return;
+      try {
+        localStorage.setItem('nexus_emp_photo_' + pageId, dataUrl);
+      } catch (e) {}
+    }
+
+    function compressImageFileToDataUrl(file, callback) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 240;
+          let w = img.width || 240;
+          let h = img.height || 240;
+          if (w > h) {
+            if (w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+          } else {
+            if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.82);
+          callback(compressed);
+        };
+        img.onerror = function() {
+          callback(ev.target.result);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleAdminAvatarFileUpload(event) {
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Only Super Admin can change an approved employee photograph.');
+        return;
+      }
+      const file = event && event.target && event.target.files && event.target.files[0];
+      if (!file) return;
+      compressImageFileToDataUrl(file, function(dataUrl) {
+        saveEmployeePhotoDataUrl(activeNotionRowId, dataUrl);
+        if (NOTION_EMPLOYEE_RECORDS[activeNotionRowId]) {
+          NOTION_EMPLOYEE_RECORDS[activeNotionRowId].photoDataUrl = dataUrl;
+        }
+        const avatarContainer = document.getElementById('empAvatarContainer');
+        if (avatarContainer) {
+          avatarContainer.innerHTML = '<img id="empMainAvatarImg" alt="' + (personalData.fullName || 'Employee') + '" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="' + dataUrl + '"/>';
+        }
+        const topBarImg = document.getElementById('topBarAvatarImg');
+        if (topBarImg) topBarImg.src = dataUrl;
+        loadDirectoryFromNotion(false);
+        showToast('Updated employee profile photograph for ' + (personalData.fullName || 'Employee'));
+      });
     }
 
     function openAddEmployeeModal() {
@@ -3374,17 +3945,20 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function renderEmployeeDirectoryRow(emp) {
+      const safePageId = emp.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75';
       const isPrem = (emp.name || '').toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
+      const uploadedPhoto = getEmployeePhotoDataUrl(safePageId) || emp.photoDataUrl || '';
+      const defaultPremPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S';
+      const rowPhotoSrc = uploadedPhoto || (isPrem ? defaultPremPhoto : '');
       const initials = (emp.name || 'EM').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
-      const avatarHtml = isPrem
-        ? '<img alt="SUKUMAR PREM KUMAR" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
+      const avatarHtml = rowPhotoSrc
+        ? '<img alt="' + (emp.name || 'Employee') + '" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="' + rowPhotoSrc + '"/>'
         : '<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">' + initials + '</div>';
       const shortBand = (emp.band || 'Band L5').split('·')[0].trim();
       const statusBadge = (emp.status === 'Active')
         ? '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active</span>'
         : '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">' + (emp.status || 'Active') + '</span>';
       const cleanPageId = (emp.pageId || '').replace(/-/g, '');
-      const safePageId = emp.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75';
       const actionHtml = '<button class="h-7 px-3 ' + (isPrem ? 'bg-apple-primary hover:bg-black text-white' : 'bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border') + ' rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View Dossier</button>' +
         (cleanPageId && cleanPageId.indexOf('local') < 0 ? ' <a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion ↗</a>' : '');
 
@@ -3520,12 +4094,55 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     // ============================================================================
-    // 8. SHAREABLE EMPLOYEE ONBOARDING FORM & SUPER ADMIN APPROVAL / REJECTION QUEUE
+    // 8. SHAREABLE EMPLOYEE ONBOARDING FORM (PHOTO + DOCS) & SUPER ADMIN APPROVAL
     // ============================================================================
     let pendingSubmissionsMap = JSON.parse(localStorage.getItem('nexus_pending_submissions_v1') || '{}') || {};
+    let onboardingUploadedDocsMap = {};
 
     function savePendingSubmissionsMap() {
       localStorage.setItem('nexus_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
+    }
+
+    function handleOnboardingPhotoSelect(event) {
+      const file = event && event.target && event.target.files && event.target.files[0];
+      if (!file) return;
+      compressImageFileToDataUrl(file, function(dataUrl) {
+        const hiddenInput = document.getElementById('formEmpPhotoDataUrl');
+        const previewImg = document.getElementById('formEmpPhotoPreviewImg');
+        const placeholder = document.getElementById('formEmpPhotoPlaceholderIcon');
+        const statusText = document.getElementById('formEmpPhotoStatusText');
+        if (hiddenInput) hiddenInput.value = dataUrl;
+        if (previewImg) {
+          previewImg.src = dataUrl;
+          previewImg.classList.remove('hidden');
+        }
+        if (placeholder) placeholder.classList.add('hidden');
+        if (statusText) {
+          statusText.innerText = '✓ Selected: ' + file.name;
+          statusText.classList.remove('hidden');
+        }
+      });
+    }
+
+    function handleOnboardingDocSelect(event) {
+      const input = event && event.target;
+      if (!input || !input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const slotId = input.getAttribute('data-doc-slot');
+      const title = input.getAttribute('data-doc-title');
+      const sizeStr = file.size > 1048576
+        ? (file.size / 1048576).toFixed(1) + ' MB'
+        : Math.max(1, Math.round(file.size / 1024)) + ' KB';
+      const todayStr = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+      onboardingUploadedDocsMap[slotId] = {
+        id: slotId,
+        title: title,
+        subtitle: 'Uploaded during Onboarding · ' + file.name + ' (' + sizeStr + ')',
+        status: 'Uploaded (Pending Super Admin Approval)',
+        uploadedOn: todayStr,
+        fileName: file.name,
+        uploadedByOnboarding: true
+      };
     }
 
     function getShareableFormBaseUrl() {
@@ -3555,6 +4172,7 @@ No pending employee form submissions awaiting review. Share the form link above 
       const corrBanner = document.getElementById('formCorrectionAlertBanner');
       const corrText = document.getElementById('formCorrectionAlertText');
 
+      onboardingUploadedDocsMap = {};
       if (formEl) formEl.classList.remove('hidden');
       if (successCard) successCard.classList.add('hidden');
 
@@ -3599,6 +4217,15 @@ No pending employee form submissions awaiting review. Share the form link above 
     function resetStandaloneEmployeeForm() {
       const formEl = document.getElementById('standaloneEmployeeOnboardingForm');
       const successCard = document.getElementById('standaloneFormSuccessCard');
+      onboardingUploadedDocsMap = {};
+      const previewImg = document.getElementById('formEmpPhotoPreviewImg');
+      const placeholder = document.getElementById('formEmpPhotoPlaceholderIcon');
+      const statusText = document.getElementById('formEmpPhotoStatusText');
+      const hiddenPhoto = document.getElementById('formEmpPhotoDataUrl');
+      if (previewImg) { previewImg.src = ''; previewImg.classList.add('hidden'); }
+      if (placeholder) placeholder.classList.remove('hidden');
+      if (statusText) statusText.classList.add('hidden');
+      if (hiddenPhoto) hiddenPhoto.value = '';
       if (formEl) {
         formEl.reset();
         formEl.classList.remove('hidden');
@@ -3612,7 +4239,7 @@ No pending employee form submissions awaiting review. Share the form link above 
       const origHtml = btn ? btn.innerHTML : '';
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<span class="material-symbols-outlined text-[17px] animate-spin">sync</span><span>Submitting to Super Admin Queue &amp; Notion...</span>';
+        btn.innerHTML = '<span class="material-symbols-outlined text-[17px] animate-spin">sync</span><span>Submitting Photo, Docs &amp; Details to Super Admin...</span>';
       }
 
       const existingPageId = document.getElementById('formSubmissionPageId').value.trim();
@@ -3629,12 +4256,15 @@ No pending employee form submissions awaiting review. Share the form link above 
       const bankAccount = document.getElementById('formEmpBankAccount').value.trim();
       const bankIfsc = document.getElementById('formEmpBankIfsc').value.trim().toUpperCase();
       const pan = document.getElementById('formEmpPan').value.trim().toUpperCase();
+      const photoDataUrl = (document.getElementById('formEmpPhotoDataUrl') && document.getElementById('formEmpPhotoDataUrl').value) || '';
+      const uploadedDocsList = Object.keys(onboardingUploadedDocsMap).map(function(k) { return onboardingUploadedDocsMap[k]; });
 
       const empId = (existingPageId && NOTION_EMPLOYEE_RECORDS[existingPageId] && NOTION_EMPLOYEE_RECORDS[existingPageId].empId)
         ? NOTION_EMPLOYEE_RECORDS[existingPageId].empId
         : ('NX-' + Math.floor(8850 + Math.random() * 140));
       const emergDigits = Number(String(emergPhone || '').replace(/\D+/g, '').slice(-10)) || 9800000000;
-      const bankSummaryText = bankName + ' | Acc: ' + bankAccount + ' | IFSC: ' + bankIfsc + ' | PAN: ' + pan + ' | Nat: ' + nationality + (dob ? ' | DOB: ' + dob : '');
+      const docsSummary = uploadedDocsList.length ? (' | Docs: ' + uploadedDocsList.map(function(d) { return d.fileName; }).join(', ')) : '';
+      const bankSummaryText = bankName + ' | Acc: ' + bankAccount + ' | IFSC: ' + bankIfsc + ' | PAN: ' + pan + ' | Nat: ' + nationality + (dob ? ' | DOB: ' + dob : '') + docsSummary;
       const todayIso = new Date().toISOString().slice(0, 10);
 
       const notionProperties = {
@@ -3675,6 +4305,24 @@ No pending employee form submissions awaiting review. Share the form link above 
         }
       } catch (err) {}
 
+      // Save employee photograph & uploaded compliance documents for this employee
+      if (photoDataUrl) {
+        saveEmployeePhotoDataUrl(savedPageId, photoDataUrl);
+      }
+
+      if (uploadedDocsList.length > 0) {
+        const mergedDocs = JSON.parse(JSON.stringify(DEFAULT_COMPLIANCE_DOCS));
+        uploadedDocsList.forEach(function(upDoc) {
+          const idx = mergedDocs.findIndex(function(d) { return d.id === upDoc.id; });
+          if (idx >= 0) {
+            mergedDocs[idx] = upDoc;
+          } else {
+            mergedDocs.unshift(upDoc);
+          }
+        });
+        localStorage.setItem(getEmployeeDocsKey(savedPageId), JSON.stringify(mergedDocs));
+      }
+
       const submissionObj = {
         pageId: savedPageId,
         name: fullName,
@@ -3692,6 +4340,8 @@ No pending employee form submissions awaiting review. Share the form link above 
         bankAccount: bankAccount,
         bankIfsc: bankIfsc,
         pan: pan,
+        photoDataUrl: photoDataUrl,
+        uploadedDocs: uploadedDocsList,
         jobTitle: 'Pending Super Admin Assignment',
         band: 'Band L4 · Consultant',
         dept: 'Data Science',
@@ -3705,6 +4355,19 @@ No pending employee form submissions awaiting review. Share the form link above 
       savePendingSubmissionsMap();
       NOTION_EMPLOYEE_RECORDS[savedPageId] = Object.assign({}, NOTION_EMPLOYEE_RECORDS[savedPageId] || {}, submissionObj);
 
+      // Push notification to Super Admin about new onboarding submission
+      addRoleNotification({
+        id: 'NOTIF-ONB-' + Date.now(),
+        targetRole: 'superadmin',
+        applicantName: fullName,
+        applicantPageId: savedPageId,
+        title: 'New Onboarding Submission: ' + fullName,
+        message: 'Submitted profile details' + (photoDataUrl ? ', photograph' : '') + ' & ' + uploadedDocsList.length + ' compliance documents for Super Admin approval.',
+        status: 'Pending Approval',
+        createdAt: 'Just now',
+        read: false
+      });
+
       renderPendingApprovals();
       loadDirectoryFromNotion(false);
 
@@ -3715,7 +4378,7 @@ No pending employee form submissions awaiting review. Share the form link above 
 
       document.getElementById('standaloneEmployeeOnboardingForm').classList.add('hidden');
       document.getElementById('standaloneFormSuccessCard').classList.remove('hidden');
-      showToast('Submitted "' + fullName + '" for Super Admin Review & Approval!');
+      showToast('Submitted "' + fullName + '" (with Photo & Documents) for Super Admin Approval!');
     }
 
     function renderPendingApprovals() {
@@ -3744,7 +4407,7 @@ No pending employee form submissions awaiting review. Share the form link above 
 
       if (items.length === 0) {
         container.innerHTML = '<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[12px] text-apple-secondary text-center">' +
-          'No pending employee form submissions awaiting review. Share the form link above or click <strong>Open Employee Form View</strong> to test submitting a new employee record.' +
+          'No pending employee form submissions awaiting review. Share the form link above or click <strong>Open Employee Form View</strong> to test submitting a new employee record with photograph &amp; documents.' +
         '</div>';
         return;
       }
@@ -3755,6 +4418,22 @@ No pending employee form submissions awaiting review. Share the form link above 
           ? '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-apple-surface text-apple-primary border border-apple-primary">Changes Requested · Correction Email Sent</span>'
           : '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-apple-primary text-white">Pending Super Admin Approval</span>';
 
+        const photoSrc = item.photoDataUrl || getEmployeePhotoDataUrl(item.pageId) || '';
+        const initials = (item.name || 'NE').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
+        const avatarThumb = photoSrc
+          ? '<img src="' + photoSrc + '" alt="' + (item.name || 'Employee') + '" class="w-11 h-11 rounded-full object-cover border border-apple-border shrink-0" />'
+          : '<div class="w-11 h-11 rounded-full bg-apple-surface border border-apple-border flex items-center justify-center text-[13px] font-bold text-apple-primary shrink-0">' + initials + '</div>';
+
+        const uploadedDocs = Array.isArray(item.uploadedDocs) ? item.uploadedDocs : [];
+        const docsBadgesHtml = uploadedDocs.length > 0
+          ? '<div class="flex items-center gap-1.5 flex-wrap mt-2 pt-2 border-t border-apple-borderSubtle">' +
+              '<span class="text-[10px] font-semibold uppercase tracking-wider text-apple-secondary mr-1">Uploaded Docs (' + uploadedDocs.length + '):</span>' +
+              uploadedDocs.map(function(d) {
+                return '<span class="px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-[10px] font-mono text-apple-primary">✓ ' + d.title + ' (' + d.fileName + ')</span>';
+              }).join('') +
+            '</div>'
+          : '';
+
         const mistakeBanner = (isRejected && item.mistakeNotes)
           ? '<div class="mt-2 p-2.5 rounded-lg bg-apple-surface border border-apple-border text-[11px] text-apple-primary">' +
               '<strong>Mistakes Flagged &amp; Emailed to Employee:</strong> ' + item.mistakeNotes +
@@ -3763,18 +4442,22 @@ No pending employee form submissions awaiting review. Share the form link above 
 
         return '<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-3">' +
           '<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-apple-borderSubtle pb-2.5">' +
-            '<div>' +
-              '<div class="flex items-center gap-2 flex-wrap">' +
-                '<span class="text-[14px] font-bold text-apple-primary">' + (item.name || 'New Employee') + '</span>' +
-                '<span class="text-[11px] font-mono text-apple-secondary">' + (item.empId || 'NX-NEW') + '</span>' +
-                statusPill +
+            '<div class="flex items-center gap-3">' +
+              avatarThumb +
+              '<div>' +
+                '<div class="flex items-center gap-2 flex-wrap">' +
+                  '<span class="text-[14px] font-bold text-apple-primary">' + (item.name || 'New Employee') + '</span>' +
+                  '<span class="text-[11px] font-mono text-apple-secondary">' + (item.empId || 'NX-NEW') + '</span>' +
+                  statusPill +
+                  (photoSrc ? '<span class="px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-[10px] font-medium text-apple-secondary">Photo Uploaded</span>' : '') +
+                '</div>' +
+                '<div class="text-[11px] text-apple-secondary">' + (item.email || '—') + ' · Phone: ' + (item.phone || '—') + ' · Submitted: ' + (item.submittedAt || 'Today') + '</div>' +
               '</div>' +
-              '<div class="text-[11px] text-apple-secondary">' + (item.email || '—') + ' · Phone: ' + (item.phone || '—') + ' · Submitted: ' + (item.submittedAt || 'Today') + '</div>' +
             '</div>' +
             '<div class="flex flex-wrap items-center gap-2">' +
               '<button type="button" onclick="approveEmployeeSubmission(\'' + item.pageId + '\')" class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1 shadow-sm transition-colors">' +
                 '<span class="material-symbols-outlined text-[14px]">check_circle</span>' +
-                '<span>Approve &amp; Activate</span>' +
+                '<span>Approve &amp; Lock Employee Edit</span>' +
               '</button>' +
               '<button type="button" onclick="openRejectCorrectionModal(\'' + item.pageId + '\')" class="h-8 px-3.5 rounded-full bg-apple-surface hover:bg-apple-hover text-apple-primary border border-apple-border text-[11px] font-semibold flex items-center gap-1 transition-colors">' +
                 '<span class="material-symbols-outlined text-[14px]">mark_email_unread</span>' +
@@ -3798,6 +4481,7 @@ No pending employee form submissions awaiting review. Share the form link above 
               '<div class="text-[11px] text-apple-primary mt-0.5 line-clamp-2">' + (item.address || '—') + '</div>' +
             '</div>' +
           '</div>' +
+          docsBadgesHtml +
           mistakeBanner +
         '</div>';
       }).join('');
@@ -3813,15 +4497,42 @@ No pending employee form submissions awaiting review. Share the form link above 
 
       item.status = 'Active';
       item.reviewStatus = 'Approved';
+      item.lockedAfterApproval = true;
       if (pendingSubmissionsMap[pageId]) {
         pendingSubmissionsMap[pageId].reviewStatus = 'Approved';
         pendingSubmissionsMap[pageId].status = 'Active';
+        pendingSubmissionsMap[pageId].lockedAfterApproval = true;
         savePendingSubmissionsMap();
       }
       if (NOTION_EMPLOYEE_RECORDS[pageId]) {
         NOTION_EMPLOYEE_RECORDS[pageId].status = 'Active';
+        NOTION_EMPLOYEE_RECORDS[pageId].lockedAfterApproval = true;
       }
+
+      // Mark any uploaded onboarding compliance documents for this employee as Verified
+      const docsKey = getEmployeeDocsKey(pageId);
+      const savedDocs = JSON.parse(localStorage.getItem(docsKey) || 'null');
+      if (Array.isArray(savedDocs)) {
+        savedDocs.forEach(function(d) {
+          if (d.uploadedByOnboarding) d.status = 'Verified';
+        });
+        localStorage.setItem(docsKey, JSON.stringify(savedDocs));
+      }
+
       registerApprovedEmployeeLogin(item);
+
+      // Push notification to the approved employee
+      addRoleNotification({
+        id: 'NOTIF-APR-' + Date.now(),
+        targetRole: 'employee',
+        applicantName: item.name,
+        applicantPageId: pageId,
+        title: 'Your Onboarding Profile & Documents Were Approved!',
+        message: 'Super Admin SUKUMAR PREM KUMAR approved your onboarding profile & compliance documents. Your profile is now verified & locked (only Super Admin can make further edits).',
+        status: 'Approved',
+        createdAt: 'Just now',
+        read: false
+      });
 
       try {
         if (pageId.indexOf('sub-') < 0 && pageId.indexOf('local-') < 0) {
@@ -3835,8 +4546,9 @@ No pending employee form submissions awaiting review. Share the form link above 
       } catch (e) {}
 
       renderPendingApprovals();
+      renderDocumentsUI();
       loadDirectoryFromNotion(false);
-      showToast('Approved "' + item.name + '"! Status set to Active in Notion & Google Auth login enabled.');
+      showToast('Approved "' + item.name + '"! Profile & Compliance Documents are now locked to Super Admin only.');
     }
 
     function buildEmployeeCorrectionUrl(item, notes) {
@@ -3977,7 +4689,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           address: params.get('address') || '',
           bankName: params.get('bankName') || '',
           bankAccount: params.get('bankAcc') || '',
-          bankIfsc: params.get('ifsc') || '',
+          ifsc: params.get('ifsc') || '',
           pan: params.get('pan') || ''
         };
         const hasPrefill = Boolean(prefill.name || prefill.email || prefill.pageId);
@@ -4082,6 +4794,8 @@ No pending employee form submissions awaiting review. Share the form link above 
       renderAdminUI();
       renderAppraisalUI();
       renderLeaveUI();
+      renderDocumentsUI();
+      renderNotificationsUI();
       renderPendingApprovals();
       setAccessMode('superadmin', true);
       loadDirectoryFromNotion(false);
