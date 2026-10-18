@@ -169,6 +169,29 @@
 <span class="text-apple-tertiary text-[11px]">Last sync: Today, 09:42 IST</span>
 </div>
 </div>
+<!-- Dynamic Sidebar Page Header Banner (shown on Directory, Payroll, Leave, Compliance, Reports, Settings) -->
+<div class="hidden bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm" id="sidebarPageBanner">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary">
+<span class="material-symbols-outlined text-[24px]" id="bannerIcon">badge</span>
+</div>
+<div>
+<div class="flex items-center gap-2.5">
+<h1 class="text-[20px] font-semibold text-apple-primary tracking-tight" id="bannerTitle">Workforce Directory</h1>
+<span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="bannerBadge">Enterprise View</span>
+</div>
+<p class="text-[13px] text-apple-secondary mt-0.5" id="bannerSubtitle">Employee: Prem Kumar (NX-8842) · Band L5 (Senior Consultant)</p>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" onclick="navigateSidebar('employees')" type="button">
+<span class="material-symbols-outlined text-[15px] text-apple-secondary">person</span>
+<span>Back to Employee Profile</span>
+</button>
+</div>
+</div>
+</div>
 <!-- 1. Apple-Style Employee Profile Header Card -->
 <div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6" id="employeeHeaderCard">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -1001,34 +1024,58 @@
 </div>
 <!-- Interactive JavaScript -->
 <script>
-    const tabToSidebarMap = {
-      'tab-overview': 'employees',
-      'tab-compensation': 'payroll',
-      'tab-bank': 'payroll',
-      'tab-documents': 'compliance',
-      'tab-leave': 'leave',
-      'tab-appraisals': 'reports',
-      'tab-directory': 'directory',
-      'tab-settings': 'settings'
-    };
-
-    const sidebarToTabMap = {
-      'directory': 'tab-directory',
-      'employees': 'tab-overview',
-      'payroll': 'tab-compensation',
-      'leave': 'tab-leave',
-      'compliance': 'tab-documents',
-      'reports': 'tab-appraisals',
-      'settings': 'tab-settings'
+    const sidebarBannerMeta = {
+      'directory': {
+        icon: 'badge',
+        title: 'Enterprise Workforce Directory',
+        badge: '4 Active Members',
+        subtitle: 'Department of Data Science & AI · Bangalore HQ (Hybrid)',
+        tabs: ['tab-directory']
+      },
+      'payroll': {
+        icon: 'credit_card',
+        title: 'Payroll, Compensation & Tax Console',
+        badge: 'FY 2026–2027 (Regime 115BAC)',
+        subtitle: 'Prem Kumar (NX-8842) · Gross: ₹1,85,000/mo · Net Disbursed: ₹1,66,600/mo',
+        tabs: ['tab-compensation', 'tab-bank']
+      },
+      'leave': {
+        icon: 'calendar_today',
+        title: 'Leave & Attendance Management',
+        badge: '100% Attendance',
+        subtitle: 'Prem Kumar (NX-8842) · Cycle: Jan 2026 – Dec 2026 · Bangalore Hub',
+        tabs: ['tab-leave']
+      },
+      'compliance': {
+        icon: 'verified_user',
+        title: 'Compliance & Verified Records',
+        badge: 'SHA-256 Verified',
+        subtitle: 'Prem Kumar (NX-8842) · 6 Counter-Signed Documents & Statutory IDs',
+        tabs: ['tab-documents', 'tab-bank']
+      },
+      'reports': {
+        icon: 'bar_chart',
+        title: 'Performance, Appraisals & Health Reports',
+        badge: 'Score: 4.8 / 5.0',
+        subtitle: 'Prem Kumar (NX-8842) · Q4 Annual Review, Mandatory Training & OHS',
+        tabs: ['tab-appraisals']
+      },
+      'settings': {
+        icon: 'tune',
+        title: 'Enterprise Console Settings',
+        badge: 'SSO Active',
+        subtitle: 'Security, WebAuthn Passkeys & Notification Preferences · Prem Kumar (NX-8842)',
+        tabs: ['tab-settings']
+      }
     };
 
     const tabBreadcrumbLabels = {
-      'tab-overview': 'Prem Kumar',
-      'tab-compensation': 'Prem Kumar · Payroll & Comp',
+      'tab-overview': 'Prem Kumar · Overview',
+      'tab-compensation': 'Prem Kumar · Compensation & Payroll',
       'tab-bank': 'Prem Kumar · Bank & Tax',
-      'tab-documents': 'Prem Kumar · Compliance & Records',
+      'tab-documents': 'Prem Kumar · Documents',
       'tab-leave': 'Prem Kumar · Leave & Attendance',
-      'tab-appraisals': 'Prem Kumar · Appraisals & Reports',
+      'tab-appraisals': 'Prem Kumar · Appraisals & Training',
       'tab-directory': 'Workforce Directory',
       'tab-settings': 'Console Settings'
     };
@@ -1054,8 +1101,13 @@
       });
     }
 
-    // Tab switching for Apple-style segmented control
+    // Tab switching for Apple-style segmented control inside Employee Profile
     function switchTab(tabId, el) {
+      const empCard = document.getElementById('employeeHeaderCard');
+      const banner = document.getElementById('sidebarPageBanner');
+      if (empCard) empCard.classList.remove('hidden');
+      if (banner) banner.classList.add('hidden');
+
       document.querySelectorAll('.tab-content').forEach(function(content) {
         content.classList.add('hidden');
         content.classList.remove('block');
@@ -1076,10 +1128,7 @@
         targetBtn.classList.remove('text-apple-secondary');
       }
 
-      const navKey = tabToSidebarMap[tabId];
-      if (navKey) {
-        highlightSidebar(navKey);
-      }
+      highlightSidebar('employees');
 
       const bc = document.getElementById('breadcrumbCurrent');
       if (bc && tabBreadcrumbLabels[tabId]) {
@@ -1087,11 +1136,50 @@
       }
     }
 
-    // Sidebar navigation handler
+    // Full-page Sidebar navigation handler
     function navigateSidebar(navKey, el) {
-      const targetTabId = sidebarToTabMap[navKey] || 'tab-overview';
-      switchTab(targetTabId);
       highlightSidebar(navKey);
+      const empCard = document.getElementById('employeeHeaderCard');
+      const banner = document.getElementById('sidebarPageBanner');
+
+      if (navKey === 'employees') {
+        if (empCard) empCard.classList.remove('hidden');
+        if (banner) banner.classList.add('hidden');
+        switchTab('tab-overview');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const meta = sidebarBannerMeta[navKey];
+      if (!meta) return;
+
+      // Hide Employee Profile Header Card and show dedicated Page Banner at the very top
+      if (empCard) empCard.classList.add('hidden');
+      if (banner) {
+        banner.classList.remove('hidden');
+        document.getElementById('bannerIcon').innerText = meta.icon;
+        document.getElementById('bannerTitle').innerText = meta.title;
+        document.getElementById('bannerBadge').innerText = meta.badge;
+        document.getElementById('bannerSubtitle').innerText = meta.subtitle;
+      }
+
+      document.querySelectorAll('.tab-content').forEach(function(content) {
+        content.classList.add('hidden');
+        content.classList.remove('block');
+      });
+
+      meta.tabs.forEach(function(tId) {
+        const sec = document.getElementById(tId);
+        if (sec) {
+          sec.classList.remove('hidden');
+          sec.classList.add('block');
+        }
+      });
+
+      const bc = document.getElementById('breadcrumbCurrent');
+      if (bc) {
+        bc.innerText = meta.title;
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1100,17 +1188,17 @@
       const q = (query || '').toLowerCase().trim();
       if (!q) return;
       if (q.includes('pay') || q.includes('salary') || q.includes('ctc') || q.includes('hra')) {
-        switchTab('tab-compensation');
+        navigateSidebar('payroll');
       } else if (q.includes('bank') || q.includes('ifsc') || q.includes('pan') || q.includes('tax') || q.includes('uan')) {
         switchTab('tab-bank');
       } else if (q.includes('doc') || q.includes('aadhaar') || q.includes('resume') || q.includes('degree')) {
-        switchTab('tab-documents');
+        navigateSidebar('compliance');
       } else if (q.includes('leave') || q.includes('holiday') || q.includes('attendance')) {
-        switchTab('tab-leave');
+        navigateSidebar('leave');
       } else if (q.includes('appraisal') || q.includes('training') || q.includes('health') || q.includes('report')) {
-        switchTab('tab-appraisals');
+        navigateSidebar('reports');
       } else if (q.includes('directory') || q.includes('ananya') || q.includes('rohit')) {
-        switchTab('tab-directory');
+        navigateSidebar('directory');
       }
     }
 
