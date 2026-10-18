@@ -309,19 +309,24 @@
 </div>
 </div>
 <!-- Action items -->
-<div class="flex items-center gap-3">
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="navigateSidebar('leave')" type="button">
+<div class="flex items-center gap-2.5">
+<!-- Role Mode Switcher (Employee vs Super Admin) -->
+<div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px]">
+<button class="px-2.5 py-1 rounded-full font-medium transition-all bg-apple-surface text-apple-primary apple-shadow-sm" id="roleBtnEmployee" onclick="setAccessMode('employee')" type="button">Employee</button>
+<button class="px-2.5 py-1 rounded-full font-medium transition-all text-apple-secondary hover:text-apple-primary" id="roleBtnAdmin" onclick="setAccessMode('superadmin')" type="button">Super Admin</button>
+</div>
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="openLeaveModal()" type="button">
 <span class="material-symbols-outlined text-[16px]">add</span>
-<span>New Request</span>
+<span>Apply Leave</span>
 </button>
 <button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors" onclick="navigateSidebar('reports')" title="View Updates &amp; Appraisals" type="button">
 <span class="material-symbols-outlined text-[19px]">notifications</span>
 </button>
-<div class="h-4 w-px bg-apple-border mx-1"></div>
+<div class="h-4 w-px bg-apple-border mx-0.5"></div>
 <div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
 <span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">Prem Kumar</span>
-<span class="text-[10px] text-apple-secondary" id="topBarUserRole">HR Admin</span>
+<span class="text-[10px] text-apple-secondary" id="topBarUserRole">Employee View</span>
 </div>
 <img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 </div>
@@ -341,8 +346,8 @@
 <span class="text-apple-primary font-medium" id="breadcrumbCurrent">Prem Kumar</span>
 </div>
 <div class="flex items-center gap-3">
-<span class="px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium">Confidential</span>
-<span class="text-apple-tertiary text-[11px]">Last sync: Today, 09:42 IST</span>
+<span class="px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle" id="accessModeStatusBadge">Mode: Employee Self-Service</span>
+<span class="text-apple-tertiary text-[11px]" id="lastSyncTimestamp">Last sync: Today, 09:42 IST</span>
 </div>
 </div>
 <!-- Dynamic Sidebar Page Header Banner (shown on Directory, Payroll, Leave, Compliance, Reports, Settings) -->
@@ -378,34 +383,38 @@
 </div>
 <div class="space-y-1">
 <div class="flex items-center gap-2.5">
-<h1 class="text-[22px] font-semibold text-apple-primary tracking-tight">Prem Kumar</h1>
-<span class="text-[12px] font-mono text-apple-secondary px-2 py-0.5 rounded bg-apple-subtle">NX-8842</span>
+<h1 class="text-[22px] font-semibold text-apple-primary tracking-tight" id="dispEmpName">Prem Kumar</h1>
+<span class="text-[12px] font-mono text-apple-secondary px-2 py-0.5 rounded bg-apple-subtle" id="dispEmpId">NX-8842</span>
 <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">
 <span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>
-<span>Active</span>
+<span id="dispEmpStatus">Active</span>
 </div>
 </div>
 <p class="text-[14px] text-apple-secondary">
-                  Consultant <span class="text-apple-tertiary mx-1.5">·</span> Department of Data Science &amp; AI <span class="text-apple-tertiary mx-1.5">·</span> <span class="text-apple-primary font-medium">Band L5 (Senior Consultant)</span>
+<span id="dispDesignation">Consultant</span> <span class="text-apple-tertiary mx-1.5">·</span> <span id="dispDepartment">Department of Data Science &amp; AI</span> <span class="text-apple-tertiary mx-1.5">·</span> <span class="text-apple-primary font-medium" id="dispPayBand">Band L5 (Senior Consultant)</span>
 </p>
 <div class="flex flex-wrap items-center gap-x-5 gap-y-1 pt-1 text-[12px] text-apple-secondary">
-<span>Joining: <strong class="text-apple-primary font-medium">17/08/2026</strong></span>
+<span>Joining: <strong class="text-apple-primary font-medium" id="dispJoiningDate">17/08/2026</strong></span>
 <span class="text-apple-tertiary">·</span>
-<span>Location: <strong class="text-apple-primary font-medium">Hybrid (Bangalore HQ)</strong></span>
+<span>Location: <strong class="text-apple-primary font-medium" id="dispLocation">Hybrid (Bangalore HQ)</strong></span>
 <span class="text-apple-tertiary">·</span>
-<span>Reporting: <strong class="text-apple-primary font-medium">Ananya Sharma</strong> (VP, Data &amp; Analytics)</span>
+<span>Reporting: <strong class="text-apple-primary font-medium" id="dispManager">Ananya Sharma</strong> (VP, Data &amp; Analytics)</span>
 </div>
 </div>
 </div>
 <!-- Right Profile Actions -->
-<div class="flex items-center gap-2.5 self-start md:self-center">
+<div class="flex flex-wrap items-center gap-2 self-start md:self-center">
 <button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" onclick="window.print()" type="button">
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">download</span>
 <span>Export Dossier</span>
 </button>
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="navigateSidebar('settings')" type="button">
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">edit</span>
-<span>Edit Profile</span>
+<span>Edit Personal Details</span>
+</button>
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" id="headerAdminEditBtn" onclick="openSuperAdminModal()" type="button">
+<span class="material-symbols-outlined text-[15px] text-apple-secondary">admin_panel_settings</span>
+<span>Edit Pay Scale &amp; Org (Admin)</span>
 </button>
 </div>
 </div>
@@ -437,16 +446,22 @@
 <!-- Core Details (2 columns) -->
 <div class="lg:col-span-2 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
 <div class="flex items-center justify-between pb-1">
-<h2 class="text-[15px] font-semibold text-apple-primary">Core Identification &amp; Contact</h2>
-<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-0.5 rounded-full border border-apple-borderSubtle">Verified Record</span>
+<div>
+<h2 class="text-[15px] font-semibold text-apple-primary">Core Identification &amp; Personal Details</h2>
+<p class="text-[11px] text-apple-secondary">Editable by Employee (Self-Service)</p>
+</div>
+<button class="h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" onclick="openPersonalEditModal()" type="button">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+<span>Edit Personal Info</span>
+</button>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <!-- Corporate Email -->
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Corporate Email</span>
 <div class="flex items-center justify-between">
-<span class="text-[13px] font-medium text-apple-primary truncate">premkumarrss669@gmail.com</span>
-<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText('premkumarrss669@gmail.com')" title="Copy email">
+<span class="text-[13px] font-medium text-apple-primary truncate" id="dispEmail">premkumarrss669@gmail.com</span>
+<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText(document.getElementById('dispEmail').innerText)" title="Copy email">
 <span class="material-symbols-outlined text-[16px]">content_copy</span>
 </button>
 </div>
@@ -455,8 +470,8 @@
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Primary Phone</span>
 <div class="flex items-center justify-between">
-<span class="text-[13px] font-medium text-apple-primary">+91 74179 92482</span>
-<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText('+917417992482')" title="Copy phone">
+<span class="text-[13px] font-medium text-apple-primary" id="dispPhone">+91 74179 92482</span>
+<button class="text-apple-secondary hover:text-apple-primary p-1 rounded transition-colors" onclick="navigator.clipboard.writeText(document.getElementById('dispPhone').innerText)" title="Copy phone">
 <span class="material-symbols-outlined text-[16px]">content_copy</span>
 </button>
 </div>
@@ -464,26 +479,26 @@
 <!-- Emergency Contact -->
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Emergency Contact</span>
-<div class="text-[13px] font-medium text-apple-primary">Suresh Kumar <span class="text-apple-secondary font-normal">(Father)</span></div>
-<div class="text-[12px] text-apple-secondary font-mono">+91 98390 12455</div>
+<div class="text-[13px] font-medium text-apple-primary"><span id="dispEmergName">Suresh Kumar</span> <span class="text-apple-secondary font-normal" id="dispEmergRel">(Father)</span></div>
+<div class="text-[12px] text-apple-secondary font-mono" id="dispEmergPhone">+91 98390 12455</div>
 </div>
 <!-- Nationality & Blood Group -->
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Nationality &amp; Blood Group</span>
 <div class="flex items-center justify-between pt-0.5">
-<span class="text-[13px] font-medium text-apple-primary">Indian</span>
-<span class="text-[12px] font-medium text-apple-secondary px-2 py-0.5 rounded bg-apple-surface border border-apple-border">B+ Positive</span>
+<span class="text-[13px] font-medium text-apple-primary" id="dispNationality">Indian</span>
+<span class="text-[12px] font-medium text-apple-secondary px-2 py-0.5 rounded bg-apple-surface border border-apple-border" id="dispBloodGroup">B+ Positive</span>
 </div>
 </div>
 <!-- Permanent Address -->
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle sm:col-span-2 space-y-1">
 <div class="flex items-center justify-between">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Permanent Residential Address</span>
-<button class="text-apple-secondary hover:text-apple-primary p-0.5 rounded transition-colors" onclick="navigator.clipboard.writeText('Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Bangalore 560048')">
+<button class="text-apple-secondary hover:text-apple-primary p-0.5 rounded transition-colors" onclick="navigator.clipboard.writeText(document.getElementById('dispAddress').innerText)">
 <span class="material-symbols-outlined text-[15px]">content_copy</span>
 </button>
 </div>
-<p class="text-[13px] text-apple-primary leading-relaxed">
+<p class="text-[13px] text-apple-primary leading-relaxed" id="dispAddress">
                     Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048
                   </p>
 </div>
@@ -491,7 +506,7 @@
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle sm:col-span-2 flex items-center justify-between">
 <div>
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary block">Workstation &amp; Campus</span>
-<span class="text-[13px] font-medium text-apple-primary">Tower B, 4th Floor · Dedicated Workstation DS-402</span>
+<span class="text-[13px] font-medium text-apple-primary" id="dispWorkstation">Tower B, 4th Floor · Dedicated Workstation DS-402</span>
 </div>
 <span class="text-[11px] font-medium text-apple-secondary bg-apple-surface px-2.5 py-1 rounded-full border border-apple-border">L5 Badge Access</span>
 </div>
@@ -500,23 +515,29 @@
 <!-- Organizational & Employment (1 column) -->
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-5">
 <div class="space-y-4">
+<div class="flex items-center justify-between">
 <h3 class="text-[15px] font-semibold text-apple-primary">Organizational Unit</h3>
+<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary flex items-center gap-1 bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle transition-colors" onclick="openSuperAdminModal()" type="button">
+<span class="material-symbols-outlined text-[13px]">lock_person</span>
+<span>Super Admin</span>
+</button>
+</div>
 <div class="space-y-2 text-[13px]">
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
 <span class="text-apple-secondary">Cost Center:</span>
-<span class="font-mono text-apple-primary font-medium">CC-8820 (Analytics)</span>
+<span class="font-mono text-apple-primary font-medium" id="dispCostCenter">CC-8820 (Analytics)</span>
 </div>
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
 <span class="text-apple-secondary">Legal Entity:</span>
-<span class="text-apple-primary font-medium text-right text-[12px]">Nexus Global Tech India Pvt Ltd</span>
+<span class="text-apple-primary font-medium text-right text-[12px]" id="dispLegalEntity">Nexus Global Tech India Pvt Ltd</span>
 </div>
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
 <span class="text-apple-secondary">Notice Period:</span>
-<span class="text-apple-primary font-medium">60 Days (Standard)</span>
+<span class="text-apple-primary font-medium" id="dispNoticePeriod">60 Days (Standard)</span>
 </div>
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
 <span class="text-apple-secondary">Probation Status:</span>
-<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary">Confirmed</span>
+<span class="text-[11px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-primary" id="dispProbation">Confirmed</span>
 </div>
 </div>
 <!-- Onboarding Progress -->
@@ -553,12 +574,12 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 <div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Gross Monthly Salary</span>
-<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹1,85,000</div>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight" id="dispGrossMonthly">₹1,85,000</div>
 <span class="text-[12px] text-apple-secondary block">Fixed base + monthly allowances</span>
 </div>
 <div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Total Deductions</span>
-<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹18,400</div>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight" id="dispTotalDeductions">₹18,400</div>
 <span class="text-[12px] text-apple-secondary block">PF, Professional Tax &amp; TDS</span>
 </div>
 <div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2 border-l-2 border-l-apple-primary">
@@ -566,23 +587,29 @@
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Net Take-Home Pay</span>
 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary">Disbursed</span>
 </div>
-<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹1,66,600</div>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight" id="dispNetMonthly">₹1,66,600</div>
 <span class="text-[12px] text-apple-secondary block">Credited on 30th of each month</span>
 </div>
 <div class="bg-apple-surface rounded-2xl apple-border p-5 apple-shadow-sm space-y-2">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Annual CTC</span>
-<div class="text-[26px] font-semibold text-apple-primary tracking-tight">₹22,20,000</div>
-<span class="text-[12px] text-apple-secondary block">Senior Consultant Package (L5)</span>
+<div class="text-[26px] font-semibold text-apple-primary tracking-tight" id="dispAnnualCtc">₹22,20,000</div>
+<span class="text-[12px] text-apple-secondary block" id="dispCtcSublabel">Senior Consultant Package (L5)</span>
 </div>
 </div>
 <!-- Detailed Itemized Table -->
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
-<div class="flex items-center justify-between pb-1">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
 <div>
 <h3 class="text-[15px] font-semibold text-apple-primary">Itemized Monthly Compensation Structure</h3>
 <p class="text-[12px] text-apple-secondary">FY 2026–2027 Indian Tax Framework (New Tax Regime Section 115BAC)</p>
 </div>
+<div class="flex items-center gap-2">
 <span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">Regime: 115BAC</span>
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="openSuperAdminModal()" type="button">
+<span class="material-symbols-outlined text-[15px]">admin_panel_settings</span>
+<span>Modify Pay Scale (Super Admin)</span>
+</button>
+</div>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse text-[13px]">
@@ -602,36 +629,36 @@
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">Basic Salary</td>
 <td class="py-2.5 px-3 text-apple-secondary">Core Base</td>
-<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">45.9% of Gross</td>
-<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹85,000</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono" id="dispBasicFactor">45.9% of Gross</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary" id="dispBasicAmt">₹85,000</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">House Rent Allowance (HRA)</td>
 <td class="py-2.5 px-3 text-apple-secondary">Standard Statutory</td>
-<td class="py-2.5 px-3 text-right text-apple-secondary font-mono">50% of Basic</td>
-<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹42,500</td>
+<td class="py-2.5 px-3 text-right text-apple-secondary font-mono" id="dispHraFactor">50.0% of Basic</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary" id="dispHraAmt">₹42,500</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">Travel / Conveyance Allowance</td>
 <td class="py-2.5 px-3 text-apple-secondary">Fixed Commute</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Standard Monthly</td>
-<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹8,000</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary" id="dispTravelAmt">₹8,000</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">Medical Allowance</td>
 <td class="py-2.5 px-3 text-apple-secondary">Health Reimbursable</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Tier L5 Allowance</td>
-<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹6,500</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary" id="dispMedicalAmt">₹6,500</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">Special Tech Allowance</td>
 <td class="py-2.5 px-3 text-apple-secondary">Domain Specialty (AI)</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Role Band</td>
-<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary">₹43,000</td>
+<td class="py-2.5 px-3 text-right font-mono font-medium text-apple-primary" id="dispSpecialAmt">₹43,000</td>
 </tr>
 <tr class="bg-apple-subtle/70 font-semibold text-apple-primary">
 <td class="py-2.5 px-3" colspan="3">Total Monthly Gross (A)</td>
-<td class="py-2.5 px-3 text-right font-mono">₹1,85,000</td>
+<td class="py-2.5 px-3 text-right font-mono" id="dispTableGross">₹1,85,000</td>
 </tr>
 <!-- Section B -->
 <tr class="bg-apple-subtle/50 font-medium text-[11px] uppercase tracking-wider text-apple-secondary">
@@ -641,28 +668,28 @@
 <td class="py-2.5 px-3 font-medium text-apple-primary">Provident Fund (PF)</td>
 <td class="py-2.5 px-3 text-apple-secondary">EPFO Statutory</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">12% on Basic Cap</td>
-<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹10,200</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary" id="dispPfAmt">₹10,200</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">Professional Tax (PT)</td>
 <td class="py-2.5 px-3 text-apple-secondary">Karnataka State Law</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Fixed</td>
-<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹200</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary" id="dispPtAmt">₹200</td>
 </tr>
 <tr>
 <td class="py-2.5 px-3 font-medium text-apple-primary">TDS / Income Tax Withholding</td>
 <td class="py-2.5 px-3 text-apple-secondary">Section 192 (IT Act)</td>
 <td class="py-2.5 px-3 text-right text-apple-secondary font-mono">Est. Annual Slab</td>
-<td class="py-2.5 px-3 text-right font-mono text-apple-secondary">₹8,000</td>
+<td class="py-2.5 px-3 text-right font-mono text-apple-secondary" id="dispTdsAmt">₹8,000</td>
 </tr>
 <tr class="bg-apple-subtle/70 font-semibold text-apple-primary">
 <td class="py-2.5 px-3" colspan="3">Total Deductions (B)</td>
-<td class="py-2.5 px-3 text-right font-mono">₹18,400</td>
+<td class="py-2.5 px-3 text-right font-mono" id="dispTableDeductions">₹18,400</td>
 </tr>
 <!-- Net Take Home -->
 <tr class="bg-apple-subtle border-t-2 border-apple-border font-semibold">
 <td class="py-3 px-3 text-apple-primary text-[14px]" colspan="3">Net Disbursement (A − B)</td>
-<td class="py-3 px-3 text-right font-mono text-[15px] text-apple-primary">₹1,66,600</td>
+<td class="py-3 px-3 text-right font-mono text-[15px] text-apple-primary" id="dispTableNet">₹1,66,600</td>
 </tr>
 </tbody>
 </table>
@@ -887,49 +914,50 @@
 <h3 class="text-[15px] font-semibold text-apple-primary">Leave Accrual &amp; Quotas</h3>
 <p class="text-[12px] text-apple-secondary">Cycle: Jan 2026 – Dec 2026 (Annual Allocation)</p>
 </div>
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all" type="button">
-                  Apply for Leave
-                </button>
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="openLeaveModal()" type="button">
+<span class="material-symbols-outlined text-[15px]">event_available</span>
+<span>Apply for Leave</span>
+</button>
 </div>
 <!-- 3 Quota Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 <div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
 <div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
 <span>Annual Leave</span>
-<span class="text-apple-primary">0 Taken</span>
+<span class="text-apple-primary" id="leaveAnnualTakenBadge">0 Taken</span>
 </div>
 <div>
-<div class="text-[26px] font-semibold text-apple-primary">9 <span class="text-[14px] font-normal text-apple-secondary">/ 9 Days</span></div>
-<span class="text-[12px] text-apple-secondary">Remaining AL: 9 / 9</span>
+<div class="text-[26px] font-semibold text-apple-primary"><span id="leaveAnnualRem">9</span> <span class="text-[14px] font-normal text-apple-secondary">/ <span id="leaveAnnualTotal">9</span> Days</span></div>
+<span class="text-[12px] text-apple-secondary" id="leaveAnnualSub">Remaining AL: 9 / 9</span>
 </div>
 <div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
-<div class="bg-apple-primary h-full rounded-full" style="width: 100%;"></div>
+<div class="bg-apple-primary h-full rounded-full transition-all" id="leaveAnnualBar" style="width: 100%;"></div>
 </div>
 </div>
 <div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
 <div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
 <span>Sick Leave</span>
-<span class="text-apple-primary">0 Taken</span>
+<span class="text-apple-primary" id="leaveSickTakenBadge">0 Taken</span>
 </div>
 <div>
-<div class="text-[26px] font-semibold text-apple-primary">6 <span class="text-[14px] font-normal text-apple-secondary">/ 6 Days</span></div>
-<span class="text-[12px] text-apple-secondary">Remaining SL: 6 / 6</span>
+<div class="text-[26px] font-semibold text-apple-primary"><span id="leaveSickRem">6</span> <span class="text-[14px] font-normal text-apple-secondary">/ <span id="leaveSickTotal">6</span> Days</span></div>
+<span class="text-[12px] text-apple-secondary" id="leaveSickSub">Remaining SL: 6 / 6</span>
 </div>
 <div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
-<div class="bg-apple-secondary h-full rounded-full" style="width: 100%;"></div>
+<div class="bg-apple-secondary h-full rounded-full transition-all" id="leaveSickBar" style="width: 100%;"></div>
 </div>
 </div>
 <div class="p-4 bg-apple-subtle rounded-xl border border-apple-borderSubtle space-y-3">
 <div class="flex justify-between items-center text-[11px] text-apple-secondary uppercase tracking-wider font-medium">
 <span>Casual Leave</span>
-<span class="text-apple-primary">Full Balance</span>
+<span class="text-apple-primary" id="leaveCasualTakenBadge">Full Balance</span>
 </div>
 <div>
-<div class="text-[26px] font-semibold text-apple-primary">4 <span class="text-[14px] font-normal text-apple-secondary">/ 4 Days</span></div>
-<span class="text-[12px] text-apple-secondary">Remaining: 4 / 4</span>
+<div class="text-[26px] font-semibold text-apple-primary"><span id="leaveCasualRem">4</span> <span class="text-[14px] font-normal text-apple-secondary">/ <span id="leaveCasualTotal">4</span> Days</span></div>
+<span class="text-[12px] text-apple-secondary" id="leaveCasualSub">Remaining: 4 / 4</span>
 </div>
 <div class="w-full bg-apple-border h-1 rounded-full overflow-hidden">
-<div class="bg-apple-secondary h-full rounded-full" style="width: 100%;"></div>
+<div class="bg-apple-secondary h-full rounded-full transition-all" id="leaveCasualBar" style="width: 100%;"></div>
 </div>
 </div>
 </div>
@@ -945,6 +973,18 @@
 </div>
 </div>
 <span class="text-[11px] font-medium px-2.5 py-1 rounded bg-apple-surface border border-apple-border text-apple-primary">0 Absences</span>
+</div>
+<!-- Leave Applications & History -->
+<div class="pt-2 space-y-3">
+<div class="flex items-center justify-between">
+<h4 class="text-[13px] font-semibold text-apple-primary">Leave Applications &amp; Request History</h4>
+<span class="text-[11px] text-apple-secondary" id="leaveRequestsCountBadge">0 Requests</span>
+</div>
+<div class="space-y-2 text-[13px]" id="leaveHistoryContainer">
+<div class="p-4 rounded-xl bg-apple-subtle/60 border border-apple-borderSubtle text-center text-[12px] text-apple-secondary">
+                    No leave applications submitted yet. Click <strong>Apply for Leave</strong> above to request time off.
+                  </div>
+</div>
 </div>
 </div>
 <!-- Holidays Calendar (1 col) -->
@@ -1198,6 +1238,300 @@
 </div>
 </main>
 </div>
+
+<!-- ========================================================================== -->
+<!-- TOAST NOTIFICATION BANNER                                                  -->
+<!-- ========================================================================== -->
+<div id="appleToast" class="fixed bottom-6 right-6 z-[95] hidden flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-apple-primary text-white text-[12px] font-medium shadow-xl border border-white/10 transition-all">
+  <span class="material-symbols-outlined text-[17px] text-white" id="appleToastIcon">check_circle</span>
+  <span id="appleToastText">Changes saved</span>
+</div>
+
+<!-- ========================================================================== -->
+<!-- MODAL 1: EMPLOYEE SELF-SERVICE — EDIT PERSONAL DETAILS                     -->
+<!-- ========================================================================== -->
+<div id="personalEditModal" class="fixed inset-0 z-[80] hidden bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="w-full max-w-lg bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-apple-borderSubtle pb-3.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary">
+          <span class="material-symbols-outlined text-[18px]">edit_note</span>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Edit Personal &amp; Emergency Details</h3>
+          <p class="text-[11px] text-apple-secondary">Employee Self-Service · Prem Kumar (NX-8842)</p>
+        </div>
+      </div>
+      <button onclick="closePersonalEditModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <form id="personalEditForm" onsubmit="savePersonalDetails(event)" class="space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Personal Phone Number</label>
+          <input id="inputPhone" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Blood Group</label>
+          <select id="inputBloodGroup" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all">
+            <option value="O+ (Positive)">O+ (Positive)</option>
+            <option value="O- (Negative)">O- (Negative)</option>
+            <option value="A+ (Positive)">A+ (Positive)</option>
+            <option value="A- (Negative)">A- (Negative)</option>
+            <option value="B+ (Positive)">B+ (Positive)</option>
+            <option value="B- (Negative)">B- (Negative)</option>
+            <option value="AB+ (Positive)">AB+ (Positive)</option>
+            <option value="AB- (Negative)">AB- (Negative)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Emergency Contact Name</label>
+          <input id="inputEmergName" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Relationship</label>
+          <input id="inputEmergRel" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Emergency Contact Phone</label>
+          <input id="inputEmergPhone" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"/>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Nationality &amp; Work Permit</label>
+        <input id="inputNationality" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"/>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Permanent Residential Address</label>
+        <textarea id="inputAddress" rows="2" required class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none transition-all"></textarea>
+      </div>
+
+      <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex items-center justify-between text-[11px] text-apple-secondary">
+        <span>Note: Pay Scale, Band &amp; Organizational fields require Super Admin privileges.</span>
+        <span class="font-medium text-apple-primary">Self-Service</span>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closePersonalEditModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">check</span>
+          <span>Save Personal Details</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================================================== -->
+<!-- MODAL 2: SUPER ADMIN — EDIT PAY SCALE, COMPENSATION & ORG DETAILS          -->
+<!-- ========================================================================== -->
+<div id="superAdminModal" class="fixed inset-0 z-[80] hidden bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+  <div class="w-full max-w-2xl bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5 my-8">
+    <div class="flex items-center justify-between border-b border-apple-borderSubtle pb-3.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-apple-primary text-white flex items-center justify-center">
+          <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Super Admin · Pay Scale, Compensation &amp; Org Lifecycle</h3>
+          <p class="text-[11px] text-apple-secondary">Privileged HR Admin Override · Prem Kumar (NX-8842)</p>
+        </div>
+      </div>
+      <button onclick="closeSuperAdminModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <!-- Shown if user opens modal while in Employee mode -->
+    <div id="superAdminPermissionBanner" class="hidden p-4 rounded-2xl bg-apple-subtle border border-apple-border space-y-3">
+      <div class="flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-[18px] text-apple-primary mt-0.5">lock</span>
+        <div class="flex-1">
+          <div class="text-[13px] font-semibold text-apple-primary">Super Admin Role Required to Edit Pay Scale &amp; Org Data</div>
+          <p class="text-[11px] text-apple-secondary mt-0.5 leading-relaxed">
+            You are currently viewing the console in <strong>Employee</strong> mode. Regular employees can edit their own Personal Details, while Pay Scale, Salary Structure, and Organizational Placement are restricted to <strong>Super Admin</strong>.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2">
+        <button type="button" onclick="closeSuperAdminModal()" class="h-8 px-3 rounded-lg bg-apple-surface border border-apple-border text-apple-secondary text-[11px] font-medium">Close</button>
+        <button type="button" onclick="elevateToSuperAdminInsideModal()" class="h-8 px-3.5 rounded-lg bg-apple-primary text-white text-[11px] font-medium flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+          <span>Switch to Super Admin Mode &amp; Unlock</span>
+        </button>
+      </div>
+    </div>
+
+    <form id="superAdminEditForm" onsubmit="saveSuperAdminDetails(event)" class="space-y-4">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-apple-secondary">1. Organizational Placement &amp; Pay Scale</div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Designation / Job Title</label>
+          <input id="adminInputDesignation" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Pay Scale / Band</label>
+          <select id="adminInputPayBand" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none">
+            <option value="Band L4 · Consultant">Band L4 · Consultant</option>
+            <option value="Band L5 · Senior IC">Band L5 · Senior IC</option>
+            <option value="Band L6 · Lead / Principal">Band L6 · Lead / Principal</option>
+            <option value="Band L7 · Director">Band L7 · Director</option>
+            <option value="Band L8 · Vice President">Band L8 · Vice President</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Department</label>
+          <input id="adminInputDepartment" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Reporting Manager</label>
+          <input id="adminInputManager" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Work Location &amp; Mode</label>
+          <input id="adminInputLocation" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Cost Center</label>
+          <input id="adminInputCostCenter" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Notice Period</label>
+          <input id="adminInputNotice" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Probation Status</label>
+          <input id="adminInputProbation" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-apple-borderSubtle text-[11px] font-semibold uppercase tracking-wider text-apple-secondary">2. Monthly Pay Scale &amp; Compensation Breakdown (INR ₹)</div>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Basic Salary (₹)</label>
+          <input id="adminInputBasic" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">HRA (₹)</label>
+          <input id="adminInputHra" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Travel Allow. (₹)</label>
+          <input id="adminInputTravel" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Medical Allow. (₹)</label>
+          <input id="adminInputMedical" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Special Allow. (₹)</label>
+          <input id="adminInputSpecial" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">PF Deduction (₹/mo)</label>
+          <input id="adminInputPf" type="number" min="0" step="50" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Professional Tax (₹/mo)</label>
+          <input id="adminInputPt" type="number" min="0" step="50" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[10px] font-medium text-apple-secondary mb-1">Income Tax TDS (₹/mo)</label>
+          <input id="adminInputTds" type="number" min="0" step="100" required class="w-full h-9 px-2.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] font-mono text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeSuperAdminModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">verified</span>
+          <span>Update Pay Scale &amp; Org Structure</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================================================== -->
+<!-- MODAL 3: APPLY FOR LEAVE WORKFLOW MODAL                                    -->
+<!-- ========================================================================== -->
+<div id="applyLeaveModal" class="fixed inset-0 z-[80] hidden bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="w-full max-w-md bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5">
+    <div class="flex items-center justify-between border-b border-apple-borderSubtle pb-3.5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary">
+          <span class="material-symbols-outlined text-[18px]">event_available</span>
+        </div>
+        <div>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Apply for Leave</h3>
+          <p class="text-[11px] text-apple-secondary">Approver: Ananya Sharma (VP, Data &amp; Analytics)</p>
+        </div>
+      </div>
+      <button onclick="closeLeaveModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+
+    <form id="applyLeaveForm" onsubmit="submitLeaveRequest(event)" class="space-y-4">
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Leave Category</label>
+        <select id="leaveTypeInput" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none">
+          <option value="annual">Annual / Earned Leave (EL)</option>
+          <option value="sick">Sick / Medical Leave (SL)</option>
+          <option value="casual">Casual Leave (CL)</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Start Date</label>
+          <input id="leaveStartInput" type="date" required onchange="recalcLeaveDaysPreview()" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[12px] text-apple-primary outline-none"/>
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-apple-secondary mb-1">End Date</label>
+          <input id="leaveEndInput" type="date" required onchange="recalcLeaveDaysPreview()" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[12px] text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex items-center justify-between text-[12px]">
+        <span class="text-apple-secondary">Calculated Duration:</span>
+        <span class="font-semibold text-apple-primary font-mono" id="leaveDurationPreview">2 Days</span>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Reason / Handover Notes</label>
+        <textarea id="leaveReasonInput" rows="2" required placeholder="e.g., Family travel, personal work, medical rest..." class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary outline-none"></textarea>
+      </div>
+
+      <div id="leaveFormError" class="hidden p-2.5 rounded-xl bg-apple-subtle border border-apple-destructive/40 text-[11px] text-apple-destructive font-medium"></div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
+        <button type="button" onclick="closeLeaveModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
+        <button type="submit" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">send</span>
+          <span>Submit Leave Application</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </div>
 <!-- Interactive JavaScript -->
 <script>
@@ -1437,7 +1771,7 @@
       const nameEl = document.getElementById('topBarUserName');
       const roleEl = document.getElementById('topBarUserRole');
       if (nameEl) nameEl.innerText = employee.name;
-      if (roleEl) roleEl.innerText = employee.role;
+      if (roleEl) roleEl.innerText = currentAccessMode === 'superadmin' ? 'Super Admin (HR)' : 'Employee Self-Service';
     }
 
     function logoutSession() {
@@ -1449,14 +1783,6 @@
       document.getElementById('loginStepEmail').classList.remove('hidden');
       document.getElementById('totpCodeInput').value = '';
     }
-
-    // Restore session if already authenticated in current tab
-    window.addEventListener('DOMContentLoaded', function() {
-      const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
-      if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
-        unlockConsole(savedEmail);
-      }
-    });
 
     // ============================================================================
     // 2. DASHBOARD SIDEBAR & TAB NAVIGATION
@@ -1654,5 +1980,490 @@
         isRevealed = false;
       }
     }
+
+    // ============================================================================
+    // 3. ROLE ACCESS MODE (EMPLOYEE vs SUPER ADMIN), EDITING & LEAVE MANAGEMENT
+    // ============================================================================
+    let currentAccessMode = 'employee'; // 'employee' | 'superadmin'
+
+    const DEFAULT_PERSONAL_DATA = {
+      phone: '+91 98450 66912',
+      emergName: 'Rajeshwari Kumar',
+      emergRel: 'Spouse',
+      emergPhone: '+91 98450 11209',
+      nationality: 'Indian Citizen (Resident)',
+      bloodGroup: 'O+ (Positive)',
+      address: 'Flat 402, Prestige Palms, Indiranagar 100 Ft Road, Bengaluru, Karnataka — 560038'
+    };
+
+    const DEFAULT_ADMIN_DATA = {
+      designation: 'Senior Consultant',
+      payBand: 'Band L5 · Senior IC',
+      department: 'Data Science & AI',
+      manager: 'Ananya Sharma (VP, Data & Analytics)',
+      location: 'Bangalore HQ · Hybrid',
+      costCenter: 'CC-409 · AI Research India',
+      noticePeriod: '60 Calendar Days',
+      probation: 'Confirmed (Completed Oct 2022)',
+      basic: 92500,
+      hra: 37000,
+      travel: 8000,
+      medical: 5000,
+      special: 42500,
+      pf: 3600,
+      pt: 200,
+      tds: 14600
+    };
+
+    const DEFAULT_LEAVE_STATE = {
+      annualTotal: 24,
+      annualTaken: 6,
+      sickTotal: 12,
+      sickTaken: 2,
+      casualTotal: 8,
+      casualTaken: 3,
+      requests: [
+        {
+          id: 'LV-2026-091',
+          type: 'annual',
+          typeLabel: 'Annual / Earned Leave (EL)',
+          startDate: '2026-08-12',
+          endDate: '2026-08-14',
+          days: 3,
+          reason: 'Family trip to Coorg & Independence Day long weekend',
+          status: 'Approved',
+          appliedOn: '04 Aug 2026'
+        },
+        {
+          id: 'LV-2026-064',
+          type: 'casual',
+          typeLabel: 'Casual Leave (CL)',
+          startDate: '2026-06-18',
+          endDate: '2026-06-19',
+          days: 2,
+          reason: 'Personal bank & property registration work in Bengaluru',
+          status: 'Approved',
+          appliedOn: '15 Jun 2026'
+        }
+      ]
+    };
+
+    let personalData = JSON.parse(localStorage.getItem('nexus_personal_data_v1') || 'null') || Object.assign({}, DEFAULT_PERSONAL_DATA);
+    let adminData = JSON.parse(localStorage.getItem('nexus_admin_data_v1') || 'null') || Object.assign({}, DEFAULT_ADMIN_DATA);
+    let leaveState = JSON.parse(localStorage.getItem('nexus_leave_state_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_LEAVE_STATE));
+
+    function formatINR(num) {
+      return '₹' + Number(num || 0).toLocaleString('en-IN');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('appleToast');
+      const text = document.getElementById('appleToastText');
+      if (!toast || !text) return;
+      text.innerText = message;
+      toast.classList.remove('hidden');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(function() {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    function setAccessMode(mode) {
+      currentAccessMode = mode === 'superadmin' ? 'superadmin' : 'employee';
+      const btnEmp = document.getElementById('roleBtnEmployee');
+      const btnAdm = document.getElementById('roleBtnAdmin');
+      const roleSub = document.getElementById('topBarUserRole');
+
+      if (currentAccessMode === 'superadmin') {
+        if (btnAdm) {
+          btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium bg-apple-primary text-white shadow-sm transition-all flex items-center gap-1';
+        }
+        if (btnEmp) {
+          btnEmp.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
+        }
+        if (roleSub) roleSub.innerText = 'Super Admin (HR)';
+        showToast('Switched to Super Admin Mode — Pay Scale & Org editing unlocked');
+      } else {
+        if (btnEmp) {
+          btnEmp.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all flex items-center gap-1';
+        }
+        if (btnAdm) {
+          btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
+        }
+        if (roleSub) roleSub.innerText = 'Employee Self-Service';
+        showToast('Switched to Employee Mode — Personal Details & Leave enabled');
+      }
+      renderLeaveUI();
+    }
+
+    // Render Personal Details into DOM
+    function renderPersonalUI() {
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+      setEl('dispPhone', personalData.phone);
+      setEl('dispEmergName', personalData.emergName);
+      setEl('dispEmergRel', personalData.emergRel);
+      setEl('dispEmergPhone', personalData.emergPhone);
+      setEl('dispNationality', personalData.nationality);
+      setEl('dispBloodGroup', personalData.bloodGroup);
+      setEl('dispAddress', personalData.address);
+    }
+
+    // Open & Save Employee Personal Details Modal
+    function openPersonalEditModal() {
+      document.getElementById('inputPhone').value = personalData.phone;
+      document.getElementById('inputBloodGroup').value = personalData.bloodGroup;
+      document.getElementById('inputEmergName').value = personalData.emergName;
+      document.getElementById('inputEmergRel').value = personalData.emergRel;
+      document.getElementById('inputEmergPhone').value = personalData.emergPhone;
+      document.getElementById('inputNationality').value = personalData.nationality;
+      document.getElementById('inputAddress').value = personalData.address;
+      document.getElementById('personalEditModal').classList.remove('hidden');
+    }
+
+    function closePersonalEditModal() {
+      document.getElementById('personalEditModal').classList.add('hidden');
+    }
+
+    function savePersonalDetails(e) {
+      e.preventDefault();
+      personalData = {
+        phone: document.getElementById('inputPhone').value.trim(),
+        bloodGroup: document.getElementById('inputBloodGroup').value,
+        emergName: document.getElementById('inputEmergName').value.trim(),
+        emergRel: document.getElementById('inputEmergRel').value.trim(),
+        emergPhone: document.getElementById('inputEmergPhone').value.trim(),
+        nationality: document.getElementById('inputNationality').value.trim(),
+        address: document.getElementById('inputAddress').value.trim()
+      };
+      localStorage.setItem('nexus_personal_data_v1', JSON.stringify(personalData));
+      renderPersonalUI();
+      closePersonalEditModal();
+      showToast('Personal & Emergency details updated');
+    }
+
+    // Render Super Admin Pay Scale, Compensation & Org Details into DOM
+    function renderAdminUI() {
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+      setEl('dispDesignation', adminData.designation);
+      setEl('dispPayBand', adminData.payBand);
+      setEl('dispDepartment', adminData.department);
+      setEl('dispManager', adminData.manager);
+      setEl('dispLocation', adminData.location);
+      setEl('dispCostCenter', adminData.costCenter);
+      setEl('dispNoticePeriod', adminData.noticePeriod);
+      setEl('dispProbation', adminData.probation);
+
+      const grossMonthly = Number(adminData.basic) + Number(adminData.hra) + Number(adminData.travel) + Number(adminData.medical) + Number(adminData.special);
+      const totalDeductions = Number(adminData.pf) + Number(adminData.pt) + Number(adminData.tds);
+      const netMonthly = Math.max(0, grossMonthly - totalDeductions);
+      const annualFixed = grossMonthly * 12;
+      const annualVariable = Math.round(annualFixed * 0.081); // ~8.1% variable bonus
+      const annualCtc = annualFixed + annualVariable;
+      const basicPct = grossMonthly > 0 ? Math.round((adminData.basic / grossMonthly) * 100) : 50;
+      const hraPct = adminData.basic > 0 ? Math.round((adminData.hra / adminData.basic) * 100) : 40;
+
+      setEl('dispGrossMonthly', formatINR(grossMonthly));
+      setEl('dispTotalDeductions', formatINR(totalDeductions));
+      setEl('dispNetMonthly', formatINR(netMonthly));
+      setEl('dispAnnualCtc', formatINR(annualCtc));
+      setEl('dispCtcSublabel', 'Includes ' + formatINR(annualVariable) + ' Variable + ' + formatINR(annualFixed) + ' Fixed');
+
+      setEl('dispBasicFactor', basicPct + '% of Gross');
+      setEl('dispBasicAmt', formatINR(adminData.basic));
+      setEl('dispHraFactor', hraPct + '% of Basic');
+      setEl('dispHraAmt', formatINR(adminData.hra));
+      setEl('dispTravelAmt', formatINR(adminData.travel));
+      setEl('dispMedicalAmt', formatINR(adminData.medical));
+      setEl('dispSpecialAmt', formatINR(adminData.special));
+      setEl('dispTableGross', formatINR(grossMonthly));
+
+      setEl('dispPfAmt', '- ' + formatINR(adminData.pf));
+      setEl('dispPtAmt', '- ' + formatINR(adminData.pt));
+      setEl('dispTdsAmt', '- ' + formatINR(adminData.tds));
+      setEl('dispTableDeductions', '- ' + formatINR(totalDeductions));
+      setEl('dispTableNet', formatINR(netMonthly));
+
+      sidebarBannerMeta.payroll.subtitle = 'Prem Kumar (NX-8842) · Gross: ' + formatINR(grossMonthly) + '/mo · Net Disbursed: ' + formatINR(netMonthly) + '/mo';
+    }
+
+    function populateSuperAdminForm() {
+      document.getElementById('adminInputDesignation').value = adminData.designation;
+      document.getElementById('adminInputPayBand').value = adminData.payBand;
+      document.getElementById('adminInputDepartment').value = adminData.department;
+      document.getElementById('adminInputManager').value = adminData.manager;
+      document.getElementById('adminInputLocation').value = adminData.location;
+      document.getElementById('adminInputCostCenter').value = adminData.costCenter;
+      document.getElementById('adminInputNotice').value = adminData.noticePeriod;
+      document.getElementById('adminInputProbation').value = adminData.probation;
+
+      document.getElementById('adminInputBasic').value = adminData.basic;
+      document.getElementById('adminInputHra').value = adminData.hra;
+      document.getElementById('adminInputTravel').value = adminData.travel;
+      document.getElementById('adminInputMedical').value = adminData.medical;
+      document.getElementById('adminInputSpecial').value = adminData.special;
+      document.getElementById('adminInputPf').value = adminData.pf;
+      document.getElementById('adminInputPt').value = adminData.pt;
+      document.getElementById('adminInputTds').value = adminData.tds;
+    }
+
+    function openSuperAdminModal() {
+      populateSuperAdminForm();
+      const banner = document.getElementById('superAdminPermissionBanner');
+      const form = document.getElementById('superAdminEditForm');
+      if (currentAccessMode !== 'superadmin') {
+        banner.classList.remove('hidden');
+        form.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        banner.classList.add('hidden');
+        form.classList.remove('opacity-50', 'pointer-events-none');
+      }
+      document.getElementById('superAdminModal').classList.remove('hidden');
+    }
+
+    function elevateToSuperAdminInsideModal() {
+      setAccessMode('superadmin');
+      document.getElementById('superAdminPermissionBanner').classList.add('hidden');
+      document.getElementById('superAdminEditForm').classList.remove('opacity-50', 'pointer-events-none');
+    }
+
+    function closeSuperAdminModal() {
+      document.getElementById('superAdminModal').classList.add('hidden');
+    }
+
+    function saveSuperAdminDetails(e) {
+      e.preventDefault();
+      if (currentAccessMode !== 'superadmin') {
+        showToast('Switch to Super Admin mode to save Pay Scale changes');
+        return;
+      }
+      adminData = {
+        designation: document.getElementById('adminInputDesignation').value.trim(),
+        payBand: document.getElementById('adminInputPayBand').value,
+        department: document.getElementById('adminInputDepartment').value.trim(),
+        manager: document.getElementById('adminInputManager').value.trim(),
+        location: document.getElementById('adminInputLocation').value.trim(),
+        costCenter: document.getElementById('adminInputCostCenter').value.trim(),
+        noticePeriod: document.getElementById('adminInputNotice').value.trim(),
+        probation: document.getElementById('adminInputProbation').value.trim(),
+        basic: Number(document.getElementById('adminInputBasic').value || 0),
+        hra: Number(document.getElementById('adminInputHra').value || 0),
+        travel: Number(document.getElementById('adminInputTravel').value || 0),
+        medical: Number(document.getElementById('adminInputMedical').value || 0),
+        special: Number(document.getElementById('adminInputSpecial').value || 0),
+        pf: Number(document.getElementById('adminInputPf').value || 0),
+        pt: Number(document.getElementById('adminInputPt').value || 0),
+        tds: Number(document.getElementById('adminInputTds').value || 0)
+      };
+      localStorage.setItem('nexus_admin_data_v1', JSON.stringify(adminData));
+      renderAdminUI();
+      closeSuperAdminModal();
+      showToast('Pay Scale, Compensation & Org structure updated by Super Admin');
+    }
+
+    // ============================================================================
+    // 4. APPLY FOR LEAVE WORKFLOW & QUOTA ENGINE
+    // ============================================================================
+    function renderLeaveUI() {
+      const annualRem = Math.max(0, leaveState.annualTotal - leaveState.annualTaken);
+      const sickRem = Math.max(0, leaveState.sickTotal - leaveState.sickTaken);
+      const casualRem = Math.max(0, leaveState.casualTotal - leaveState.casualTaken);
+
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+
+      setEl('leaveAnnualTakenBadge', leaveState.annualTaken + ' Taken');
+      setEl('leaveAnnualRem', annualRem);
+      setEl('leaveAnnualTotal', '/ ' + leaveState.annualTotal + ' Days');
+      setEl('leaveAnnualSub', annualRem + ' days remaining · Carry-forward eligible (Max 12)');
+      const annualBar = document.getElementById('leaveAnnualBar');
+      if (annualBar) annualBar.style.width = Math.round((annualRem / leaveState.annualTotal) * 100) + '%';
+
+      setEl('leaveSickTakenBadge', leaveState.sickTaken + ' Taken');
+      setEl('leaveSickRem', sickRem);
+      setEl('leaveSickTotal', '/ ' + leaveState.sickTotal + ' Days');
+      setEl('leaveSickSub', sickRem + ' days remaining · No medical cert under 2 days');
+      const sickBar = document.getElementById('leaveSickBar');
+      if (sickBar) sickBar.style.width = Math.round((sickRem / leaveState.sickTotal) * 100) + '%';
+
+      setEl('leaveCasualTakenBadge', leaveState.casualTaken + ' Taken');
+      setEl('leaveCasualRem', casualRem);
+      setEl('leaveCasualTotal', '/ ' + leaveState.casualTotal + ' Days');
+      setEl('leaveCasualSub', casualRem + ' days remaining · Lapses on Dec 31, 2026');
+      const casualBar = document.getElementById('leaveCasualBar');
+      if (casualBar) casualBar.style.width = Math.round((casualRem / leaveState.casualTotal) * 100) + '%';
+
+      setEl('leaveRequestsCountBadge', leaveState.requests.length + ' Requests');
+
+      const container = document.getElementById('leaveHistoryContainer');
+      if (!container) return;
+
+      container.innerHTML = leaveState.requests.map(function(req) {
+        const isPending = req.status === 'Pending Approval';
+        const isRejected = req.status === 'Rejected';
+        const statusStyle = isPending
+          ? 'bg-apple-subtle text-apple-primary border-apple-border'
+          : isRejected
+          ? 'bg-apple-subtle text-apple-destructive border-apple-destructive/30'
+          : 'bg-apple-primary text-white border-apple-primary';
+
+        const adminActions = (currentAccessMode === 'superadmin' && isPending)
+          ? '<div class="flex items-center gap-1.5 ml-2">' +
+              '<button type="button" onclick="handleLeaveDecision(\'' + req.id + '\', \'Approved\')" class="h-6 px-2.5 rounded-md bg-apple-primary text-white text-[10px] font-medium hover:bg-black">Approve</button>' +
+              '<button type="button" onclick="handleLeaveDecision(\'' + req.id + '\', \'Rejected\')" class="h-6 px-2.5 rounded-md bg-apple-surface border border-apple-border text-apple-destructive text-[10px] font-medium hover:bg-apple-subtle">Reject</button>' +
+            '</div>'
+          : '';
+
+        return (
+          '<div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
+            '<div class="space-y-0.5">' +
+              '<div class="flex items-center gap-2">' +
+                '<span class="text-[13px] font-semibold text-apple-primary">' + req.typeLabel + '</span>' +
+                '<span class="text-[11px] font-mono text-apple-secondary">(' + req.days + (req.days === 1 ? ' Day' : ' Days') + ')</span>' +
+                '<span class="text-[10px] font-mono text-apple-tertiary">' + req.id + '</span>' +
+              '</div>' +
+              '<div class="text-[12px] text-apple-secondary">' + req.startDate + ' → ' + req.endDate + ' · ' + req.reason + '</div>' +
+            '</div>' +
+            '<div class="flex items-center gap-2 self-start sm:self-center">' +
+              '<span class="text-[10px] text-apple-tertiary">Applied ' + req.appliedOn + '</span>' +
+              '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium border ' + statusStyle + '">' + req.status + '</span>' +
+              adminActions +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function openLeaveModal() {
+      const today = new Date();
+      const tomorrow = new Date(today.getTime() + 86400000);
+      const nextDay = new Date(today.getTime() + 2 * 86400000);
+      const fmt = function(d) { return d.toISOString().split('T')[0]; };
+
+      document.getElementById('leaveTypeInput').value = 'annual';
+      document.getElementById('leaveStartInput').value = fmt(tomorrow);
+      document.getElementById('leaveEndInput').value = fmt(nextDay);
+      document.getElementById('leaveReasonInput').value = '';
+      document.getElementById('leaveFormError').classList.add('hidden');
+      recalcLeaveDaysPreview();
+      document.getElementById('applyLeaveModal').classList.remove('hidden');
+    }
+
+    function closeLeaveModal() {
+      document.getElementById('applyLeaveModal').classList.add('hidden');
+    }
+
+    function calcDaySpan(startStr, endStr) {
+      if (!startStr || !endStr) return 0;
+      const s = new Date(startStr);
+      const e = new Date(endStr);
+      const diff = Math.round((e - s) / 86400000) + 1;
+      return diff;
+    }
+
+    function recalcLeaveDaysPreview() {
+      const s = document.getElementById('leaveStartInput').value;
+      const e = document.getElementById('leaveEndInput').value;
+      const span = calcDaySpan(s, e);
+      const preview = document.getElementById('leaveDurationPreview');
+      if (span <= 0) {
+        preview.innerText = 'Invalid Date Range';
+      } else {
+        preview.innerText = span + (span === 1 ? ' Working Day' : ' Working Days');
+      }
+    }
+
+    function submitLeaveRequest(e) {
+      e.preventDefault();
+      const type = document.getElementById('leaveTypeInput').value;
+      const start = document.getElementById('leaveStartInput').value;
+      const end = document.getElementById('leaveEndInput').value;
+      const reason = document.getElementById('leaveReasonInput').value.trim();
+      const errEl = document.getElementById('leaveFormError');
+
+      const days = calcDaySpan(start, end);
+      if (days <= 0) {
+        errEl.innerText = 'End date must be on or after the start date.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const remMap = {
+        annual: leaveState.annualTotal - leaveState.annualTaken,
+        sick: leaveState.sickTotal - leaveState.sickTaken,
+        casual: leaveState.casualTotal - leaveState.casualTaken
+      };
+
+      if (days > remMap[type]) {
+        errEl.innerText = 'Requested ' + days + ' days exceeds your remaining quota (' + remMap[type] + ' days available).';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+
+      if (type === 'annual') leaveState.annualTaken += days;
+      if (type === 'sick') leaveState.sickTaken += days;
+      if (type === 'casual') leaveState.casualTaken += days;
+
+      const labels = {
+        annual: 'Annual / Earned Leave (EL)',
+        sick: 'Sick / Medical Leave (SL)',
+        casual: 'Casual Leave (CL)'
+      };
+
+      const newReq = {
+        id: 'LV-2026-' + Math.floor(100 + Math.random() * 899),
+        type: type,
+        typeLabel: labels[type],
+        startDate: start,
+        endDate: end,
+        days: days,
+        reason: reason,
+        status: 'Pending Approval',
+        appliedOn: 'Today'
+      };
+
+      leaveState.requests.unshift(newReq);
+      localStorage.setItem('nexus_leave_state_v1', JSON.stringify(leaveState));
+
+      renderLeaveUI();
+      closeLeaveModal();
+      switchTab('tab-leave');
+      showToast('Leave application (' + days + (days === 1 ? ' day' : ' days') + ') submitted & balance updated');
+    }
+
+    function handleLeaveDecision(reqId, decision) {
+      const target = leaveState.requests.find(function(r) { return r.id === reqId; });
+      if (!target) return;
+      if (decision === 'Rejected' && target.status !== 'Rejected') {
+        if (target.type === 'annual') leaveState.annualTaken = Math.max(0, leaveState.annualTaken - target.days);
+        if (target.type === 'sick') leaveState.sickTaken = Math.max(0, leaveState.sickTaken - target.days);
+        if (target.type === 'casual') leaveState.casualTaken = Math.max(0, leaveState.casualTaken - target.days);
+      }
+      target.status = decision;
+      localStorage.setItem('nexus_leave_state_v1', JSON.stringify(leaveState));
+      renderLeaveUI();
+      showToast('Leave request ' + reqId + ' marked as ' + decision);
+    }
+
+    // Initialize all dynamic UI data on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      renderPersonalUI();
+      renderAdminUI();
+      renderLeaveUI();
+      const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
+      if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
+        unlockConsole(savedEmail);
+      }
+    });
   </script>
 </body></html>
+
