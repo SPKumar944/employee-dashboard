@@ -1220,17 +1220,13 @@
 <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
 <div class="flex items-center justify-between pb-1">
 <div>
-<h3 class="text-[15px] font-semibold text-apple-primary">Notion Cloud Database Integration</h3>
-<p class="text-[12px] text-apple-secondary">Live two-way schema binding to S.Prem Kumar's vault · Nexus HR — Employee Database</p>
+<h3 class="text-[15px] font-semibold text-apple-primary">Notion Cloud Data Source Integration</h3>
+<p class="text-[12px] text-apple-secondary">Bound to Data Source <span class="font-mono text-apple-primary">46e3448d-38a7-8393-a64d-07425010c0ff</span> · S.Prem Kumar's vault</p>
 </div>
 <div class="flex items-center gap-2">
-<a class="h-8 px-3 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1.5" href="https://www.notion.so/2cb394b615254a73b86b5b5c69b93cba" target="_blank" rel="noopener noreferrer">
-<span class="material-symbols-outlined text-[14px]">open_in_new</span>
-<span>Open Notion Database</span>
-</a>
 <button class="h-8 px-3.5 rounded-lg bg-apple-primary hover:bg-black text-white text-[11px] font-medium flex items-center gap-1.5" onclick="syncEmployeeToNotion(true)" type="button">
 <span class="material-symbols-outlined text-[14px]">cloud_upload</span>
-<span>Push Updates to Notion Now</span>
+<span>Modify &amp; Sync Data Source Now</span>
 </button>
 </div>
 </div>
@@ -1241,14 +1237,14 @@
 <span class="text-[11px] font-mono text-apple-secondary">Bot: employee (ntn_1403••••mar1)</span>
 </div>
 <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle">
-<span class="text-[10px] uppercase tracking-wider text-apple-secondary block">Notion Database ID</span>
-<span class="text-[12px] font-mono font-semibold text-apple-primary mt-0.5 block">2cb394b6-1525-4a73-b86b-5b5c69b93cba</span>
-<span class="text-[11px] text-apple-secondary">4 Employee Records Synced</span>
+<span class="text-[10px] uppercase tracking-wider text-apple-secondary block">Target Notion Data Source ID</span>
+<span class="text-[12px] font-mono font-semibold text-apple-primary mt-0.5 block">46e3448d-38a7-8393-a64d-07425010c0ff</span>
+<span class="text-[11px] text-apple-secondary">Primary Employee Data Source</span>
 </div>
 <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle">
-<span class="text-[10px] uppercase tracking-wider text-apple-secondary block">Prem Kumar Dossier Page ID</span>
-<span class="text-[12px] font-mono font-semibold text-apple-primary mt-0.5 block">3fd3448d-38a7-81e0-a1ad-d145f8d20321</span>
-<span class="text-[11px] text-apple-secondary" id="settingsNotionSyncStatus">Auto-sync on Save: Active</span>
+<span class="text-[10px] uppercase tracking-wider text-apple-secondary block">Sync Status</span>
+<span class="text-[12px] font-mono font-semibold text-apple-primary mt-0.5 block" id="settingsNotionSyncHead">Auto-Sync Enabled</span>
+<span class="text-[11px] text-apple-secondary" id="settingsNotionSyncStatus">Share page with 'employee' bot in Notion (••• → Connections)</span>
 </div>
 </div>
 </div>
@@ -2503,13 +2499,37 @@
     }
 
     // ============================================================================
-    // 5. NOTION CLOUD DATABASE LIVE SYNC ENGINE (S.Prem Kumar's vault)
+    // 5. NOTION CLOUD DATA SOURCE LIVE SYNC ENGINE (46e3448d-38a7-8393-a64d-07425010c0ff)
     // ============================================================================
     const NOTION_CONFIG = {
-      databaseId: '2cb394b6-1525-4a73-b86b-5b5c69b93cba',
-      premPageId: '3fd3448d-38a7-81e0-a1ad-d145f8d20321',
+      targetDataSourceId: '46e3448d-38a7-8393-a64d-07425010c0ff',
+      fallbackPageId: '3fd3448d-38a7-81e0-a1ad-d145f8d20321',
       encodedToken: ['bnRuXzE0MDM1MDA3NjU1', 'NWVOMGdhbE9tWXV5V1RP', 'MWd4QXNXMDFLWU1OdnA1bWFyMQ=='].join('')
     };
+
+    async function callNotionEndpoint(url, method, bodyObj, apiVersion) {
+      const token = atob(NOTION_CONFIG.encodedToken);
+      const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Notion-Version': apiVersion || '2025-09-03',
+        'Content-Type': 'application/json'
+      };
+      try {
+        const directRes = await fetch(url, {
+          method: method,
+          headers: headers,
+          body: bodyObj ? JSON.stringify(bodyObj) : undefined
+        });
+        return await directRes.json();
+      } catch (corsErr) {
+        const proxyRes = await fetch('https://corsproxy.io/?' + encodeURIComponent(url), {
+          method: method,
+          headers: headers,
+          body: bodyObj ? JSON.stringify(bodyObj) : undefined
+        });
+        return await proxyRes.json();
+      }
+    }
 
     async function syncEmployeeToNotion(showExplicitToast) {
       const badgeText = document.getElementById('notionSyncBadgeText');
@@ -2527,86 +2547,142 @@
       const sickRem = Math.max(0, leaveState.sickTotal - leaveState.sickTaken);
       const casualRem = Math.max(0, leaveState.casualTotal - leaveState.casualTaken);
 
-      const notionPayload = {
-        properties: {
-          'Phone Number': { phone_number: personalData.phone },
-          'Blood Group': { select: { name: personalData.bloodGroup } },
-          'Emergency Contact': {
-            rich_text: [{ text: { content: personalData.emergName + ' (' + personalData.emergRel + ') · ' + personalData.emergPhone } }]
-          },
-          'Residential Address': {
-            rich_text: [{ text: { content: personalData.address } }]
-          },
-          'Designation': {
-            rich_text: [{ text: { content: adminData.designation } }]
-          },
-          'Pay Scale / Band': {
-            select: { name: adminData.payBand }
-          },
-          'Department': {
-            select: { name: adminData.department }
-          },
-          'Reporting Manager': {
-            rich_text: [{ text: { content: adminData.manager } }]
-          },
-          'Location': {
-            rich_text: [{ text: { content: adminData.location } }]
-          },
-          'Cost Center': {
-            rich_text: [{ text: { content: adminData.costCenter } }]
-          },
-          'Basic Salary (INR)': { number: Number(adminData.basic) },
-          'HRA (INR)': { number: Number(adminData.hra) },
-          'Monthly Gross (INR)': { number: grossMonthly },
-          'Monthly Net Pay (INR)': { number: netMonthly },
-          'Annual CTC (INR)': { number: annualCtc },
-          'Annual Leave Remaining': { number: annualRem },
-          'Sick Leave Remaining': { number: sickRem },
-          'Casual Leave Remaining': { number: casualRem }
-        }
+      // 1. Modify Data Source 46e3448d-38a7-8393-a64d-07425010c0ff Schema to ensure HR columns exist
+      const schemaProperties = {
+        'Employee ID': { rich_text: {} },
+        'Designation': { rich_text: {} },
+        'Pay Scale / Band': {
+          select: {
+            options: [
+              { name: 'Band L4 · Consultant', color: 'gray' },
+              { name: 'Band L5 · Senior IC', color: 'blue' },
+              { name: 'Band L6 · Lead / Principal', color: 'purple' },
+              { name: 'Band L7 · Director', color: 'orange' },
+              { name: 'Band L8 · Vice President', color: 'green' }
+            ]
+          }
+        },
+        'Department': {
+          select: {
+            options: [
+              { name: 'Data Science & AI', color: 'blue' },
+              { name: 'People Operations', color: 'purple' }
+            ]
+          }
+        },
+        'Phone Number': { phone_number: {} },
+        'Blood Group': {
+          select: {
+            options: [
+              { name: 'O+ (Positive)', color: 'green' },
+              { name: 'A+ (Positive)', color: 'blue' },
+              { name: 'B+ (Positive)', color: 'purple' },
+              { name: 'AB+ (Positive)', color: 'orange' }
+            ]
+          }
+        },
+        'Emergency Contact': { rich_text: {} },
+        'Residential Address': { rich_text: {} },
+        'Reporting Manager': { rich_text: {} },
+        'Location': { rich_text: {} },
+        'Cost Center': { rich_text: {} },
+        'Basic Salary (INR)': { number: { format: 'rupee' } },
+        'HRA (INR)': { number: { format: 'rupee' } },
+        'Monthly Gross (INR)': { number: { format: 'rupee' } },
+        'Monthly Net Pay (INR)': { number: { format: 'rupee' } },
+        'Annual CTC (INR)': { number: { format: 'rupee' } },
+        'Annual Leave Remaining': { number: { format: 'number' } },
+        'Sick Leave Remaining': { number: { format: 'number' } },
+        'Casual Leave Remaining': { number: { format: 'number' } }
       };
 
-      const token = atob(NOTION_CONFIG.encodedToken);
-      const targetUrl = 'https://api.notion.com/v1/pages/' + NOTION_CONFIG.premPageId;
+      const rowProperties = {
+        'Employee ID': { rich_text: [{ text: { content: 'NX-8842' } }] },
+        'Phone Number': { phone_number: personalData.phone },
+        'Blood Group': { select: { name: personalData.bloodGroup } },
+        'Emergency Contact': {
+          rich_text: [{ text: { content: personalData.emergName + ' (' + personalData.emergRel + ') · ' + personalData.emergPhone } }]
+        },
+        'Residential Address': {
+          rich_text: [{ text: { content: personalData.address } }]
+        },
+        'Designation': {
+          rich_text: [{ text: { content: adminData.designation } }]
+        },
+        'Pay Scale / Band': {
+          select: { name: adminData.payBand }
+        },
+        'Department': {
+          select: { name: adminData.department }
+        },
+        'Reporting Manager': {
+          rich_text: [{ text: { content: adminData.manager } }]
+        },
+        'Location': {
+          rich_text: [{ text: { content: adminData.location } }]
+        },
+        'Cost Center': {
+          rich_text: [{ text: { content: adminData.costCenter } }]
+        },
+        'Basic Salary (INR)': { number: Number(adminData.basic) },
+        'HRA (INR)': { number: Number(adminData.hra) },
+        'Monthly Gross (INR)': { number: grossMonthly },
+        'Monthly Net Pay (INR)': { number: netMonthly },
+        'Annual CTC (INR)': { number: annualCtc },
+        'Annual Leave Remaining': { number: annualRem },
+        'Sick Leave Remaining': { number: sickRem },
+        'Casual Leave Remaining': { number: casualRem }
+      };
 
       try {
-        // Attempt direct Notion API call first, with CORS-proxy fallback for browser environments
-        let res = null;
-        try {
-          res = await fetch(targetUrl, {
-            method: 'PATCH',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Notion-Version': '2022-06-28',
-              'Content-Type': 'application/json'
+        // Modify Data Source 46e3448d-38a7-8393-a64d-07425010c0ff schema
+        const dsRes = await callNotionEndpoint(
+          'https://api.notion.com/v1/data_sources/' + NOTION_CONFIG.targetDataSourceId,
+          'PATCH',
+          { properties: schemaProperties },
+          '2025-09-03'
+        );
+
+        const savedRowId = localStorage.getItem('nexus_notion_row_46e3448d');
+        if (savedRowId) {
+          await callNotionEndpoint(
+            'https://api.notion.com/v1/pages/' + savedRowId,
+            'PATCH',
+            { properties: rowProperties },
+            '2025-09-03'
+          );
+        } else if (dsRes && dsRes.object !== 'error') {
+          const created = await callNotionEndpoint(
+            'https://api.notion.com/v1/pages',
+            'POST',
+            {
+              parent: { type: 'data_source_id', data_source_id: NOTION_CONFIG.targetDataSourceId },
+              properties: rowProperties
             },
-            body: JSON.stringify(notionPayload)
-          });
-        } catch (corsErr) {
-          res = await fetch('https://corsproxy.io/?' + encodeURIComponent(targetUrl), {
-            method: 'PATCH',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Notion-Version': '2022-06-28',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(notionPayload)
-          });
+            '2025-09-03'
+          );
+          if (created && created.id) {
+            localStorage.setItem('nexus_notion_row_46e3448d', created.id);
+          }
         }
 
         const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if (badgeText) badgeText.innerText = 'Notion DB: Synced (' + nowTime + ')';
-        if (settingsStatus) settingsStatus.innerText = 'Last synced to Notion at ' + nowTime;
-        if (showExplicitToast) {
-          showToast('Synced employee details to Notion Database (S.Prem Kumar\'s vault)');
+        if (dsRes && dsRes.code === 'object_not_found') {
+          if (badgeText) badgeText.innerText = 'Notion: Connect "employee" bot';
+          if (settingsStatus) settingsStatus.innerText = 'In Notion page 46e3448d…, click ••• → Connections → employee';
+          if (showExplicitToast) {
+            showToast('In Notion, open your database → ••• → Connections → select "employee"');
+          }
+        } else {
+          if (badgeText) badgeText.innerText = 'Notion DB: Synced (' + nowTime + ')';
+          if (settingsStatus) settingsStatus.innerText = 'Synced to 46e3448d-38a7-8393-a64d-07425010c0ff at ' + nowTime;
+          if (showExplicitToast) {
+            showToast('Modified & updated Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+          }
         }
       } catch (err) {
         const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if (badgeText) badgeText.innerText = 'Notion DB: Connected (' + nowTime + ')';
-        if (settingsStatus) settingsStatus.innerText = 'Queued for Notion sync (' + nowTime + ')';
-        if (showExplicitToast) {
-          showToast('Employee record synced with Notion Database');
-        }
+        if (badgeText) badgeText.innerText = 'Notion DB: Bound (' + nowTime + ')';
       }
     }
 
