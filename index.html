@@ -3,6 +3,9 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <meta content="web_dashboard" name="shell-type"/>
 <title>Nexus HR — Enterprise Console</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -325,7 +328,7 @@
 <div class="h-4 w-px bg-apple-border mx-0.5"></div>
 <div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
-<span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">Prem Kumar</span>
+<span class="text-[12px] font-medium text-apple-primary leading-tight" id="topBarUserName">SUKUMAR PREM KUMAR</span>
 <span class="text-[10px] text-apple-secondary" id="topBarUserRole">Employee View</span>
 </div>
 <img alt="Profile" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
@@ -341,9 +344,9 @@
 <div class="flex items-center gap-1.5">
 <a class="hover:text-apple-primary transition-colors cursor-pointer" href="#directory" onclick="navigateSidebar('directory'); return false;">Directory</a>
 <span class="text-apple-tertiary">/</span>
-<a class="hover:text-apple-primary transition-colors cursor-pointer" href="#employees" onclick="navigateSidebar('employees'); return false;">Data Science &amp; AI</a>
+<a class="hover:text-apple-primary transition-colors cursor-pointer" href="#employees" onclick="navigateSidebar('employees'); return false;">Data Science</a>
 <span class="text-apple-tertiary">/</span>
-<span class="text-apple-primary font-medium" id="breadcrumbCurrent">Prem Kumar</span>
+<span class="text-apple-primary font-semibold" id="breadcrumbCurrent">SUKUMAR PREM KUMAR</span>
 </div>
 <div class="flex items-center gap-2.5">
 <a class="px-2.5 py-0.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border transition-colors flex items-center gap-1.5" href="https://www.notion.so/5313448d38a782b39ec3816f042abf6f" target="_blank" rel="noopener noreferrer" title="Open Employee Directory* (46e3448d-38a7-8393-a64d-07425010c0ff) in Notion">
@@ -368,9 +371,9 @@
 <div>
 <div class="flex items-center gap-2.5">
 <h1 class="text-[20px] font-semibold text-apple-primary tracking-tight" id="bannerTitle">Workforce Directory</h1>
-<span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="bannerBadge">Enterprise View</span>
+<span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="bannerBadge">2 Notion Records</span>
 </div>
-<p class="text-[13px] text-apple-secondary mt-0.5" id="bannerSubtitle">Employee: Prem Kumar (NX-8842) · Band L5 (Senior Consultant)</p>
+<p class="text-[13px] text-apple-secondary mt-0.5" id="bannerSubtitle">Employee: SUKUMAR PREM KUMAR (NX-8842) · Band L5 (Consultant)</p>
 </div>
 </div>
 <div class="flex items-center gap-2.5">
@@ -386,20 +389,20 @@
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 <!-- Left Profile Identity -->
 <div class="flex items-center gap-5">
-<div class="relative">
-<img alt="Prem Kumar" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+<div class="relative" id="empAvatarContainer">
+<img alt="SUKUMAR PREM KUMAR" class="w-20 h-20 rounded-full object-cover border border-apple-border" id="dispEmpAvatarImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 </div>
 <div class="space-y-1">
-<div class="flex items-center gap-2.5">
-<h1 class="text-[22px] font-semibold text-apple-primary tracking-tight" id="dispEmpName">Prem Kumar</h1>
+<div class="flex flex-wrap items-center gap-2.5">
+<h1 class="text-[22px] font-semibold text-apple-primary tracking-tight" id="dispEmpName">SUKUMAR PREM KUMAR</h1>
 <span class="text-[12px] font-mono text-apple-secondary px-2 py-0.5 rounded bg-apple-subtle" id="dispEmpId">NX-8842</span>
 <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">
-<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary" id="dispEmpStatusDot"></span>
 <span id="dispEmpStatus">Active</span>
 </div>
 </div>
 <p class="text-[14px] text-apple-secondary">
-<span id="dispDesignation">Consultant</span> <span class="text-apple-tertiary mx-1.5">·</span> <span id="dispDepartment">Department of Data Science &amp; AI</span> <span class="text-apple-tertiary mx-1.5">·</span> <span class="text-apple-primary font-medium" id="dispPayBand">Band L5 (Senior Consultant)</span>
+<span id="dispDesignation">Consultant</span> <span class="text-apple-tertiary mx-1.5">·</span> <span id="dispDepartment">Data Science</span> <span class="text-apple-tertiary mx-1.5">·</span> <span class="text-apple-primary font-medium" id="dispPayBand">Band L5 · Senior IC</span>
 </p>
 <div class="flex flex-wrap items-center gap-x-5 gap-y-1 pt-1 text-[12px] text-apple-secondary">
 <span>Joining: <strong class="text-apple-primary font-medium" id="dispJoiningDate">17/08/2026</strong></span>
@@ -456,7 +459,7 @@
 <div class="flex items-center justify-between pb-1">
 <div>
 <h2 class="text-[15px] font-semibold text-apple-primary">Core Identification &amp; Personal Details</h2>
-<p class="text-[11px] text-apple-secondary">Editable by Employee (Self-Service)</p>
+<p class="text-[11px] text-apple-secondary">Editable by Employee (Self-Service) · Synced with Notion <span class="font-mono">46e3448d…</span></p>
 </div>
 <button class="h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[14px]">edit</span>
@@ -464,6 +467,14 @@
 </button>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Full Legal Name (Notion Title Property) -->
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle sm:col-span-2 flex items-center justify-between">
+<div>
+<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary block">Full Legal Name (Notion Employee Record)</span>
+<span class="text-[15px] font-semibold text-apple-primary tracking-tight" id="dispFullName">SUKUMAR PREM KUMAR</span>
+</div>
+<span class="text-[11px] font-mono text-apple-secondary bg-apple-surface px-2.5 py-1 rounded-lg border border-apple-border" id="dispCardEmpId">ID: NX-8842</span>
+</div>
 <!-- Corporate Email -->
 <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
 <span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Corporate Email</span>
@@ -1164,9 +1175,9 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-apple-borderSubtle" id="directoryTableBody">
-<tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors" data-notion-page-id="3b63448d-38a7-8193-b60f-ffc05b1aad75">
+<tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors cursor-pointer" data-notion-page-id="3b63448d-38a7-8193-b60f-ffc05b1aad75" onclick="openEmployeeDossier('3b63448d-38a7-8193-b60f-ffc05b1aad75')">
 <td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
-<img alt="Sukumar Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+<img alt="SUKUMAR PREM KUMAR" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
 <div>
 <div class="font-semibold text-apple-primary">SUKUMAR PREM KUMAR</div>
 <div class="text-[11px] text-apple-secondary">premkumarrss669@gmail.com</div>
@@ -1180,11 +1191,12 @@
 <span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active
 </span>
 </td>
-<td class="py-3 px-3 text-right">
-<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="navigateSidebar('employees')" type="button">View Dossier</button>
+<td class="py-3 px-3 text-right space-x-2" onclick="event.stopPropagation()">
+<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier('3b63448d-38a7-8193-b60f-ffc05b1aad75')" type="button">View Dossier</button>
+<a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/3b63448d38a78193b60fffc05b1aad75" target="_blank" rel="noopener noreferrer">Notion ↗</a>
 </td>
 </tr>
-<tr class="hover:bg-apple-subtle/40 transition-colors" data-notion-page-id="3b93448d-38a7-8142-871e-ea21bfa03f04">
+<tr class="hover:bg-apple-subtle/40 transition-colors cursor-pointer" data-notion-page-id="3b93448d-38a7-8142-871e-ea21bfa03f04" onclick="openEmployeeDossier('3b93448d-38a7-8142-871e-ea21bfa03f04')">
 <td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
 <div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">AG</div>
 <div>
@@ -1198,8 +1210,9 @@
 <td class="py-3 px-3">
 <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">Voluntary Termination</span>
 </td>
-<td class="py-3 px-3 text-right">
-<a class="text-[11px] font-medium text-apple-primary hover:underline" href="https://www.notion.so/Anshika-Gaur-3b93448d38a78142871eea21bfa03f04" target="_blank" rel="noopener noreferrer">Notion Record ↗</a>
+<td class="py-3 px-3 text-right space-x-2" onclick="event.stopPropagation()">
+<button class="h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier('3b93448d-38a7-8142-871e-ea21bfa03f04')" type="button">View Dossier</button>
+<a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/Anshika-Gaur-3b93448d38a78142871eea21bfa03f04" target="_blank" rel="noopener noreferrer">Notion ↗</a>
 </td>
 </tr>
 </tbody>
@@ -1249,7 +1262,7 @@
 <div class="flex items-center justify-between pb-1">
 <div>
 <h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Console &amp; Profile Settings</h3>
-<p class="text-[12px] text-apple-secondary">Manage notifications, security preferences, and SSO session for Prem Kumar (NX-8842)</p>
+<p class="text-[12px] text-apple-secondary">Manage notifications, security preferences, and SSO session for SUKUMAR PREM KUMAR (NX-8842)</p>
 </div>
 <span class="text-[11px] font-medium text-apple-primary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">SSO Verified</span>
 </div>
@@ -1295,7 +1308,7 @@
         </div>
         <div>
           <h3 class="text-[15px] font-semibold text-apple-primary">Edit Personal &amp; Emergency Details</h3>
-          <p class="text-[11px] text-apple-secondary">Employee Self-Service · Prem Kumar (NX-8842)</p>
+          <p class="text-[11px] text-apple-secondary" id="personalModalSubtitle">Employee Self-Service · SUKUMAR PREM KUMAR (NX-8842)</p>
         </div>
       </div>
       <button onclick="closePersonalEditModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
@@ -1304,6 +1317,10 @@
     </div>
 
     <form id="personalEditForm" onsubmit="savePersonalDetails(event)" class="space-y-4">
+      <div>
+        <label class="block text-[11px] font-medium text-apple-secondary mb-1">Full Legal Name (Synced with Notion)</label>
+        <input id="inputFullName" type="text" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] font-semibold text-apple-primary outline-none transition-all"/>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Personal Phone Number</label>
@@ -1671,31 +1688,24 @@
     // ============================================================================
     const APPROVED_EMPLOYEES = {
       'premkumarrss669@gmail.com': {
-        name: 'Prem Kumar',
+        name: 'SUKUMAR PREM KUMAR',
         id: 'NX-8842',
         pan: 'ABZPK4921D',
-        role: 'Senior Consultant (L5)',
+        role: 'Consultant (Band L5)',
         secret: 'JBSWY3DPEHPK3PXP'
       },
       'prem.kumar@nexushr.corp': {
-        name: 'Prem Kumar',
+        name: 'SUKUMAR PREM KUMAR',
         id: 'NX-8842',
         pan: 'ABZPK4921D',
-        role: 'Senior Consultant (L5)',
+        role: 'Consultant (Band L5)',
         secret: 'JBSWY3DPEHPK3PXP'
       },
-      'ananya.sharma@nexushr.corp': {
-        name: 'Ananya Sharma',
-        id: 'NX-1040',
+      'anshikagaur633@gmail.com': {
+        name: 'Anshika Gaur',
+        id: 'NX-8845',
         pan: 'ABZPK4921D',
-        role: 'VP, Data & Analytics (L8)',
-        secret: 'JBSWY3DPEHPK3PXP'
-      },
-      'rohit.k@nexushr.corp': {
-        name: 'Rohit Kulkarni',
-        id: 'NX-2190',
-        pan: 'ABZPK4921D',
-        role: 'HR Business Partner (L6)',
+        role: 'Geospatial Data Science Intern (Band L3)',
         secret: 'JBSWY3DPEHPK3PXP'
       }
     };
@@ -1903,6 +1913,9 @@
       const roleEl = document.getElementById('topBarUserRole');
       if (nameEl) nameEl.innerText = employee.name;
       if (roleEl) roleEl.innerText = currentAccessMode === 'superadmin' ? 'Super Admin (HR)' : 'Employee Self-Service';
+      if (email === 'anshikagaur633@gmail.com') {
+        openEmployeeDossier('3b93448d-38a7-8142-871e-ea21bfa03f04');
+      }
     }
 
     function logoutSession() {
@@ -1918,58 +1931,60 @@
     // ============================================================================
     // 2. DASHBOARD SIDEBAR & TAB NAVIGATION
     // ============================================================================
+    let activeProfileName = 'SUKUMAR PREM KUMAR';
+
     const sidebarBannerMeta = {
       'directory': {
         icon: 'badge',
         title: 'Enterprise Workforce Directory',
-        badge: '4 Active Members',
-        subtitle: 'Department of Data Science & AI · Bangalore HQ (Hybrid)',
+        badge: '2 Notion Records',
+        subtitle: 'Employee Directory* (46e3448d-38a7-8393-a64d-07425010c0ff) · Data Science',
         tabs: ['tab-directory']
       },
       'payroll': {
         icon: 'credit_card',
         title: 'Payroll, Compensation & Tax Console',
         badge: 'FY 2026–2027 (Regime 115BAC)',
-        subtitle: 'Prem Kumar (NX-8842) · Gross: ₹1,85,000/mo · Net Disbursed: ₹1,66,600/mo',
+        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Gross: ₹1,85,000/mo · Net Disbursed: ₹1,66,600/mo',
         tabs: ['tab-compensation', 'tab-bank']
       },
       'leave': {
         icon: 'calendar_today',
         title: 'Leave & Attendance Management',
         badge: '100% Attendance',
-        subtitle: 'Prem Kumar (NX-8842) · Cycle: Jan 2026 – Dec 2026 · Bangalore Hub',
+        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Cycle: Jan 2026 – Dec 2026 · Bangalore Hub',
         tabs: ['tab-leave']
       },
       'compliance': {
         icon: 'verified_user',
         title: 'Compliance & Verified Records',
         badge: 'SHA-256 Verified',
-        subtitle: 'Prem Kumar (NX-8842) · 6 Counter-Signed Documents & Statutory IDs',
+        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · 6 Counter-Signed Documents & Statutory IDs',
         tabs: ['tab-documents', 'tab-bank']
       },
       'reports': {
         icon: 'bar_chart',
         title: 'Performance, Appraisals & Health Reports',
         badge: 'Score: 4.8 / 5.0',
-        subtitle: 'Prem Kumar (NX-8842) · Q4 Annual Review, Mandatory Training & OHS',
+        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Q4 Annual Review, Mandatory Training & OHS',
         tabs: ['tab-appraisals']
       },
       'settings': {
         icon: 'tune',
         title: 'Enterprise Console Settings',
         badge: 'SSO Active',
-        subtitle: 'Security, WebAuthn Passkeys & Notification Preferences · Prem Kumar (NX-8842)',
+        subtitle: 'Security, WebAuthn Passkeys & Notification Preferences · SUKUMAR PREM KUMAR (NX-8842)',
         tabs: ['tab-settings']
       }
     };
 
     const tabBreadcrumbLabels = {
-      'tab-overview': 'Prem Kumar · Overview',
-      'tab-compensation': 'Prem Kumar · Compensation & Payroll',
-      'tab-bank': 'Prem Kumar · Bank & Tax',
-      'tab-documents': 'Prem Kumar · Documents',
-      'tab-leave': 'Prem Kumar · Leave & Attendance',
-      'tab-appraisals': 'Prem Kumar · Appraisals & Training',
+      'tab-overview': 'Overview',
+      'tab-compensation': 'Compensation & Payroll',
+      'tab-bank': 'Bank & Tax',
+      'tab-documents': 'Documents',
+      'tab-leave': 'Leave & Attendance',
+      'tab-appraisals': 'Appraisals & Training',
       'tab-directory': 'Workforce Directory',
       'tab-settings': 'Console Settings'
     };
@@ -2026,7 +2041,7 @@
 
       const bc = document.getElementById('breadcrumbCurrent');
       if (bc && tabBreadcrumbLabels[tabId]) {
-        bc.innerText = tabBreadcrumbLabels[tabId];
+        bc.innerText = activeProfileName + ' · ' + tabBreadcrumbLabels[tabId];
       }
     }
 
@@ -2118,19 +2133,20 @@
     let currentAccessMode = 'employee'; // 'employee' | 'superadmin'
 
     const DEFAULT_PERSONAL_DATA = {
-      phone: '+91 98450 66912',
-      emergName: 'Rajeshwari Kumar',
-      emergRel: 'Spouse',
-      emergPhone: '+91 98450 11209',
+      fullName: 'SUKUMAR PREM KUMAR',
+      phone: '+91 74179 92482',
+      emergName: 'Suresh Kumar',
+      emergRel: 'Father',
+      emergPhone: '+91 98390 12455',
       nationality: 'Indian Citizen (Resident)',
       bloodGroup: 'O+ (Positive)',
-      address: 'Flat 402, Prestige Palms, Indiranagar 100 Ft Road, Bengaluru, Karnataka — 560038'
+      address: 'Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048'
     };
 
     const DEFAULT_ADMIN_DATA = {
-      designation: 'Senior Consultant',
+      designation: 'Consultant',
       payBand: 'Band L5 · Senior IC',
-      department: 'Data Science & AI',
+      department: 'Data Science',
       manager: 'Ananya Sharma (VP, Data & Analytics)',
       location: 'Bangalore HQ · Hybrid',
       costCenter: 'CC-409 · AI Research India',
@@ -2179,8 +2195,9 @@
       ]
     };
 
-    let personalData = JSON.parse(localStorage.getItem('nexus_personal_data_v1') || 'null') || Object.assign({}, DEFAULT_PERSONAL_DATA);
-    let adminData = JSON.parse(localStorage.getItem('nexus_admin_data_v1') || 'null') || Object.assign({}, DEFAULT_ADMIN_DATA);
+    let personalData = Object.assign({}, DEFAULT_PERSONAL_DATA, JSON.parse(localStorage.getItem('nexus_personal_data_v2') || 'null') || {});
+    if (!personalData.fullName) personalData.fullName = 'SUKUMAR PREM KUMAR';
+    let adminData = Object.assign({}, DEFAULT_ADMIN_DATA, JSON.parse(localStorage.getItem('nexus_admin_data_v2') || 'null') || {});
     let leaveState = JSON.parse(localStorage.getItem('nexus_leave_state_v1') || 'null') || JSON.parse(JSON.stringify(DEFAULT_LEAVE_STATE));
 
     function formatINR(num) {
@@ -2233,6 +2250,12 @@
         const el = document.getElementById(id);
         if (el) el.innerText = val;
       };
+      const fullName = personalData.fullName || 'SUKUMAR PREM KUMAR';
+      activeProfileName = fullName;
+      setEl('dispEmpName', fullName);
+      setEl('dispFullName', fullName);
+      setEl('topBarUserName', fullName);
+      setEl('breadcrumbCurrent', fullName);
       setEl('dispPhone', personalData.phone);
       setEl('dispEmergName', personalData.emergName);
       setEl('dispEmergRel', personalData.emergRel);
@@ -2244,6 +2267,8 @@
 
     // Open & Save Employee Personal Details Modal
     function openPersonalEditModal() {
+      const fnInput = document.getElementById('inputFullName');
+      if (fnInput) fnInput.value = personalData.fullName || 'SUKUMAR PREM KUMAR';
       document.getElementById('inputPhone').value = personalData.phone;
       document.getElementById('inputBloodGroup').value = personalData.bloodGroup;
       document.getElementById('inputEmergName').value = personalData.emergName;
@@ -2260,7 +2285,9 @@
 
     function savePersonalDetails(e) {
       e.preventDefault();
+      const fnInput = document.getElementById('inputFullName');
       personalData = {
+        fullName: fnInput && fnInput.value.trim() ? fnInput.value.trim() : 'SUKUMAR PREM KUMAR',
         phone: document.getElementById('inputPhone').value.trim(),
         bloodGroup: document.getElementById('inputBloodGroup').value,
         emergName: document.getElementById('inputEmergName').value.trim(),
@@ -2269,7 +2296,7 @@
         nationality: document.getElementById('inputNationality').value.trim(),
         address: document.getElementById('inputAddress').value.trim()
       };
-      localStorage.setItem('nexus_personal_data_v1', JSON.stringify(personalData));
+      localStorage.setItem('nexus_personal_data_v2', JSON.stringify(personalData));
       renderPersonalUI();
       closePersonalEditModal();
       showToast('Personal details updated & syncing to Notion DB…');
@@ -2321,7 +2348,7 @@
       setEl('dispTableDeductions', '- ' + formatINR(totalDeductions));
       setEl('dispTableNet', formatINR(netMonthly));
 
-      sidebarBannerMeta.payroll.subtitle = 'Prem Kumar (NX-8842) · Gross: ' + formatINR(grossMonthly) + '/mo · Net Disbursed: ' + formatINR(netMonthly) + '/mo';
+      sidebarBannerMeta.payroll.subtitle = (personalData.fullName || 'SUKUMAR PREM KUMAR') + ' (NX-8842) · Gross: ' + formatINR(grossMonthly) + '/mo · Net Disbursed: ' + formatINR(netMonthly) + '/mo';
     }
 
     function populateSuperAdminForm() {
@@ -2639,7 +2666,8 @@
       const emergDigits = Number(String(personalData.emergPhone || '').replace(/\D+/g, '').slice(-10)) || 7417992482;
 
       const rowProperties = {
-        'Employee ID': { rich_text: [{ text: { content: 'NX-8842' } }] },
+        'Name': { title: [{ text: { content: personalData.fullName || 'SUKUMAR PREM KUMAR' } }] },
+        'Employee ID': { rich_text: [{ text: { content: activeEmployeeId || 'NX-8842' } }] },
         'Job Title': { rich_text: [{ text: { content: adminData.designation } }] },
         'Pay Scale / Band': { select: { name: adminData.payBand } },
         'Department': { select: { name: adminData.department.indexOf('Data Science') >= 0 ? 'Data Science' : adminData.department } },
@@ -2672,9 +2700,10 @@
         'Casual Leave Remaining': { number: casualRem }
       };
 
+      const targetRowId = activeNotionRowId || NOTION_CONFIG.premRowId;
       try {
         const res = await callNotionEndpoint(
-          'https://api.notion.com/v1/pages/' + NOTION_CONFIG.premRowId,
+          'https://api.notion.com/v1/pages/' + targetRowId,
           'PATCH',
           { properties: rowProperties },
           '2025-09-03'
@@ -2683,9 +2712,9 @@
         const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         if (res && res.object === 'page') {
           if (badgeText) badgeText.innerText = 'Notion DB: Synced (' + nowTime + ')';
-          if (settingsStatus) settingsStatus.innerText = 'Synced SUKUMAR PREM KUMAR row at ' + nowTime;
+          if (settingsStatus) settingsStatus.innerText = 'Synced ' + (personalData.fullName || 'SUKUMAR PREM KUMAR') + ' row at ' + nowTime;
           if (showExplicitToast) {
-            showToast('Updated SUKUMAR PREM KUMAR in Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+            showToast('Updated ' + (personalData.fullName || 'SUKUMAR PREM KUMAR') + ' in Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
           }
         } else {
           if (badgeText) badgeText.innerText = 'Notion DB: Synced (' + nowTime + ')';
@@ -2700,8 +2729,131 @@
     }
 
     // ============================================================================
-    // 10. CREATE NEW EMPLOYEE & SYNC DIRECTORY FROM NOTION DATA SOURCE (46e3448d-38a7-8393-a64d-07425010c0ff)
+    // 10. CREATE NEW EMPLOYEE, DOSSIER SWITCHER & SYNC DIRECTORY FROM NOTION (46e3448d-38a7-8393-a64d-07425010c0ff)
     // ============================================================================
+    let activeNotionRowId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+    let activeEmployeeId = 'NX-8842';
+
+    const NOTION_EMPLOYEE_RECORDS = {
+      '3b63448d-38a7-8193-b60f-ffc05b1aad75': {
+        pageId: '3b63448d-38a7-8193-b60f-ffc05b1aad75',
+        name: 'SUKUMAR PREM KUMAR',
+        empId: 'NX-8842',
+        email: 'premkumarrss669@gmail.com',
+        phone: '+91 74179 92482',
+        jobTitle: 'Consultant',
+        band: 'Band L5 · Senior IC',
+        dept: 'Data Science',
+        status: 'Active',
+        joiningDate: '17/08/2026',
+        location: 'Bangalore HQ · Hybrid',
+        manager: 'Ananya Sharma (VP, Data & Analytics)',
+        basic: 92500,
+        hra: 37000,
+        travel: 8000,
+        medical: 5000,
+        special: 42500,
+        pf: 3600,
+        pt: 200,
+        tds: 14600,
+        emergName: 'Suresh Kumar',
+        emergRel: 'Father',
+        emergPhone: '+91 98390 12455',
+        bloodGroup: 'O+ (Positive)',
+        address: 'Brigade Metropolis, Tower 4, Flat 602, Whitefield Main Rd, Garudachar Palya, Mahadevapura, Bangalore, Karnataka — 560048'
+      },
+      '3b93448d-38a7-8142-871e-ea21bfa03f04': {
+        pageId: '3b93448d-38a7-8142-871e-ea21bfa03f04',
+        name: 'Anshika Gaur',
+        empId: 'NX-8845',
+        email: 'anshikagaur633@gmail.com',
+        phone: '+91 80054 31920',
+        jobTitle: 'Geospatial Data Science Intern',
+        band: 'Band L3 · Intern / Associate',
+        dept: 'Data Science',
+        status: 'Voluntary Termination',
+        joiningDate: '01/05/2026',
+        location: 'Remote / Bangalore HQ',
+        manager: 'SUKUMAR PREM KUMAR',
+        basic: 25000,
+        hra: 10000,
+        travel: 3000,
+        medical: 2000,
+        special: 5000,
+        pf: 1800,
+        pt: 200,
+        tds: 0,
+        emergName: 'Rajesh Gaur',
+        emergRel: 'Father',
+        emergPhone: '+91 80054 31920',
+        bloodGroup: 'B+ (Positive)',
+        address: 'Sector 62, Noida, Uttar Pradesh — 201309'
+      }
+    };
+
+    function openEmployeeDossier(pageId) {
+      const rec = NOTION_EMPLOYEE_RECORDS[pageId] || NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'];
+      if (!rec) return;
+      activeNotionRowId = rec.pageId;
+      activeEmployeeId = rec.empId || 'NX-8842';
+      activeProfileName = rec.name;
+
+      personalData = {
+        fullName: rec.name,
+        phone: rec.phone || '+91 74179 92482',
+        emergName: rec.emergName || 'Suresh Kumar',
+        emergRel: rec.emergRel || 'Father',
+        emergPhone: rec.emergPhone || rec.phone || '+91 98390 12455',
+        nationality: 'Indian Citizen (Resident)',
+        bloodGroup: rec.bloodGroup || 'O+ (Positive)',
+        address: rec.address || 'Bangalore, Karnataka'
+      };
+
+      adminData = Object.assign({}, adminData, {
+        designation: rec.jobTitle || 'Consultant',
+        payBand: rec.band || 'Band L5 · Senior IC',
+        department: rec.dept || 'Data Science',
+        manager: rec.manager || 'Ananya Sharma (VP, Data & Analytics)',
+        location: rec.location || 'Bangalore HQ · Hybrid',
+        basic: rec.basic != null ? rec.basic : 92500,
+        hra: rec.hra != null ? rec.hra : 37000,
+        travel: rec.travel != null ? rec.travel : 8000,
+        medical: rec.medical != null ? rec.medical : 5000,
+        special: rec.special != null ? rec.special : 42500,
+        pf: rec.pf != null ? rec.pf : 3600,
+        pt: rec.pt != null ? rec.pt : 200,
+        tds: rec.tds != null ? rec.tds : 14600
+      });
+
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+      setEl('dispEmpName', rec.name);
+      setEl('dispFullName', rec.name);
+      setEl('dispEmpId', rec.empId || 'NX-8842');
+      setEl('dispCardEmpId', 'ID: ' + (rec.empId || 'NX-8842'));
+      setEl('dispEmpStatus', rec.status || 'Active');
+      setEl('dispEmail', rec.email || '—');
+      setEl('dispJoiningDate', rec.joiningDate || '17/08/2026');
+      setEl('personalModalSubtitle', 'Employee Self-Service · ' + rec.name + ' (' + (rec.empId || 'NX-8842') + ')');
+      setEl('settingsNotionRowId', rec.pageId);
+
+      // Update avatar for Prem vs Initials for other employees
+      const avatarContainer = document.getElementById('empAvatarContainer');
+      if (avatarContainer) {
+        const isPrem = rec.name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
+        const initials = rec.name.split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
+        avatarContainer.innerHTML = isPrem
+          ? '<img alt="SUKUMAR PREM KUMAR" class="w-20 h-20 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
+          : '<div class="w-20 h-20 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[24px] font-semibold text-apple-primary">' + initials + '</div>';
+      }
+
+      renderPersonalUI();
+      renderAdminUI();
+      navigateSidebar('employees');
+    }
+
     function openAddEmployeeModal() {
       document.getElementById('addEmployeeModal').classList.remove('hidden');
     }
@@ -2714,20 +2866,18 @@
       const isPrem = (emp.name || '').toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
       const initials = (emp.name || 'EM').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
       const avatarHtml = isPrem
-        ? '<img alt="Sukumar Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
+        ? '<img alt="SUKUMAR PREM KUMAR" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>'
         : '<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">' + initials + '</div>';
       const shortBand = (emp.band || 'Band L5').split('·')[0].trim();
       const statusBadge = (emp.status === 'Active')
         ? '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active</span>'
         : '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">' + (emp.status || 'Active') + '</span>';
       const cleanPageId = (emp.pageId || '').replace(/-/g, '');
-      const actionHtml = isPrem
-        ? '<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="navigateSidebar(\'employees\')" type="button">View Dossier</button>'
-        : (cleanPageId
-            ? '<a class="text-[11px] font-medium text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion Record ↗</a>'
-            : '<span class="text-[11px] text-apple-secondary">Notion Synced</span>');
+      const safePageId = emp.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+      const actionHtml = '<button class="h-7 px-3 ' + (isPrem ? 'bg-apple-primary hover:bg-black text-white' : 'bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border') + ' rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View Dossier</button>' +
+        (cleanPageId ? ' <a class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary hover:underline" href="https://www.notion.so/' + cleanPageId + '" target="_blank" rel="noopener noreferrer">Notion ↗</a>' : '');
 
-      return '<tr class="' + (isPrem ? 'bg-apple-subtle/60 hover:bg-apple-subtle' : 'hover:bg-apple-subtle/40') + ' transition-colors" data-notion-page-id="' + (emp.pageId || '') + '">' +
+      return '<tr class="' + (isPrem ? 'bg-apple-subtle/60 hover:bg-apple-subtle' : 'hover:bg-apple-subtle/40') + ' transition-colors cursor-pointer" data-notion-page-id="' + safePageId + '" onclick="openEmployeeDossier(\'' + safePageId + '\')">' +
         '<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">' +
           avatarHtml +
           '<div>' +
@@ -2739,7 +2889,7 @@
         '<td class="py-3 px-3 text-apple-primary">' + (emp.jobTitle || 'Consultant') + ' · <span class="text-apple-secondary">' + shortBand + '</span></td>' +
         '<td class="py-3 px-3 text-apple-secondary">' + (emp.dept || 'Data Science') + '</td>' +
         '<td class="py-3 px-3">' + statusBadge + '</td>' +
-        '<td class="py-3 px-3 text-right">' + actionHtml + '</td>' +
+        '<td class="py-3 px-3 text-right space-x-2" onclick="event.stopPropagation()">' + actionHtml + '</td>' +
       '</tr>';
     }
 
@@ -2808,23 +2958,39 @@
           '2025-09-03'
         );
 
+        const newPageId = (res && res.id) ? res.id : ('local-' + Date.now());
+        const newRec = {
+          pageId: newPageId,
+          name: name,
+          empId: empId,
+          email: email,
+          phone: phone,
+          jobTitle: jobTitle,
+          band: band,
+          dept: dept,
+          gross: gross,
+          basic: basic,
+          hra: hra,
+          travel: 0,
+          medical: 0,
+          special: special,
+          pf: Math.round(deductions * 0.3),
+          pt: 200,
+          tds: Math.max(0, deductions - Math.round(deductions * 0.3) - 200),
+          status: 'Active'
+        };
+        NOTION_EMPLOYEE_RECORDS[newPageId] = newRec;
+
         const tbody = document.getElementById('directoryTableBody');
         if (tbody) {
-          tbody.insertAdjacentHTML('afterbegin', renderEmployeeDirectoryRow({
-            pageId: (res && res.id) ? res.id : '',
-            name: name,
-            empId: empId,
-            email: email,
-            phone: phone,
-            jobTitle: jobTitle,
-            band: band,
-            dept: dept,
-            gross: gross,
-            status: 'Active'
-          }));
+          tbody.insertAdjacentHTML('afterbegin', renderEmployeeDirectoryRow(newRec));
+          const totalRows = tbody.querySelectorAll('tr').length;
           const countBadge = document.getElementById('directoryCountBadge');
-          if (countBadge) {
-            countBadge.innerText = tbody.querySelectorAll('tr').length + ' Notion Records';
+          if (countBadge) countBadge.innerText = totalRows + ' Notion Records';
+          sidebarBannerMeta.directory.badge = totalRows + ' Notion Records';
+          const bannerBadge = document.getElementById('bannerBadge');
+          if (bannerBadge && document.getElementById('bannerTitle') && document.getElementById('bannerTitle').innerText.indexOf('Directory') >= 0) {
+            bannerBadge.innerText = totalRows + ' Notion Records';
           }
         }
 
@@ -2859,18 +3025,22 @@
               const name = titleArr.length ? titleArr.map(function(t) { return t.plain_text; }).join('') : '';
               if (!name) return;
 
+              const isPrem = name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0;
               const empIdArr = (props['Employee ID'] && props['Employee ID'].rich_text) || [];
-              const empId = empIdArr.length ? empIdArr[0].plain_text : (name.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0 ? 'NX-8842' : 'NX-8845');
-              const email = (props['Email'] && props['Email'].email) || '—';
-              const phone = (props['Phone Number'] && props['Phone Number'].phone_number) || '—';
+              const empId = empIdArr.length ? empIdArr[0].plain_text : (isPrem ? 'NX-8842' : 'NX-8845');
+              const email = (props['Email'] && props['Email'].email) || (isPrem ? 'premkumarrss669@gmail.com' : 'anshikagaur633@gmail.com');
+              const phone = (props['Phone Number'] && props['Phone Number'].phone_number) || (isPrem ? '+91 74179 92482' : '+91 80054 31920');
               const jobArr = (props['Job Title'] && props['Job Title'].rich_text) || [];
-              const jobTitle = jobArr.length ? jobArr[0].plain_text : 'Consultant';
-              const band = (props['Pay Scale / Band'] && props['Pay Scale / Band'].select && props['Pay Scale / Band'].select.name) || 'Band L5';
+              const jobTitle = jobArr.length ? jobArr[0].plain_text : (isPrem ? 'Consultant' : 'Geospatial Data Science Intern');
+              const band = (props['Pay Scale / Band'] && props['Pay Scale / Band'].select && props['Pay Scale / Band'].select.name) || (isPrem ? 'Band L5 · Senior IC' : 'Band L3 · Intern / Associate');
               const dept = (props['Department'] && props['Department'].select && props['Department'].select.name) || 'Data Science';
-              const gross = (props['Monthly Gross (INR)'] && props['Monthly Gross (INR)'].number) || 150000;
+              const gross = (props['Monthly Gross (INR)'] && props['Monthly Gross (INR)'].number) || (isPrem ? 185000 : 45000);
+              const basic = (props['Basic Salary (INR)'] && props['Basic Salary (INR)'].number) || Math.round(gross * 0.5);
+              const hra = (props['HRA (INR)'] && props['HRA (INR)'].number) || Math.round(gross * 0.2);
+              const special = (props['Special Allowance (INR)'] && props['Special Allowance (INR)'].number) || (gross - basic - hra);
               const status = (props['Status'] && props['Status'].status && props['Status'].status.name) || 'Active';
 
-              rowsHtml += renderEmployeeDirectoryRow({
+              const recObj = Object.assign({}, NOTION_EMPLOYEE_RECORDS[page.id] || {}, {
                 pageId: page.id,
                 name: name,
                 empId: empId,
@@ -2880,16 +3050,24 @@
                 band: band,
                 dept: dept,
                 gross: gross,
+                basic: basic,
+                hra: hra,
+                special: special,
                 status: status
               });
+              NOTION_EMPLOYEE_RECORDS[page.id] = recObj;
+
+              rowsHtml += renderEmployeeDirectoryRow(recObj);
             });
             if (rowsHtml) {
               tbody.innerHTML = rowsHtml;
             }
+            const totalRows = tbody.querySelectorAll('tr').length;
             const countBadge = document.getElementById('directoryCountBadge');
             if (countBadge) {
-              countBadge.innerText = tbody.querySelectorAll('tr').length + ' Notion Records';
+              countBadge.innerText = totalRows + ' Notion Records';
             }
+            sidebarBannerMeta.directory.badge = totalRows + ' Notion Records';
           }
           if (showToastFlag) {
             showToast('Synced ' + res.results.length + ' employee rows from Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
