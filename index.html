@@ -59,6 +59,7 @@
       }
     }
   </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="bg-apple-bg text-apple-primary antialiased selection:bg-apple-blue selection:text-white">
 <!-- PASSWORDLESS EMPLOYEE EMAIL + GOOGLE AUTHENTICATOR (TOTP) LOGIN GATE -->
@@ -73,14 +74,14 @@
 </div>
 </div>
 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-surface border border-apple-border text-[11px] font-medium text-apple-secondary">
-<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Passwordless TOTP
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Google OAuth + TOTP
 </span>
 </div>
 
 <!-- Center Login Card -->
 <div class="max-w-md w-full mx-auto my-auto py-8">
 <div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6">
-<!-- STEP 1: APPROVED COMPANY EMAIL -->
+<!-- STEP 1: APPROVED COMPANY EMAIL & GOOGLE IDENTITY VERIFICATION -->
 <div class="space-y-5" id="loginStepEmail">
 <div class="space-y-1.5">
 <div class="w-10 h-10 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center text-apple-primary mb-3">
@@ -88,7 +89,7 @@
 </div>
 <h1 class="text-[20px] font-semibold text-apple-primary tracking-tight">Employee Sign In</h1>
 <p class="text-[13px] text-apple-secondary leading-relaxed">
-              Enter your approved corporate email address. No password is required — identity is verified via <strong class="text-apple-primary font-medium">Google Authenticator</strong>.
+              Sign in with your approved corporate email address and verify via <strong class="text-apple-primary font-medium">Google Authenticator</strong>.
             </p>
 </div>
 
@@ -106,22 +107,25 @@
 <label class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary block" for="loginEmailInput">Approved Employee Email</label>
 <div class="relative flex items-center">
 <span class="material-symbols-outlined absolute left-3.5 text-apple-tertiary text-[18px]">mail</span>
-<input autocomplete="email" class="w-full h-10 pl-10 pr-3.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" id="loginEmailInput" placeholder="name@nexushr.corp or registered email" required="" type="email"/>
+<input autocomplete="email" class="w-full h-10 pl-10 pr-3.5 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" id="loginEmailInput" placeholder="Enter your approved email address" required="" type="email"/>
 </div>
 </div>
 <button class="w-full h-10 bg-apple-primary hover:bg-black text-white rounded-xl text-[13px] font-medium transition-all flex items-center justify-center gap-2 shadow-sm" type="submit">
-<span>Continue with Google Authenticator</span>
+<span>Continue to Google Authenticator</span>
 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
 </button>
 </form>
+
+<!-- Google Sign-In Container (renders when OAuth Client ID is configured) -->
+<div class="hidden pt-2" id="googleGsiButtonContainer"></div>
 
 <!-- Security Notice -->
 <div class="pt-3 border-t border-apple-borderSubtle flex items-center justify-between text-[11px] text-apple-secondary">
 <span class="flex items-center gap-1.5">
 <span class="material-symbols-outlined text-[15px] text-apple-primary">shield_lock</span>
-<span>Allowlist Enforced (Approved Employees Only)</span>
+<span>Allowlist Enforced · Device-Bound TOTP</span>
 </span>
-<span class="font-mono text-[10px] text-apple-tertiary">Zero-Password</span>
+<span class="font-mono text-[10px] text-apple-tertiary">RFC 6238</span>
 </div>
 </div>
 
@@ -138,7 +142,7 @@
 <div class="space-y-1">
 <h2 class="text-[19px] font-semibold text-apple-primary tracking-tight">Google Authenticator</h2>
 <p class="text-[12px] text-apple-secondary">
-              Open the <strong class="text-apple-primary font-medium">Google Authenticator</strong> app on your phone and enter the 6-digit code for <strong class="text-apple-primary font-medium" id="verifiedEmailText">premkumarrss669@gmail.com</strong>
+              Open the <strong class="text-apple-primary font-medium">Google Authenticator</strong> app on your mobile phone and enter the 6-digit code for <strong class="text-apple-primary font-medium" id="verifiedEmailText">premkumarrss669@gmail.com</strong>
 </p>
 </div>
 
@@ -164,20 +168,37 @@
 </button>
 </form>
 
-<!-- Pair Google Authenticator App (One-Time Enrollment QR Code, no OTP exposed) -->
+<!-- Identity-Gated Device Pairing (QR Code is NEVER shown unless Employee ID + PAN or Google OAuth is verified) -->
 <div class="pt-3 border-t border-apple-borderSubtle space-y-3" id="qrSetupContainer">
 <button class="w-full flex items-center justify-between text-[12px] font-medium text-apple-secondary hover:text-apple-primary transition-colors" onclick="toggleQrSetupDrawer()" type="button">
 <span class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[16px]">qr_code_2</span>
-<span>First-time device setup? Scan QR in Google Authenticator</span>
+<span class="material-symbols-outlined text-[16px]">phonelink_lock</span>
+<span>Pair new mobile device (Requires Identity Verification)</span>
 </span>
 <span class="material-symbols-outlined text-[16px]" id="qrToggleChevron">expand_more</span>
 </button>
 
 <div class="hidden p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-3" id="qrSetupDrawer">
+<!-- Identity Challenge before revealing QR -->
+<div class="space-y-3" id="qrIdentityChallenge">
 <p class="text-[11px] text-apple-secondary leading-relaxed">
-                Open <strong class="text-apple-primary">Google Authenticator</strong> on your phone &rarr; tap <strong class="text-apple-primary">+</strong> &rarr; <strong class="text-apple-primary">Scan a QR code</strong>, then enter the 6-digit code generated on your phone above:
-              </p>
+                  To prevent unauthorized QR scanning, verify your <strong class="text-apple-primary">Employee ID</strong> and <strong class="text-apple-primary">Tax PAN</strong> before generating a pairing QR code:
+                </p>
+<div class="grid grid-cols-2 gap-2">
+<input class="h-8 px-2.5 bg-apple-surface border border-apple-border rounded-lg text-[12px] font-mono text-apple-primary uppercase placeholder:text-apple-tertiary outline-none" id="verifyEmpIdInput" placeholder="Employee ID (e.g. NX-8842)" type="text"/>
+<input class="h-8 px-2.5 bg-apple-surface border border-apple-border rounded-lg text-[12px] font-mono text-apple-primary uppercase placeholder:text-apple-tertiary outline-none" id="verifyPanInput" placeholder="PAN Number" type="password"/>
+</div>
+<div class="hidden text-[11px] text-red-600 font-medium" id="qrVerifyError">Verification failed: Employee ID or PAN does not match corporate records.</div>
+<button class="w-full h-8 bg-apple-primary hover:bg-black text-white rounded-lg text-[11px] font-medium transition-colors" onclick="verifyIdentityForQr()" type="button">
+                  Verify Identity &amp; Generate Pairing QR
+                </button>
+</div>
+
+<!-- Revealed QR Block (only shown after passing Identity Challenge or Google OAuth) -->
+<div class="hidden space-y-3" id="qrRevealedBlock">
+<p class="text-[11px] text-apple-secondary leading-relaxed">
+                  Identity verified. Scan this QR code in your <strong class="text-apple-primary">Google Authenticator</strong> mobile app:
+                </p>
 <div class="flex flex-col sm:flex-row items-center gap-4">
 <div class="p-2 bg-white rounded-xl border border-apple-border shrink-0">
 <img alt="Google Authenticator QR Code" class="w-32 h-32 object-contain" id="totpQrImage" src=""/>
@@ -185,13 +206,14 @@
 <div class="space-y-2 text-[11px] w-full">
 <div>
 <span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Authenticator Account</span>
-<span class="font-mono text-apple-primary font-medium break-all" id="qrAccountLabel">Nexus HR (premkumarrss669@gmail.com)</span>
+<span class="font-mono text-apple-primary font-medium break-all" id="qrAccountLabel">Nexus HR</span>
 </div>
 <div>
 <span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Manual Setup Key</span>
 <div class="flex items-center justify-between bg-apple-surface px-2.5 py-1.5 rounded-lg border border-apple-border mt-0.5">
-<span class="font-mono font-semibold text-apple-primary tracking-wider" id="qrSecretKeyLabel">JBSWY3DPEHPK3PXP</span>
+<span class="font-mono font-semibold text-apple-primary tracking-wider" id="qrSecretKeyLabel">••••••••••••</span>
 <button class="text-[10px] font-medium text-apple-primary hover:underline" onclick="navigator.clipboard.writeText(currentTotpSecret)" type="button">Copy</button>
+</div>
 </div>
 </div>
 </div>
@@ -1186,24 +1208,28 @@
       'premkumarrss669@gmail.com': {
         name: 'Prem Kumar',
         id: 'NX-8842',
+        pan: 'ABZPK4921D',
         role: 'Senior Consultant (L5)',
         secret: 'JBSWY3DPEHPK3PXP'
       },
       'prem.kumar@nexushr.corp': {
         name: 'Prem Kumar',
         id: 'NX-8842',
+        pan: 'ABZPK4921D',
         role: 'Senior Consultant (L5)',
         secret: 'JBSWY3DPEHPK3PXP'
       },
       'ananya.sharma@nexushr.corp': {
         name: 'Ananya Sharma',
         id: 'NX-1040',
+        pan: 'ABZPK4921D',
         role: 'VP, Data & Analytics (L8)',
         secret: 'JBSWY3DPEHPK3PXP'
       },
       'rohit.k@nexushr.corp': {
         name: 'Rohit Kulkarni',
         id: 'NX-2190',
+        pan: 'ABZPK4921D',
         role: 'HR Business Partner (L6)',
         secret: 'JBSWY3DPEHPK3PXP'
       }
@@ -1212,6 +1238,7 @@
     let pendingAuthEmail = '';
     let currentTotpSecret = 'JBSWY3DPEHPK3PXP';
     let totpIntervalId = null;
+    let isGoogleOAuthVerified = false;
 
     // Decode RFC 4648 Base32 secret to Uint8Array
     function base32ToBytes(base32) {
@@ -1261,20 +1288,33 @@
       return otp;
     }
 
-    function fillApprovedEmail(email) {
-      const input = document.getElementById('loginEmailInput');
-      const errBox = document.getElementById('emailErrorBox');
-      if (input) input.value = email;
-      if (errBox) errBox.classList.add('hidden');
+    // Google Identity Services OAuth 2.0 JWT handler
+    function handleGoogleCredentialResponse(response) {
+      try {
+        const parts = response.credential.split('.');
+        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        if (payload && payload.email && payload.email_verified) {
+          isGoogleOAuthVerified = true;
+          const input = document.getElementById('loginEmailInput');
+          if (input) input.value = payload.email.toLowerCase();
+          proceedToTotpStep(payload.email.toLowerCase());
+        }
+      } catch (err) {
+        console.error('Google OAuth token verification error:', err);
+      }
     }
 
     function handleEmailSubmit(e) {
       e.preventDefault();
+      isGoogleOAuthVerified = false;
       const input = document.getElementById('loginEmailInput');
+      const email = (input.value || '').trim().toLowerCase();
+      proceedToTotpStep(email);
+    }
+
+    function proceedToTotpStep(email) {
       const errBox = document.getElementById('emailErrorBox');
       const errDesc = document.getElementById('emailErrorDesc');
-      const email = (input.value || '').trim().toLowerCase();
-
       const employee = APPROVED_EMPLOYEES[email];
       if (!employee) {
         if (errDesc) {
@@ -1297,20 +1337,42 @@
       document.getElementById('totpCodeInput').value = '';
       document.getElementById('totpCodeInput').focus();
 
-      // Update Google Authenticator QR Code & Setup Key (hidden once employee has enrolled their phone)
-      const isEnrolled = localStorage.getItem('nexus_totp_enrolled_' + email) === '1';
-      const qrContainer = document.getElementById('qrSetupContainer');
-      if (isEnrolled && qrContainer) {
-        qrContainer.classList.add('hidden');
-      } else if (qrContainer) {
-        qrContainer.classList.remove('hidden');
-        const otpauthUri = 'otpauth://totp/Nexus%20HR:' + encodeURIComponent(email) + '?secret=' + currentTotpSecret + '&issuer=Nexus%20HR&algorithm=SHA1&digits=6&period=30';
-        document.getElementById('totpQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=' + encodeURIComponent(otpauthUri);
-        document.getElementById('qrAccountLabel').innerText = 'Nexus HR (' + email + ')';
-        document.getElementById('qrSecretKeyLabel').innerText = currentTotpSecret;
+      // Keep QR Code strictly hidden until Identity Challenge (or Google OAuth) is verified
+      document.getElementById('qrSetupDrawer').classList.add('hidden');
+      document.getElementById('qrToggleChevron').innerText = 'expand_more';
+      document.getElementById('qrRevealedBlock').classList.add('hidden');
+      document.getElementById('qrIdentityChallenge').classList.remove('hidden');
+      document.getElementById('totpQrImage').src = '';
+      document.getElementById('qrSecretKeyLabel').innerText = '••••••••••••';
+
+      if (isGoogleOAuthVerified) {
+        revealPairingQr();
       }
 
       startTotpTimer();
+    }
+
+    function verifyIdentityForQr() {
+      const empIdVal = (document.getElementById('verifyEmpIdInput').value || '').trim().toUpperCase();
+      const panVal = (document.getElementById('verifyPanInput').value || '').trim().toUpperCase();
+      const errEl = document.getElementById('qrVerifyError');
+      const employee = APPROVED_EMPLOYEES[pendingAuthEmail];
+
+      if (employee && empIdVal === employee.id.toUpperCase() && panVal === employee.pan.toUpperCase()) {
+        errEl.classList.add('hidden');
+        revealPairingQr();
+      } else {
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    function revealPairingQr() {
+      const otpauthUri = 'otpauth://totp/Nexus%20HR:' + encodeURIComponent(pendingAuthEmail) + '?secret=' + currentTotpSecret + '&issuer=Nexus%20HR&algorithm=SHA1&digits=6&period=30';
+      document.getElementById('totpQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=' + encodeURIComponent(otpauthUri);
+      document.getElementById('qrAccountLabel').innerText = 'Nexus HR (' + pendingAuthEmail + ')';
+      document.getElementById('qrSecretKeyLabel').innerText = currentTotpSecret;
+      document.getElementById('qrIdentityChallenge').classList.add('hidden');
+      document.getElementById('qrRevealedBlock').classList.remove('hidden');
     }
 
     function backToEmailStep() {
