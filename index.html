@@ -115,18 +115,13 @@
 </button>
 </form>
 
-<!-- Approved Employees Quick-Select Info -->
-<div class="pt-3 border-t border-apple-borderSubtle space-y-2">
-<div class="flex items-center justify-between">
-<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Approved Employee Directory Allowlist</span>
-<span class="text-[10px] text-apple-tertiary">Click to autofill</span>
-</div>
-<div class="flex flex-wrap gap-1.5">
-<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-primary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('premkumarrss669@gmail.com')" type="button">premkumarrss669@gmail.com</button>
-<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-primary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('prem.kumar@nexushr.corp')" type="button">prem.kumar@nexushr.corp</button>
-<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-secondary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('ananya.sharma@nexushr.corp')" type="button">ananya.sharma@nexushr.corp</button>
-<button class="px-2.5 py-1 rounded-lg bg-apple-subtle hover:bg-apple-hover text-[11px] font-mono text-apple-secondary border border-apple-borderSubtle transition-colors" onclick="fillApprovedEmail('rohit.k@nexushr.corp')" type="button">rohit.k@nexushr.corp</button>
-</div>
+<!-- Security Notice -->
+<div class="pt-3 border-t border-apple-borderSubtle flex items-center justify-between text-[11px] text-apple-secondary">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-apple-primary">shield_lock</span>
+<span>Allowlist Enforced (Approved Employees Only)</span>
+</span>
+<span class="font-mono text-[10px] text-apple-tertiary">Zero-Password</span>
 </div>
 </div>
 
@@ -143,14 +138,14 @@
 <div class="space-y-1">
 <h2 class="text-[19px] font-semibold text-apple-primary tracking-tight">Google Authenticator</h2>
 <p class="text-[12px] text-apple-secondary">
-              Signing in as <strong class="text-apple-primary font-medium" id="verifiedEmailText">premkumarrss669@gmail.com</strong>
+              Open the <strong class="text-apple-primary font-medium">Google Authenticator</strong> app on your phone and enter the 6-digit code for <strong class="text-apple-primary font-medium" id="verifiedEmailText">premkumarrss669@gmail.com</strong>
 </p>
 </div>
 
 <!-- TOTP Error Banner -->
 <div class="hidden p-3 rounded-xl bg-red-50 border border-red-200 text-[12px] text-red-700 flex items-center gap-2" id="totpErrorBox">
 <span class="material-symbols-outlined text-[16px]">gpp_bad</span>
-<span id="totpErrorText">Invalid 6-digit Google Authenticator code. Please try again.</span>
+<span id="totpErrorText">Invalid 6-digit Google Authenticator code. Please check your mobile app and try again.</span>
 </div>
 
 <!-- 6-Digit Code Form -->
@@ -160,7 +155,7 @@
 <label class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary" for="totpCodeInput">6-Digit Authenticator Code</label>
 <span class="text-[11px] font-mono text-apple-secondary" id="totpTimerLabel">Refreshes in 30s</span>
 </div>
-<input autocomplete="one-time-code" class="w-full h-12 px-4 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-center font-mono text-[22px] font-semibold tracking-[0.35em] text-apple-primary placeholder:text-apple-tertiary placeholder:tracking-normal placeholder:text-[14px] placeholder:font-normal outline-none transition-all" id="totpCodeInput" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required="" type="text"/>
+<input autocomplete="one-time-code" class="w-full h-12 px-4 bg-apple-subtle focus:bg-apple-surface border border-apple-border focus:border-apple-primary rounded-xl text-center font-mono text-[22px] font-semibold tracking-[0.35em] text-apple-primary placeholder:text-apple-tertiary placeholder:tracking-normal placeholder:text-[14px] placeholder:font-normal outline-none transition-all" id="totpCodeInput" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit code from phone" required="" type="text"/>
 </div>
 
 <button class="w-full h-10 bg-apple-primary hover:bg-black text-white rounded-xl text-[13px] font-medium transition-all flex items-center justify-center gap-2 shadow-sm" type="submit">
@@ -169,19 +164,19 @@
 </button>
 </form>
 
-<!-- Pair Google Authenticator App (QR Code + Setup Key) -->
-<div class="pt-3 border-t border-apple-borderSubtle space-y-3">
-<button class="w-full flex items-center justify-between text-[12px] font-medium text-apple-primary hover:opacity-80 transition-opacity" onclick="toggleQrSetupDrawer()" type="button">
+<!-- Pair Google Authenticator App (One-Time Enrollment QR Code, no OTP exposed) -->
+<div class="pt-3 border-t border-apple-borderSubtle space-y-3" id="qrSetupContainer">
+<button class="w-full flex items-center justify-between text-[12px] font-medium text-apple-secondary hover:text-apple-primary transition-colors" onclick="toggleQrSetupDrawer()" type="button">
 <span class="flex items-center gap-1.5">
-<span class="material-symbols-outlined text-[16px] text-apple-secondary">qr_code_2</span>
-<span>First time? Pair Google Authenticator App</span>
+<span class="material-symbols-outlined text-[16px]">qr_code_2</span>
+<span>First-time device setup? Scan QR in Google Authenticator</span>
 </span>
-<span class="material-symbols-outlined text-[16px] text-apple-secondary" id="qrToggleChevron">expand_more</span>
+<span class="material-symbols-outlined text-[16px]" id="qrToggleChevron">expand_more</span>
 </button>
 
 <div class="hidden p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-3" id="qrSetupDrawer">
 <p class="text-[11px] text-apple-secondary leading-relaxed">
-                Open the <strong class="text-apple-primary">Google Authenticator</strong> app on your phone, tap <strong class="text-apple-primary">+</strong> &rarr; <strong class="text-apple-primary">Scan a QR code</strong> (or enter setup key manually):
+                Open <strong class="text-apple-primary">Google Authenticator</strong> on your phone &rarr; tap <strong class="text-apple-primary">+</strong> &rarr; <strong class="text-apple-primary">Scan a QR code</strong>, then enter the 6-digit code generated on your phone above:
               </p>
 <div class="flex flex-col sm:flex-row items-center gap-4">
 <div class="p-2 bg-white rounded-xl border border-apple-border shrink-0">
@@ -189,19 +184,15 @@
 </div>
 <div class="space-y-2 text-[11px] w-full">
 <div>
-<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Account</span>
-<span class="font-mono text-apple-primary font-medium break-all" id="qrAccountLabel">Nexus HR:premkumarrss669@gmail.com</span>
+<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Authenticator Account</span>
+<span class="font-mono text-apple-primary font-medium break-all" id="qrAccountLabel">Nexus HR (premkumarrss669@gmail.com)</span>
 </div>
 <div>
-<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Base32 Setup Key (RFC 6238)</span>
+<span class="text-apple-secondary block uppercase tracking-wider text-[10px] font-medium">Manual Setup Key</span>
 <div class="flex items-center justify-between bg-apple-surface px-2.5 py-1.5 rounded-lg border border-apple-border mt-0.5">
 <span class="font-mono font-semibold text-apple-primary tracking-wider" id="qrSecretKeyLabel">JBSWY3DPEHPK3PXP</span>
 <button class="text-[10px] font-medium text-apple-primary hover:underline" onclick="navigator.clipboard.writeText(currentTotpSecret)" type="button">Copy</button>
 </div>
-</div>
-<div class="pt-1 flex items-center justify-between">
-<span class="text-apple-secondary">Current TOTP Code:</span>
-<button class="px-2 py-0.5 rounded bg-apple-surface border border-apple-border font-mono font-semibold text-apple-primary hover:bg-apple-hover transition-colors" id="liveTotpPreviewBtn" onclick="autofillCurrentTotp()" title="Click to autofill current Google Authenticator code" type="button">••••••</button>
 </div>
 </div>
 </div>
@@ -1306,11 +1297,18 @@
       document.getElementById('totpCodeInput').value = '';
       document.getElementById('totpCodeInput').focus();
 
-      // Update Google Authenticator QR Code & Setup Key
-      const otpauthUri = 'otpauth://totp/Nexus%20HR:' + encodeURIComponent(email) + '?secret=' + currentTotpSecret + '&issuer=Nexus%20HR&algorithm=SHA1&digits=6&period=30';
-      document.getElementById('totpQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=' + encodeURIComponent(otpauthUri);
-      document.getElementById('qrAccountLabel').innerText = 'Nexus HR (' + email + ')';
-      document.getElementById('qrSecretKeyLabel').innerText = currentTotpSecret;
+      // Update Google Authenticator QR Code & Setup Key (hidden once employee has enrolled their phone)
+      const isEnrolled = localStorage.getItem('nexus_totp_enrolled_' + email) === '1';
+      const qrContainer = document.getElementById('qrSetupContainer');
+      if (isEnrolled && qrContainer) {
+        qrContainer.classList.add('hidden');
+      } else if (qrContainer) {
+        qrContainer.classList.remove('hidden');
+        const otpauthUri = 'otpauth://totp/Nexus%20HR:' + encodeURIComponent(email) + '?secret=' + currentTotpSecret + '&issuer=Nexus%20HR&algorithm=SHA1&digits=6&period=30';
+        document.getElementById('totpQrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=' + encodeURIComponent(otpauthUri);
+        document.getElementById('qrAccountLabel').innerText = 'Nexus HR (' + email + ')';
+        document.getElementById('qrSecretKeyLabel').innerText = currentTotpSecret;
+      }
 
       startTotpTimer();
     }
@@ -1333,32 +1331,18 @@
       }
     }
 
-    async function updateTotpTimerAndPreview() {
+    function updateTotpTimer() {
       const remaining = 30 - (Math.floor(Date.now() / 1000) % 30);
       const timerLabel = document.getElementById('totpTimerLabel');
       if (timerLabel) {
         timerLabel.innerText = 'Code refreshes in ' + remaining + 's';
       }
-      const previewBtn = document.getElementById('liveTotpPreviewBtn');
-      if (previewBtn && currentTotpSecret) {
-        const code = await generateTotpCode(currentTotpSecret, 0);
-        previewBtn.innerText = code + ' (Autofill)';
-      }
     }
 
     function startTotpTimer() {
       if (totpIntervalId) clearInterval(totpIntervalId);
-      updateTotpTimerAndPreview();
-      totpIntervalId = setInterval(updateTotpTimerAndPreview, 1000);
-    }
-
-    async function autofillCurrentTotp() {
-      const code = await generateTotpCode(currentTotpSecret, 0);
-      const input = document.getElementById('totpCodeInput');
-      if (input) {
-        input.value = code;
-        input.focus();
-      }
+      updateTotpTimer();
+      totpIntervalId = setInterval(updateTotpTimer, 1000);
     }
 
     async function handleTotpSubmit(e) {
@@ -1375,6 +1359,8 @@
       if (entered === validCurr || entered === validPrev || entered === validNext) {
         if (errBox) errBox.classList.add('hidden');
         if (totpIntervalId) clearInterval(totpIntervalId);
+        // Mark device as enrolled so QR code is hidden on future logins
+        localStorage.setItem('nexus_totp_enrolled_' + pendingAuthEmail, '1');
         sessionStorage.setItem('nexus_hr_authenticated_email', pendingAuthEmail);
         unlockConsole(pendingAuthEmail);
       } else {
