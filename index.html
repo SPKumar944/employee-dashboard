@@ -122,6 +122,14 @@
 <!-- Google Sign-In Container (renders when OAuth Client ID is configured) -->
 <div class="hidden pt-2" id="googleGsiButtonContainer"></div>
 
+<!-- New Employee Self-Service Onboarding Form Link (Photo & Documents Upload) -->
+<div class="pt-3 border-t border-apple-borderSubtle">
+  <button type="button" onclick="openStandaloneEmployeeForm()" class="w-full h-9 px-3 rounded-xl bg-apple-subtle hover:bg-apple-hover border border-apple-border text-[12px] font-semibold text-apple-primary flex items-center justify-center gap-2 transition-colors">
+    <span class="material-symbols-outlined text-[16px]">upload_file</span>
+    <span>New Employee? Complete Onboarding &amp; Upload Documents →</span>
+  </button>
+</div>
+
 <!-- Security Notice -->
 <div class="pt-3 border-t border-apple-borderSubtle flex items-center justify-between text-[11px] text-apple-secondary">
 <span class="flex items-center gap-1.5">
@@ -258,6 +266,10 @@
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
 <span>Directory &amp; Approvals</span>
 </a>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" href="#onboarding-form" onclick="openStandaloneEmployeeForm(); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">upload_file</span>
+<span>Onboarding Form (Upload)</span>
+</a>
 <a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-apple-subtle text-apple-primary font-medium text-[13px] transition-colors cursor-pointer" data-nav="employees" href="#employees" onclick="navigateSidebar('employees', this); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-primary">group</span>
 <span>My Profile</span>
@@ -313,10 +325,10 @@
 </div>
 <!-- Action items -->
 <div class="flex items-center gap-2.5">
-<!-- Shareable Employee Form Button (Super Admin Only) -->
-<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors superadmin-only-el" id="topShareFormBtn" onclick="copyShareableFormLink()" title="Copy shareable Employee Onboarding &amp; Details Form link" type="button">
-<span class="material-symbols-outlined text-[15px]">link</span>
-<span>Share Employee Form</span>
+<!-- Shareable Employee Form Button (Opens Onboarding Form & Copies Link) -->
+<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors superadmin-only-el" id="topShareFormBtn" onclick="openStandaloneEmployeeForm()" title="Open &amp; Share Employee Onboarding Form (Photo &amp; Documents Upload)" type="button">
+<span class="material-symbols-outlined text-[15px]">upload_file</span>
+<span>Onboarding Form</span>
 </button>
 <!-- Role Mode Switcher (Visible Only to Super Admin SUKUMAR PREM KUMAR) -->
 <div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px]" id="roleModeSwitcher">
@@ -1597,15 +1609,15 @@ No pending employee form submissions awaiting review. Share the form link above 
 <!-- MODAL 4: ADD NEW EMPLOYEE DIRECTLY TO NOTION (46e3448d-38a7-8393-a64d-07425010c0ff) -->
 <!-- ========================================================================== -->
 <div id="addEmployeeModal" class="fixed inset-0 z-[80] hidden bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-  <div class="w-full max-w-xl bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5 my-8">
+  <div class="w-full max-w-2xl bg-apple-surface rounded-3xl apple-border p-6 shadow-2xl space-y-5 my-8 max-h-[92vh] overflow-y-auto">
     <div class="flex items-center justify-between border-b border-apple-borderSubtle pb-3.5">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-xl bg-apple-primary text-white flex items-center justify-center">
           <span class="material-symbols-outlined text-[18px]">person_add</span>
         </div>
         <div>
-          <h3 class="text-[15px] font-semibold text-apple-primary">Add New Employee to Notion Database</h3>
-          <p class="text-[11px] text-apple-secondary">Creates a new row directly in <span class="font-mono">Employee Directory* (46e3448d…)</span></p>
+          <h3 class="text-[15px] font-semibold text-apple-primary">Add / Onboard New Employee to Notion Database</h3>
+          <p class="text-[11px] text-apple-secondary">Upload Employee Photograph, Compliance Documents &amp; Create Row in <span class="font-mono">Employee Directory* (46e3448d…)</span></p>
         </div>
       </div>
       <button onclick="closeAddEmployeeModal()" type="button" class="w-7 h-7 rounded-full hover:bg-apple-subtle flex items-center justify-center text-apple-secondary hover:text-apple-primary">
@@ -1614,6 +1626,23 @@ No pending employee form submissions awaiting review. Share the form link above 
     </div>
 
     <form id="addEmployeeForm" onsubmit="createNewEmployeeInNotion(event)" class="space-y-4">
+      <input type="hidden" id="newEmpPhotoDataUrl" value=""/>
+
+      <!-- Employee Photograph Upload inside Add Employee Modal -->
+      <div class="p-3.5 rounded-2xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row items-center gap-4">
+        <div class="w-16 h-16 rounded-full bg-apple-surface border-2 border-apple-border flex items-center justify-center overflow-hidden shrink-0">
+          <span class="material-symbols-outlined text-[24px] text-apple-tertiary" id="newEmpPhotoPlaceholderIcon">add_a_photo</span>
+          <img id="newEmpPhotoPreviewImg" src="" alt="Employee Photograph Preview" class="hidden w-full h-full object-cover"/>
+        </div>
+        <div class="flex-1 space-y-1 text-center sm:text-left">
+          <div class="flex items-center justify-center sm:justify-start gap-2">
+            <span class="text-[12px] font-semibold text-apple-primary">Employee Profile Photograph</span>
+            <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">Passport / Headshot</span>
+          </div>
+          <input id="newEmpPhotoInput" type="file" accept="image/*" onchange="handleNewEmpModalPhotoSelect(event)" class="w-full sm:w-auto text-[11px] text-apple-primary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Full Legal Name *</label>
@@ -1674,6 +1703,43 @@ No pending employee form submissions awaiting review. Share the form link above 
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Annual Leave Quota (Days)</label>
           <input id="newEmpLeave" type="number" min="0" max="45" value="24" required class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
+        </div>
+      </div>
+
+      <!-- Compliance & Academic Documents Upload inside Add Employee Modal -->
+      <div class="space-y-2.5 pt-2 border-t border-apple-borderSubtle">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-[12px] font-semibold text-apple-primary">Upload Verified Compliance &amp; Academic Documents</h4>
+            <p class="text-[11px] text-apple-secondary">Attach Aadhaar, PAN, Degrees, Resume &amp; Signed NDA (Locked after approval)</p>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-border">6 Document Slots</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">1. Aadhaar National Identity Card</label>
+            <input type="file" data-doc-slot="doc-aadhaar" data-doc-title="Aadhaar National Identity Card" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">2. Income Tax PAN Card</label>
+            <input type="file" data-doc-slot="doc-pan" data-doc-title="Income Tax PAN Card" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">3. Master's / Postgraduate Degree</label>
+            <input type="file" data-doc-slot="doc-ms" data-doc-title="Master of Science — Computer Science" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">4. B.Tech / Undergraduate Degree</label>
+            <input type="file" data-doc-slot="doc-btech" data-doc-title="Bachelor of Technology — CSE" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">5. Curriculum Vitae &amp; Architecture Matrix</label>
+            <input type="file" data-doc-slot="doc-resume" data-doc-title="Curriculum Vitae & Architecture Matrix" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
+          <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
+            <label class="block font-semibold text-apple-primary">6. Signed Employment Contract &amp; IP NDA</label>
+            <input type="file" data-doc-slot="doc-nda" data-doc-title="Signed Employment Contract & IP NDA" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-primary file:text-white cursor-pointer"/>
+          </div>
         </div>
       </div>
 
@@ -1801,7 +1867,7 @@ No pending employee form submissions awaiting review. Share the form link above 
 </div>
 
 <!-- MODAL 7: SUPER ADMIN — UPLOAD / REPLACE COMPLIANCE & ACADEMIC DOCUMENT -->
-<div id="documentUploadModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+<div id="documentUploadModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
   <div class="w-full max-w-lg bg-apple-surface rounded-2xl apple-border apple-shadow-lg overflow-hidden">
     <div class="px-6 py-4 border-b border-apple-borderSubtle flex items-center justify-between bg-apple-subtle/50">
       <div class="flex items-center gap-2">
@@ -1818,37 +1884,37 @@ No pending employee form submissions awaiting review. Share the form link above 
     <form id="documentUploadForm" onsubmit="saveUploadedDocument(event)" class="p-6 space-y-4">
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Document Slot / Category *</label>
-        <select id="uploadDocCategorySelect" onchange="handleDocCategoryChange(this.value)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
-          <option value="doc-aadhaar">Aadhaar Card (Masked UID)</option>
-          <option value="doc-pan">PAN Card (Tax Record)</option>
-          <option value="doc-ms">M.S. in Data Analytics &amp; ML (Postgraduate Degree)</option>
-          <option value="doc-btech">B.Tech in Computer Science (Undergraduate Degree)</option>
-          <option value="doc-resume">Consultant Resume &amp; Matrix</option>
-          <option value="doc-nda">Non-Disclosure &amp; IP Agreement</option>
-          <option value="doc-custom">+ Add New Compliance / Academic Document</option>
+        <select id="docUploadCategorySelect" onchange="handleDocCategoryChange(this.value)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+          <option value="doc-aadhaar">Aadhaar National Identity Card</option>
+          <option value="doc-pan">Income Tax PAN Card</option>
+          <option value="doc-ms">Master of Science — Computer Science (Postgraduate Degree)</option>
+          <option value="doc-btech">Bachelor of Technology — CSE (Undergraduate Degree)</option>
+          <option value="doc-resume">Curriculum Vitae &amp; Architecture Matrix</option>
+          <option value="doc-nda">Signed Employment Contract &amp; IP NDA</option>
+          <option value="custom">+ Add New Compliance / Academic Document</option>
         </select>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Document Title *</label>
-          <input id="uploadDocTitleInput" type="text" required value="Aadhaar Card (Masked UID)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
+          <input id="docUploadTitleInput" type="text" required value="Aadhaar National Identity Card" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-medium text-apple-primary outline-none"/>
         </div>
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Verification Status</label>
-          <select id="uploadDocStatusInput" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
-            <option value="Verified">Verified (SHA-256)</option>
-            <option value="Signed">Signed (DocuSign)</option>
-            <option value="Approved by Super Admin">Approved by Super Admin</option>
+          <select id="docUploadStatusSelect" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[12px] text-apple-primary outline-none">
+            <option value="Verified">Verified</option>
+            <option value="Executed">Executed</option>
+            <option value="Current">Current</option>
           </select>
         </div>
       </div>
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Subtitle / Identifier Note *</label>
-        <input id="uploadDocSubtitleInput" type="text" required value="UID: •••• •••• 8291 · Identity Proof" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        <input id="docUploadSubtitleInput" type="text" required value="UIDAI Govt of India · Verified Copy" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
       </div>
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Select File to Upload (PDF, DOCX, PNG, JPG) *</label>
-        <input id="uploadDocFileInput" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required class="w-full p-2 bg-apple-subtle border border-apple-border rounded-xl text-[12px] text-apple-primary file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+        <input id="docUploadFileInput" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required class="w-full p-2 bg-apple-subtle border border-apple-border rounded-xl text-[12px] text-apple-primary file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
       </div>
       <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-apple-borderSubtle">
         <button type="button" onclick="closeDocumentUploadModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
@@ -1861,23 +1927,22 @@ No pending employee form submissions awaiting review. Share the form link above 
   </div>
 </div>
 
-</div>
-
 <!-- STANDALONE SHAREABLE EMPLOYEE ONBOARDING & SELF-SERVICE DETAILS FORM VIEW -->
 <div id="standaloneEmployeeFormScreen" class="fixed inset-0 z-[120] hidden bg-apple-bg overflow-y-auto py-8 px-4 sm:px-6">
-  <div class="max-w-2xl mx-auto space-y-5">
+  <div class="max-w-3xl mx-auto space-y-5">
     <!-- Top Header Bar -->
     <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-apple-primary text-white flex items-center justify-center font-bold text-sm tracking-tight shrink-0">NX</div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-[17px] font-bold text-apple-primary">NexusHR · Employee Onboarding &amp; Self-Service Details Form</h1>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-[17px] font-bold text-apple-primary">NexusHR · Employee Onboarding &amp; Document Upload Form</h1>
+            <span class="px-2 py-0.5 rounded-full bg-apple-subtle border border-apple-border text-[10px] font-semibold text-apple-primary">Photo + 6 Compliance Documents</span>
           </div>
-          <p class="text-[12px] text-apple-secondary">Upload your photograph, personal details, bank info &amp; compliance documents for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) review. <strong class="text-apple-primary">Note: Once approved, details are locked and can only be edited by Super Admin.</strong></p>
+          <p class="text-[12px] text-apple-secondary">Upload your <strong class="text-apple-primary">Profile Photograph</strong>, <strong class="text-apple-primary">Verified Compliance &amp; Academic Documents</strong>, and personal/bank details for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) approval. <strong class="text-apple-primary">Once approved, all details &amp; documents are locked and can only be edited by Super Admin.</strong></p>
         </div>
       </div>
-      <div class="flex items-center gap-2 self-start sm:self-center">
+      <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
         <button type="button" onclick="copyShareableFormLink()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1">
           <span class="material-symbols-outlined text-[14px]">content_copy</span>
           <span>Copy Link</span>
@@ -1904,27 +1969,92 @@ No pending employee form submissions awaiting review. Share the form link above 
       <input type="hidden" id="formSubmissionPageId" value=""/>
       <input type="hidden" id="formEmpPhotoDataUrl" value=""/>
 
-      <!-- Employee Photograph Upload Box -->
-      <div class="p-4 rounded-2xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row items-center gap-4">
+      <!-- TOP SECTION A: EMPLOYEE PROFILE PHOTOGRAPH UPLOAD -->
+      <div class="p-4 rounded-2xl bg-apple-subtle border border-apple-border flex flex-col sm:flex-row items-center gap-4">
         <div class="w-20 h-20 rounded-full bg-apple-surface border-2 border-apple-border flex items-center justify-center overflow-hidden shrink-0" id="formEmpPhotoPreviewWrap">
           <span class="material-symbols-outlined text-[30px] text-apple-tertiary" id="formEmpPhotoPlaceholderIcon">add_a_photo</span>
           <img id="formEmpPhotoPreviewImg" src="" alt="Employee Photograph Preview" class="hidden w-full h-full object-cover"/>
         </div>
         <div class="flex-1 space-y-1.5 text-center sm:text-left">
-          <div class="flex items-center justify-center sm:justify-start gap-2">
-            <span class="text-[13px] font-semibold text-apple-primary">Employee Profile Photograph *</span>
-            <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-apple-surface border border-apple-border text-apple-secondary">Passport / Headshot</span>
+          <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+            <span class="text-[14px] font-bold text-apple-primary">1. Upload Employee Profile Photograph *</span>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-apple-primary text-white">Required · Headshot / Passport</span>
+            <span id="formEmpPhotoStatusText" class="hidden text-[11px] font-semibold text-apple-primary"></span>
           </div>
-          <p class="text-[11px] text-apple-secondary">Upload a clear headshot photograph (JPG/PNG). Displayed on your Employee Dossier and ID card upon Super Admin approval.</p>
-          <input id="formEmpPhotoInput" type="file" accept="image/*" onchange="handleOnboardingPhotoSelect(event)" class="w-full sm:w-auto text-[11px] text-apple-primary file:mr-2.5 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          <p class="text-[11px] text-apple-secondary">Upload a clear headshot photograph (JPG/PNG). Displayed on your Employee Dossier, Top Bar &amp; Workforce Directory upon Super Admin approval.</p>
+          <input id="formEmpPhotoInput" type="file" accept="image/*" onchange="handleOnboardingPhotoSelect(event)" class="w-full sm:w-auto text-[11px] text-apple-primary file:mr-2.5 file:py-1.5 file:px-3.5 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
         </div>
       </div>
 
-      <!-- Section 1: Personal Identity & Contact -->
+      <!-- TOP SECTION B: VERIFIED COMPLIANCE & ACADEMIC DOCUMENTS UPLOAD (PLACED AT TOP FOR IMMEDIATE VISIBILITY) -->
+      <div class="p-4 rounded-2xl bg-apple-subtle/70 border border-apple-border space-y-3.5">
+        <div class="border-b border-apple-border pb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 class="text-[14px] font-bold text-apple-primary flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[18px]">folder_managed</span>
+              <span>2. Upload Verified Compliance &amp; Academic Documents *</span>
+            </h2>
+            <p class="text-[11px] text-apple-secondary">Upload your identity, tax, degree, resume &amp; NDA documents below. <strong class="text-apple-primary">Once approved by Super Admin, these documents are locked and cannot be edited by the employee.</strong></p>
+          </div>
+          <span class="text-[10px] font-mono px-2.5 py-1 rounded-full bg-apple-surface text-apple-primary border border-apple-border shrink-0 self-start sm:self-center">Locked After Super Admin Approval</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px]">
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Aadhaar National Identity Card</label>
+              <span id="status-doc-aadhaar" class="text-[10px] font-mono text-apple-tertiary">PDF / JPG / PNG</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">UIDAI Govt of India · Masked or Full Aadhaar Copy</p>
+            <input type="file" data-doc-slot="doc-aadhaar" data-doc-title="Aadhaar National Identity Card" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Income Tax PAN Card</label>
+              <span id="status-doc-pan" class="text-[10px] font-mono text-apple-tertiary">PDF / JPG / PNG</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">NSDL Tax Dept · Permanent Account Number Card</p>
+            <input type="file" data-doc-slot="doc-pan" data-doc-title="Income Tax PAN Card" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Master of Science / PG Degree</label>
+              <span id="status-doc-ms" class="text-[10px] font-mono text-apple-tertiary">PDF / JPG / PNG</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">Postgraduate Degree Certificate &amp; Official Transcripts</p>
+            <input type="file" data-doc-slot="doc-ms" data-doc-title="Master of Science — Computer Science" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Bachelor of Technology / UG Degree</label>
+              <span id="status-doc-btech" class="text-[10px] font-mono text-apple-tertiary">PDF / JPG / PNG</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">Undergraduate Degree Certificate &amp; Marksheets</p>
+            <input type="file" data-doc-slot="doc-btech" data-doc-title="Bachelor of Technology — CSE" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Curriculum Vitae &amp; Architecture Matrix</label>
+              <span id="status-doc-resume" class="text-[10px] font-mono text-apple-tertiary">PDF / DOCX</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">Updated Resume, System Design &amp; Publications</p>
+            <input type="file" data-doc-slot="doc-resume" data-doc-title="Curriculum Vitae & Architecture Matrix" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+          <div class="p-3.5 rounded-xl bg-apple-surface border border-apple-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="font-semibold text-apple-primary">Signed Employment Contract &amp; IP NDA</label>
+              <span id="status-doc-nda" class="text-[10px] font-mono text-apple-tertiary">PDF / DOCX</span>
+            </div>
+            <p class="text-[11px] text-apple-secondary">Counter-signed Employment &amp; Confidentiality Agreement</p>
+            <input type="file" data-doc-slot="doc-nda" data-doc-title="Signed Employment Contract & IP NDA" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[11px] file:font-semibold file:bg-apple-primary file:text-white hover:file:bg-black cursor-pointer"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Personal Identity & Contact -->
       <div class="space-y-3.5">
         <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
           <div>
-            <h2 class="text-[14px] font-semibold text-apple-primary">1. Personal Identity &amp; Contact Information</h2>
+            <h2 class="text-[14px] font-semibold text-apple-primary">3. Personal Identity &amp; Contact Information</h2>
             <p class="text-[11px] text-apple-secondary">Used for your employee profile and Google Authenticator login</p>
           </div>
           <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-apple-subtle text-apple-secondary border border-apple-borderSubtle">Locked After Approval</span>
@@ -1957,10 +2087,10 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Section 2: Emergency Contact & Residential Address -->
+      <!-- Section 4: Emergency Contact & Residential Address -->
       <div class="space-y-3.5">
         <div class="border-b border-apple-borderSubtle pb-2">
-          <h2 class="text-[14px] font-semibold text-apple-primary">2. Emergency Contact &amp; Permanent Residential Address</h2>
+          <h2 class="text-[14px] font-semibold text-apple-primary">4. Emergency Contact &amp; Permanent Residential Address</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div>
@@ -1978,11 +2108,11 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Section 3: Bank Disbursement & Tax Compliance -->
+      <!-- Section 5: Bank Disbursement & Tax Compliance -->
       <div class="space-y-3.5">
         <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
           <div>
-            <h2 class="text-[14px] font-semibold text-apple-primary">3. Salary Bank Account &amp; Tax PAN Details</h2>
+            <h2 class="text-[14px] font-semibold text-apple-primary">5. Salary Bank Account &amp; Tax PAN Details</h2>
             <p class="text-[11px] text-apple-secondary">Note: Pay Scale &amp; Compensation Band are strictly assigned by Super Admin</p>
           </div>
         </div>
@@ -2006,48 +2136,11 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Section 4: Verified Compliance & Academic Documents Upload -->
-      <div class="space-y-3.5">
-        <div class="border-b border-apple-borderSubtle pb-2 flex items-center justify-between">
-          <div>
-            <h2 class="text-[14px] font-semibold text-apple-primary">4. Verified Compliance &amp; Academic Documents Upload</h2>
-            <p class="text-[11px] text-apple-secondary">Upload PDF/DOCX/Image copies. Locked after Super Admin approval.</p>
-          </div>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle">SHA-256 Verified</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[12px]">
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">Aadhaar Card (Identity Proof)</label>
-            <input type="file" data-doc-slot="doc-aadhaar" data-doc-title="Aadhaar Card (Masked UID)" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">PAN Card (Tax Record)</label>
-            <input type="file" data-doc-slot="doc-pan" data-doc-title="PAN Card (Tax Record)" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">Postgraduate / Master's Degree</label>
-            <input type="file" data-doc-slot="doc-ms" data-doc-title="Postgraduate Degree & Transcripts" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">Undergraduate / B.Tech Degree</label>
-            <input type="file" data-doc-slot="doc-btech" data-doc-title="B.Tech / Undergraduate Certificate" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.png,.jpg,.jpeg" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">Updated Resume / CV</label>
-            <input type="file" data-doc-slot="doc-resume" data-doc-title="Consultant Resume & Matrix" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-          <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle space-y-1">
-            <label class="block font-medium text-apple-primary">Signed Non-Disclosure (NDA)</label>
-            <input type="file" data-doc-slot="doc-nda" data-doc-title="Non-Disclosure & IP Agreement" onchange="handleOnboardingDocSelect(event)" accept=".pdf,.doc,.docx" class="w-full text-[11px] text-apple-secondary file:mr-2 file:py-1 file:px-2.5 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-apple-surface file:text-apple-primary cursor-pointer"/>
-          </div>
-        </div>
-      </div>
-
       <div class="pt-3 border-t border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <span class="text-[11px] text-apple-secondary">Submitting sends your record to Notion (<code class="font-mono text-apple-primary">Employee Directory*</code>) with status <strong>Pending Super Admin Approval</strong>. Once approved, editing is locked to Super Admin only.</span>
+        <span class="text-[11px] text-apple-secondary">Submitting sends your Photograph, 6 Compliance Documents &amp; Details to Notion (<code class="font-mono text-apple-primary">Employee Directory*</code>) with status <strong>Pending Super Admin Approval</strong>. Once approved, editing is locked to Super Admin only.</span>
         <button type="submit" id="standaloneFormSubmitBtn" class="h-10 px-6 rounded-xl bg-apple-primary hover:bg-black text-white text-[13px] font-semibold transition-colors flex items-center justify-center gap-2 shrink-0">
           <span class="material-symbols-outlined text-[17px]">task_alt</span>
-          <span>Submit Details for Super Admin Review</span>
+          <span>Submit Photo, Docs &amp; Details for Approval</span>
         </button>
       </div>
     </form>
@@ -4044,6 +4137,22 @@ No pending employee form submissions awaiting review. Share the form link above 
         );
 
         const newPageId = (res && res.id) ? res.id : ('local-' + Date.now());
+        const newEmpPhotoUrl = (document.getElementById('newEmpPhotoDataUrl') && document.getElementById('newEmpPhotoDataUrl').value) || '';
+        if (newEmpPhotoUrl) {
+          saveEmployeePhotoDataUrl(newPageId, newEmpPhotoUrl);
+        }
+        const uploadedModalDocs = Object.keys(onboardingUploadedDocsMap).map(function(k) { return onboardingUploadedDocsMap[k]; });
+        if (uploadedModalDocs.length > 0) {
+          const mergedDocs = JSON.parse(JSON.stringify(DEFAULT_COMPLIANCE_DOCS));
+          uploadedModalDocs.forEach(function(upDoc) {
+            upDoc.status = 'Verified';
+            const idx = mergedDocs.findIndex(function(d) { return d.id === upDoc.id; });
+            if (idx >= 0) mergedDocs[idx] = upDoc;
+            else mergedDocs.unshift(upDoc);
+          });
+          localStorage.setItem(getEmployeeDocsKey(newPageId), JSON.stringify(mergedDocs));
+        }
+
         const newRec = {
           pageId: newPageId,
           name: name,
@@ -4062,6 +4171,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           pf: Math.round(deductions * 0.3),
           pt: 200,
           tds: Math.max(0, deductions - Math.round(deductions * 0.3) - 200),
+          photoDataUrl: newEmpPhotoUrl,
           status: 'Active'
         };
         NOTION_EMPLOYEE_RECORDS[newPageId] = newRec;
@@ -4082,7 +4192,8 @@ No pending employee form submissions awaiting review. Share the form link above 
 
         closeAddEmployeeModal();
         document.getElementById('addEmployeeForm').reset();
-        showToast('Created "' + name + '" directly in Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
+        onboardingUploadedDocsMap = {};
+        showToast('Created "' + name + '" (with Photo & Documents) in Notion Data Source 46e3448d-38a7-8393-a64d-07425010c0ff');
       } catch (err) {
         showToast('Added "' + name + '" and queued sync to Notion Data Source 46e3448d…');
       } finally {
@@ -4103,6 +4214,23 @@ No pending employee form submissions awaiting review. Share the form link above 
       localStorage.setItem('nexus_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
     }
 
+    function handleNewEmpModalPhotoSelect(event) {
+      const file = event && event.target && event.target.files && event.target.files[0];
+      if (!file) return;
+      compressImageFileToDataUrl(file, function(dataUrl) {
+        const hiddenInput = document.getElementById('newEmpPhotoDataUrl');
+        const previewImg = document.getElementById('newEmpPhotoPreviewImg');
+        const placeholder = document.getElementById('newEmpPhotoPlaceholderIcon');
+        if (hiddenInput) hiddenInput.value = dataUrl;
+        if (previewImg) {
+          previewImg.src = dataUrl;
+          previewImg.classList.remove('hidden');
+        }
+        if (placeholder) placeholder.classList.add('hidden');
+        showToast('Employee photograph attached: ' + file.name);
+      });
+    }
+
     function handleOnboardingPhotoSelect(event) {
       const file = event && event.target && event.target.files && event.target.files[0];
       if (!file) return;
@@ -4121,6 +4249,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           statusText.innerText = '✓ Selected: ' + file.name;
           statusText.classList.remove('hidden');
         }
+        showToast('Profile photograph attached: ' + file.name);
       });
     }
 
@@ -4143,6 +4272,12 @@ No pending employee form submissions awaiting review. Share the form link above 
         fileName: file.name,
         uploadedByOnboarding: true
       };
+      const statusBadge = document.getElementById('status-' + slotId);
+      if (statusBadge) {
+        statusBadge.innerText = '✓ ' + file.name;
+        statusBadge.className = 'text-[10px] font-mono font-semibold text-apple-primary';
+      }
+      showToast('Attached ' + title + ': ' + file.name);
     }
 
     function getShareableFormBaseUrl() {
