@@ -80,28 +80,28 @@
           Workforce
         </span>
 <nav class="flex flex-col gap-0.5">
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="directory" href="#directory" onclick="navigateSidebar('directory', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
 <span>Directory</span>
 </a>
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-apple-subtle text-apple-primary font-medium text-[13px] transition-colors" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-primary">group</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-apple-subtle text-apple-primary font-medium text-[13px] transition-colors cursor-pointer" data-nav="employees" href="#employees" onclick="navigateSidebar('employees', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-primary">group</span>
 <span>Employees</span>
 </a>
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">credit_card</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="payroll" href="#payroll" onclick="navigateSidebar('payroll', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">credit_card</span>
 <span>Payroll &amp; Comp</span>
 </a>
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">calendar_today</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="leave" href="#leave" onclick="navigateSidebar('leave', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">calendar_today</span>
 <span>Leave &amp; Attendance</span>
 </a>
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">verified_user</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="compliance" href="#compliance" onclick="navigateSidebar('compliance', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">verified_user</span>
 <span>Compliance &amp; Records</span>
 </a>
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">bar_chart</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="reports" href="#reports" onclick="navigateSidebar('reports', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">bar_chart</span>
 <span>Reports</span>
 </a>
 </nav>
@@ -109,8 +109,8 @@
 </div>
 <!-- Sidebar Bottom Status & Settings -->
 <div class="px-3 py-3 border-t border-apple-border space-y-1.5">
-<a class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px]" href="#">
-<span class="material-symbols-outlined text-[18px] text-apple-secondary">tune</span>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] cursor-pointer" data-nav="settings" href="#settings" onclick="navigateSidebar('settings', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">tune</span>
 <span>Settings</span>
 </a>
 <div class="px-2.5 py-2 rounded-lg bg-apple-subtle/70 flex items-center justify-between text-[11px] text-apple-secondary">
@@ -130,20 +130,20 @@
 <div class="flex items-center gap-3 w-full max-w-md">
 <div class="relative w-full flex items-center">
 <span class="material-symbols-outlined absolute left-3 text-apple-tertiary text-[18px]">search</span>
-<input class="w-full h-8 pl-9 pr-3 bg-apple-subtle hover:bg-apple-hover/80 focus:bg-apple-surface border border-transparent focus:border-apple-border rounded-full text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" placeholder="Search employee, ID, role or document…" type="text"/>
+<input class="w-full h-8 pl-9 pr-3 bg-apple-subtle hover:bg-apple-hover/80 focus:bg-apple-surface border border-transparent focus:border-apple-border rounded-full text-[13px] text-apple-primary placeholder:text-apple-tertiary outline-none transition-all" id="globalSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="Search employee, ID, role or document…" type="text"/>
 </div>
 </div>
 <!-- Action items -->
 <div class="flex items-center gap-3">
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" type="button">
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="navigateSidebar('leave')" type="button">
 <span class="material-symbols-outlined text-[16px]">add</span>
 <span>New Request</span>
 </button>
-<button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors" type="button">
+<button class="h-8 w-8 rounded-full flex items-center justify-center text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors" onclick="navigateSidebar('reports')" title="View Updates &amp; Appraisals" type="button">
 <span class="material-symbols-outlined text-[19px]">notifications</span>
 </button>
 <div class="h-4 w-px bg-apple-border mx-1"></div>
-<div class="flex items-center gap-2.5 pl-1">
+<div class="flex items-center gap-2.5 pl-1 cursor-pointer" onclick="navigateSidebar('employees')">
 <div class="flex flex-col text-right">
 <span class="text-[12px] font-medium text-apple-primary leading-tight">Prem Kumar</span>
 <span class="text-[10px] text-apple-secondary">HR Admin</span>
@@ -158,11 +158,11 @@
 <!-- Breadcrumb / Context Navigation -->
 <div class="flex items-center justify-between text-[12px] text-apple-secondary">
 <div class="flex items-center gap-1.5">
-<a class="hover:text-apple-primary transition-colors" href="#">Directory</a>
+<a class="hover:text-apple-primary transition-colors cursor-pointer" href="#directory" onclick="navigateSidebar('directory'); return false;">Directory</a>
 <span class="text-apple-tertiary">/</span>
-<a class="hover:text-apple-primary transition-colors" href="#">Data Science &amp; AI</a>
+<a class="hover:text-apple-primary transition-colors cursor-pointer" href="#employees" onclick="navigateSidebar('employees'); return false;">Data Science &amp; AI</a>
 <span class="text-apple-tertiary">/</span>
-<span class="text-apple-primary font-medium">Prem Kumar</span>
+<span class="text-apple-primary font-medium" id="breadcrumbCurrent">Prem Kumar</span>
 </div>
 <div class="flex items-center gap-3">
 <span class="px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium">Confidential</span>
@@ -170,7 +170,7 @@
 </div>
 </div>
 <!-- 1. Apple-Style Employee Profile Header Card -->
-<div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6">
+<div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6" id="employeeHeaderCard">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 <!-- Left Profile Identity -->
 <div class="flex items-center gap-5">
@@ -200,11 +200,11 @@
 </div>
 <!-- Right Profile Actions -->
 <div class="flex items-center gap-2.5 self-start md:self-center">
-<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" type="button">
+<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" onclick="window.print()" type="button">
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">download</span>
 <span>Export Dossier</span>
 </button>
-<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" type="button">
+<button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" onclick="navigateSidebar('settings')" type="button">
 <span class="material-symbols-outlined text-[15px]">edit</span>
 <span>Edit Profile</span>
 </button>
@@ -212,22 +212,22 @@
 </div>
 <!-- Apple Segmented Control Bar -->
 <div class="p-1 bg-apple-subtle rounded-xl flex items-center gap-1 overflow-x-auto">
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all" onclick="switchTab('tab-overview', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all" data-tab="tab-overview" onclick="switchTab('tab-overview', this)">
               Overview
             </button>
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-compensation', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-compensation" onclick="switchTab('tab-compensation', this)">
               Compensation &amp; Payroll
             </button>
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-bank', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-bank" onclick="switchTab('tab-bank', this)">
               Bank &amp; Tax
             </button>
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-documents', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-documents" onclick="switchTab('tab-documents', this)">
               Documents
             </button>
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-leave', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-leave" onclick="switchTab('tab-leave', this)">
               Leave &amp; Attendance
             </button>
-<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" onclick="switchTab('tab-appraisals', this)">
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-appraisals" onclick="switchTab('tab-appraisals', this)">
               Appraisals &amp; Training
             </button>
 </div>
@@ -884,26 +884,234 @@
 </div>
 </div>
 </section>
+<!-- SIDEBAR SECTION: WORKFORCE DIRECTORY -->
+<section class="tab-content hidden space-y-6" id="tab-directory">
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Workforce Directory</h3>
+<p class="text-[12px] text-apple-secondary">Department of Data Science &amp; AI · Bangalore HQ (Hybrid)</p>
+</div>
+<span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">4 Active Members</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-[13px]">
+<thead>
+<tr class="border-b border-apple-border text-apple-secondary text-[11px] uppercase tracking-wider">
+<th class="py-2.5 px-3 font-medium">Employee</th>
+<th class="py-2.5 px-3 font-medium">ID</th>
+<th class="py-2.5 px-3 font-medium">Role &amp; Band</th>
+<th class="py-2.5 px-3 font-medium">Department</th>
+<th class="py-2.5 px-3 font-medium">Status</th>
+<th class="py-2.5 px-3 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-apple-borderSubtle">
+<tr class="bg-apple-subtle/60 hover:bg-apple-subtle transition-colors">
+<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
+<img alt="Prem Kumar" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S"/>
+<div>
+<div class="font-semibold text-apple-primary">Prem Kumar</div>
+<div class="text-[11px] text-apple-secondary">premkumarrss669@gmail.com</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono text-apple-secondary">NX-8842</td>
+<td class="py-3 px-3 text-apple-primary">Consultant · <span class="text-apple-secondary">Band L5</span></td>
+<td class="py-3 px-3 text-apple-secondary">Data Science &amp; AI</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border">
+<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active
+</span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-medium transition-colors" onclick="navigateSidebar('employees')" type="button">View Dossier</button>
+</td>
+</tr>
+<tr class="hover:bg-apple-subtle/40 transition-colors">
+<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">AS</div>
+<div>
+<div class="font-medium text-apple-primary">Ananya Sharma</div>
+<div class="text-[11px] text-apple-secondary">ananya.sharma@nexushr.corp</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono text-apple-secondary">NX-1040</td>
+<td class="py-3 px-3 text-apple-primary">VP, Data &amp; Analytics · <span class="text-apple-secondary">Band L8</span></td>
+<td class="py-3 px-3 text-apple-secondary">Data Science &amp; AI</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">Active</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="text-[11px] text-apple-secondary">Reporting Manager</span>
+</td>
+</tr>
+<tr class="hover:bg-apple-subtle/40 transition-colors">
+<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">RK</div>
+<div>
+<div class="font-medium text-apple-primary">Rohit Kulkarni</div>
+<div class="text-[11px] text-apple-secondary">rohit.k@nexushr.corp</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono text-apple-secondary">NX-2190</td>
+<td class="py-3 px-3 text-apple-primary">HR Business Partner · <span class="text-apple-secondary">Band L6</span></td>
+<td class="py-3 px-3 text-apple-secondary">People Operations</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-medium border border-apple-borderSubtle">Active</span>
+</td>
+<td class="py-3 px-3 text-right">
+<span class="text-[11px] text-apple-secondary">Assigned HRBP</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- SIDEBAR SECTION: SETTINGS -->
+<section class="tab-content hidden space-y-6" id="tab-settings">
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex items-center justify-between pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Enterprise Console &amp; Profile Settings</h3>
+<p class="text-[12px] text-apple-secondary">Manage notifications, security preferences, and SSO session for Prem Kumar (NX-8842)</p>
+</div>
+<span class="text-[11px] font-medium text-apple-primary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">SSO Verified</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex items-center justify-between">
+<div>
+<div class="text-[13px] font-medium text-apple-primary">Two-Factor Authentication (WebAuthn)</div>
+<span class="text-[11px] text-apple-secondary">Hardware passkey enabled on macOS</span>
+</div>
+<span class="text-[11px] font-medium px-2.5 py-1 rounded bg-apple-surface border border-apple-border text-apple-primary">Enabled</span>
+</div>
+<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex items-center justify-between">
+<div>
+<div class="text-[13px] font-medium text-apple-primary">Payslip &amp; Tax Alert Notifications</div>
+<span class="text-[11px] text-apple-secondary">Sent to premkumarrss669@gmail.com</span>
+</div>
+<span class="text-[11px] font-medium px-2.5 py-1 rounded bg-apple-surface border border-apple-border text-apple-primary">Active</span>
+</div>
+</div>
+</div>
+</section>
 </div>
 </main>
 </div>
 <!-- Interactive JavaScript -->
 <script>
+    const tabToSidebarMap = {
+      'tab-overview': 'employees',
+      'tab-compensation': 'payroll',
+      'tab-bank': 'payroll',
+      'tab-documents': 'compliance',
+      'tab-leave': 'leave',
+      'tab-appraisals': 'reports',
+      'tab-directory': 'directory',
+      'tab-settings': 'settings'
+    };
+
+    const sidebarToTabMap = {
+      'directory': 'tab-directory',
+      'employees': 'tab-overview',
+      'payroll': 'tab-compensation',
+      'leave': 'tab-leave',
+      'compliance': 'tab-documents',
+      'reports': 'tab-appraisals',
+      'settings': 'tab-settings'
+    };
+
+    const tabBreadcrumbLabels = {
+      'tab-overview': 'Prem Kumar',
+      'tab-compensation': 'Prem Kumar · Payroll & Comp',
+      'tab-bank': 'Prem Kumar · Bank & Tax',
+      'tab-documents': 'Prem Kumar · Compliance & Records',
+      'tab-leave': 'Prem Kumar · Leave & Attendance',
+      'tab-appraisals': 'Prem Kumar · Appraisals & Reports',
+      'tab-directory': 'Workforce Directory',
+      'tab-settings': 'Console Settings'
+    };
+
+    function highlightSidebar(navKey) {
+      document.querySelectorAll('.sidebar-link').forEach(function(link) {
+        const icon = link.querySelector('.sidebar-icon');
+        if (link.getAttribute('data-nav') === navKey) {
+          link.classList.add('bg-apple-subtle', 'text-apple-primary', 'font-medium');
+          link.classList.remove('text-apple-secondary', 'font-normal');
+          if (icon) {
+            icon.classList.add('text-apple-primary');
+            icon.classList.remove('text-apple-secondary');
+          }
+        } else {
+          link.classList.remove('bg-apple-subtle', 'text-apple-primary', 'font-medium');
+          link.classList.add('text-apple-secondary', 'font-normal');
+          if (icon) {
+            icon.classList.remove('text-apple-primary');
+            icon.classList.add('text-apple-secondary');
+          }
+        }
+      });
+    }
+
     // Tab switching for Apple-style segmented control
     function switchTab(tabId, el) {
       document.querySelectorAll('.tab-content').forEach(function(content) {
         content.classList.add('hidden');
+        content.classList.remove('block');
       });
       const activeTab = document.getElementById(tabId);
       if (activeTab) {
         activeTab.classList.remove('hidden');
+        activeTab.classList.add('block');
       }
+
+      const targetBtn = el || document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
       document.querySelectorAll('.tab-btn').forEach(function(btn) {
         btn.classList.remove('bg-apple-surface', 'text-apple-primary', 'apple-shadow-tab');
         btn.classList.add('text-apple-secondary');
       });
-      el.classList.add('bg-apple-surface', 'text-apple-primary', 'apple-shadow-tab');
-      el.classList.remove('text-apple-secondary');
+      if (targetBtn) {
+        targetBtn.classList.add('bg-apple-surface', 'text-apple-primary', 'apple-shadow-tab');
+        targetBtn.classList.remove('text-apple-secondary');
+      }
+
+      const navKey = tabToSidebarMap[tabId];
+      if (navKey) {
+        highlightSidebar(navKey);
+      }
+
+      const bc = document.getElementById('breadcrumbCurrent');
+      if (bc && tabBreadcrumbLabels[tabId]) {
+        bc.innerText = tabBreadcrumbLabels[tabId];
+      }
+    }
+
+    // Sidebar navigation handler
+    function navigateSidebar(navKey, el) {
+      const targetTabId = sidebarToTabMap[navKey] || 'tab-overview';
+      switchTab(targetTabId);
+      highlightSidebar(navKey);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Global search filter
+    function handleGlobalSearch(query) {
+      const q = (query || '').toLowerCase().trim();
+      if (!q) return;
+      if (q.includes('pay') || q.includes('salary') || q.includes('ctc') || q.includes('hra')) {
+        switchTab('tab-compensation');
+      } else if (q.includes('bank') || q.includes('ifsc') || q.includes('pan') || q.includes('tax') || q.includes('uan')) {
+        switchTab('tab-bank');
+      } else if (q.includes('doc') || q.includes('aadhaar') || q.includes('resume') || q.includes('degree')) {
+        switchTab('tab-documents');
+      } else if (q.includes('leave') || q.includes('holiday') || q.includes('attendance')) {
+        switchTab('tab-leave');
+      } else if (q.includes('appraisal') || q.includes('training') || q.includes('health') || q.includes('report')) {
+        switchTab('tab-appraisals');
+      } else if (q.includes('directory') || q.includes('ananya') || q.includes('rohit')) {
+        switchTab('tab-directory');
+      }
     }
 
     // Toggle Masked Account Number
