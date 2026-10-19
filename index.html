@@ -1182,34 +1182,27 @@
 </section>
 <!-- SIDEBAR SECTION: WORKFORCE DIRECTORY (SUPER ADMIN ONLY) -->
 <section class="tab-content hidden space-y-6" id="tab-directory">
-<!-- Shareable Employee Onboarding & Self-Service Details Form Link Banner -->
-<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-4">
+<!-- Employee Onboarding & Self-Service Form Action Card -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm">
 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 <div class="space-y-1">
 <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle border border-apple-borderSubtle text-[11px] font-semibold text-apple-primary">
-<span class="material-symbols-outlined text-[14px]">add_link</span>
-<span>Shareable Employee Onboarding &amp; Self-Service Details Form</span>
+<span class="material-symbols-outlined text-[14px]">how_to_reg</span>
+<span>Employee Onboarding &amp; Registration</span>
 </div>
-<h3 class="text-[15px] font-semibold text-apple-primary">Share Form Link with New or Existing Employees</h3>
-<p class="text-[12px] text-apple-secondary">Employees use this link to submit their editable Personal Details, Emergency Contact, Residential Address, Bank &amp; Tax PAN. Submissions land in your <strong>Super Admin Review Queue</strong> below to <strong>Approve</strong> or <strong>Reject with Mistake Correction Email</strong>.</p>
+<h3 class="text-[15px] font-semibold text-apple-primary">Employee Onboarding &amp; Self-Service Details</h3>
+<p class="text-[12px] text-apple-secondary">Employees submit their Personal Details, Emergency Contact, Residential Address, Bank &amp; Tax PAN. Submissions arrive directly into your <strong>Super Admin Review Queue</strong> below to <strong>Approve</strong> or <strong>Reject</strong>.</p>
 </div>
 <div class="flex flex-wrap items-center gap-2 shrink-0">
 <button class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1.5 transition-colors" onclick="copyShareableFormLink()" type="button">
 <span class="material-symbols-outlined text-[15px]">content_copy</span>
-<span>Copy Shareable Form Link</span>
+<span>Copy Form Link</span>
 </button>
 <button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors" onclick="openStandaloneEmployeeForm()" type="button">
 <span class="material-symbols-outlined text-[15px]">open_in_new</span>
-<span>Open Employee Form View</span>
+<span>Open Onboarding Form</span>
 </button>
 </div>
-</div>
-<div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12px]">
-<div class="flex items-center gap-2 overflow-hidden">
-<span class="text-apple-secondary font-medium shrink-0">Form URL:</span>
-<code class="font-mono text-apple-primary truncate" id="shareableFormUrlDisplay">https://spkumar944.github.io/employee-dashboard/?form=employee-onboarding</code>
-</div>
-<span class="text-[11px] text-apple-secondary shrink-0 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Encrypted Cloud Storage</span></span>
 </div>
 </div>
 
@@ -1899,9 +1892,10 @@ No pending employee form submissions awaiting review. Share the form link above 
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Detailed Mistake / Correction Instructions for Employee *</label>
         <textarea id="rejectMistakeNotes" rows="3" required placeholder="Describe what needs to be corrected (e.g. Please verify your Bank IFSC code and upload your full legal name as per PAN card)..." class="w-full p-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"></textarea>
       </div>
-      <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[11px] text-apple-secondary space-y-1">
-        <div class="font-semibold text-apple-primary">Personalized Correction Form Link included in Email:</div>
-        <div class="font-mono text-apple-primary break-all" id="rejectCorrectionLinkPreview">https://spkumar944.github.io/employee-dashboard/?form=employee-onboarding</div>
+      <div class="p-3 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[11px] text-apple-secondary flex items-center justify-between">
+        <span class="font-medium text-apple-primary">Correction form link will be embedded securely into employee notification email</span>
+        <span class="text-emerald-600 font-semibold flex items-center gap-1 shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Auto-Attached</span>
+        <span id="rejectCorrectionLinkPreview" class="hidden"></span>
       </div>
       <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-apple-borderSubtle">
         <button type="button" onclick="closeRejectCorrectionModal()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium transition-colors">Cancel</button>
@@ -4808,12 +4802,12 @@ No pending employee form submissions awaiting review. Share the form link above 
       const url = getShareableFormBaseUrl();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).then(function() {
-          showToast('Copied Shareable Employee Form Link to clipboard!');
+          showToast('Copied Onboarding Form Link to clipboard!');
         }).catch(function() {
-          showToast('Form Link: ' + url);
+          showToast('Onboarding form link ready to share');
         });
       } else {
-        showToast('Form Link: ' + url);
+        showToast('Onboarding form link ready to share');
       }
     }
 
