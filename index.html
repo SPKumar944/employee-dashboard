@@ -12,7 +12,6 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
     @layer base {
       html, body {
@@ -36,22 +35,32 @@
       border: 1px solid #e5e5ea;
     }
     /* Super Admin UI Isolation: Strictly hidden for non-superadmin accounts */
-    .superadmin-only-el {
+    .superadmin-only-el,
+    #sidebarDirectoryLink,
+    #sidebarOnboardingLink,
+    #topShareFormBtn,
+    #roleModeSwitcher,
+    #accessModeStatusBadge {
       display: none !important;
     }
     body.is-superadmin .superadmin-only-el {
       display: inline-flex !important;
     }
-    body.is-superadmin div.superadmin-only-el {
-      display: flex !important;
+    body.is-superadmin div.superadmin-only-el,
+    body.is-superadmin #roleModeSwitcher {
+      display: inline-flex !important;
     }
-    body.is-superadmin a.superadmin-only-el {
+    body.is-superadmin a.superadmin-only-el,
+    body.is-superadmin #sidebarDirectoryLink,
+    body.is-superadmin #sidebarOnboardingLink,
+    body.is-superadmin #topShareFormBtn {
       display: flex !important;
     }
     body.is-superadmin tr.superadmin-only-el {
       display: table-row !important;
     }
-    body.is-superadmin span.superadmin-only-el {
+    body.is-superadmin span.superadmin-only-el,
+    body.is-superadmin #accessModeStatusBadge {
       display: inline-flex !important;
     }
     .employee-only-lock-badge {
@@ -274,7 +283,7 @@
 
 <!-- AUTHENTICATED ENTERPRISE CONSOLE WRAPPER -->
 <div class="hidden" id="appConsoleWrapper">
-<!-- Minimalist Sidebar (Apple Human Interface Guidelines style) -->
+<!-- Minimalist Modern Enterprise Sidebar -->
 <aside class="fixed left-0 top-0 h-full w-60 bg-apple-surface border-r border-apple-border z-50 flex flex-col justify-between">
 <div class="flex flex-col">
 <!-- App Brandmark -->
@@ -364,7 +373,7 @@
 <!-- Role Mode Switcher (Visible Only to Super Admin SUKUMAR PREM KUMAR) -->
 <div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px] superadmin-only-el" id="roleModeSwitcher">
 <button class="px-2.5 py-1 rounded-full font-medium transition-all bg-apple-surface text-apple-primary apple-shadow-sm" id="roleBtnEmployee" onclick="setAccessMode('employee')" type="button">Employee View</button>
-<button class="px-2.5 py-1 rounded-full font-medium transition-all text-apple-secondary hover:text-apple-primary" id="roleBtnAdmin" onclick="setAccessMode('superadmin')" type="button">Super Admin</button>
+<button class="px-2.5 py-1 rounded-full font-medium transition-all text-apple-secondary hover:text-apple-primary" id="roleBtnAdmin" onclick="setAccessMode('superadmin')" type="button">Super Admin View</button>
 </div>
 <button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-all flex items-center gap-1.5 shadow-sm" onclick="openLeaveModal()" type="button">
 <span class="material-symbols-outlined text-[16px]">add</span>
@@ -454,7 +463,7 @@
 </div>
 </div>
 </div>
-<!-- 1. Apple-Style Employee Profile Header Card -->
+<!-- 1. Employee Profile Header Card -->
 <div class="bg-apple-surface rounded-2xl apple-border p-7 apple-shadow-sm space-y-6" id="employeeHeaderCard">
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
 <!-- Left Profile Identity -->
@@ -496,11 +505,11 @@
 </button>
 <button class="superadmin-only-el h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5" id="headerPersonalEditBtn" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">edit</span>
-<span>Edit Personal Details (Admin)</span>
+<span>Edit Personal Details</span>
 </button>
 <button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border superadmin-only-el" id="headerAdminEditBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[15px] text-apple-secondary">admin_panel_settings</span>
-<span>Edit Pay Scale &amp; Org (Admin)</span>
+<span>Edit Pay Scale &amp; Org</span>
 </button>
 <span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">verified_user</span>
@@ -508,7 +517,7 @@
 </span>
 </div>
 </div>
-<!-- Apple Segmented Control Bar -->
+<!-- Segmented Navigation Control Bar -->
 <div class="p-1 bg-apple-subtle rounded-xl flex items-center gap-1 overflow-x-auto">
 <button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium bg-apple-surface text-apple-primary apple-shadow-tab transition-all" data-tab="tab-overview" onclick="switchTab('tab-overview', this)">
               Overview
@@ -542,7 +551,7 @@
 </div>
 <button class="superadmin-only-el h-7 px-3 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors" id="overviewPersonalEditBtn" onclick="openPersonalEditModal()" type="button">
 <span class="material-symbols-outlined text-[14px]">edit</span>
-<span>Edit Personal Info (Super Admin)</span>
+<span>Edit Personal Info</span>
 </button>
 <span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">lock</span>
@@ -619,9 +628,9 @@
 <div class="space-y-4">
 <div class="flex items-center justify-between">
 <h3 class="text-[15px] font-semibold text-apple-primary">Organizational Unit</h3>
-<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary flex items-center gap-1 bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle transition-colors superadmin-only-el" id="orgUnitAdminBtn" onclick="openSuperAdminModal()" type="button">
-<span class="material-symbols-outlined text-[13px]">lock_person</span>
-<span>Super Admin</span>
+<button class="text-[11px] font-medium text-apple-secondary hover:text-apple-primary flex items-center gap-1 bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle transition-colors superadmin-only-el" id="orgUnitAdminBtn" onclick="openSuperAdminModal()" type="button" title="Edit Organizational Unit & Pay Band (Super Admin)">
+<span class="material-symbols-outlined text-[13px]">tune</span>
+<span>Edit Org Unit</span>
 </button>
 <span class="hidden text-[10px] font-medium text-apple-secondary bg-apple-subtle px-2 py-0.5 rounded-full border border-apple-borderSubtle employee-only-lock-badge">Read-Only</span>
 </div>
@@ -710,7 +719,7 @@
 <span class="text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle">Regime: 115BAC</span>
 <button class="h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 superadmin-only-el" id="compModifyPayScaleBtn" onclick="openSuperAdminModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">admin_panel_settings</span>
-<span>Modify Pay Scale (Super Admin)</span>
+<span>Modify Pay Scale</span>
 </button>
 <span class="hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle employee-only-lock-badge flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">lock</span>
@@ -817,9 +826,9 @@
 <p class="text-[12px] text-apple-secondary mt-1">Official itemized statements of earnings, allowances &amp; statutory tax withholdings. Downloadable as a structured PDF statement or viewable by both Employee and Super Admin.</p>
 </div>
 <div class="flex items-center gap-2">
-<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" onclick="downloadPayslipPdf('2026-09')" type="button">
-<span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
-<span>Download Latest Payslip PDF (Sep 2026)</span>
+<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" onclick="printPayslip('2026-09')" type="button" title="Print or Save Latest Payslip as PDF">
+<span class="material-symbols-outlined text-[14px]">print</span>
+<span>Print Latest Payslip (Sep 2026)</span>
 </button>
 </div>
 </div>
@@ -938,7 +947,7 @@
 <div class="flex items-center gap-2">
 <button class="superadmin-only-el h-8 px-3.5 bg-apple-primary hover:bg-black text-white rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" id="uploadDocTopBtn" onclick="openDocumentUploadModal()" type="button">
 <span class="material-symbols-outlined text-[15px]">upload_file</span>
-<span>Upload Document (Super Admin)</span>
+<span>Upload / Replace Document</span>
 </button>
 <span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-3 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">lock</span>
@@ -1087,7 +1096,7 @@
 <span class="text-[11px] font-medium px-2.5 py-0.5 rounded bg-apple-subtle text-apple-primary border border-apple-borderSubtle" id="dispAppraisalBadge">Exceeds Expectations</span>
 <button class="superadmin-only-el h-7 px-3 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium flex items-center gap-1 shadow-sm transition-colors" id="appraisalModifyAdminBtn" onclick="openAppraisalAdminModal()" type="button">
 <span class="material-symbols-outlined text-[13px]">admin_panel_settings</span>
-<span>Modify Appraisal (Super Admin)</span>
+<span>Update Appraisal</span>
 </button>
 <span class="employee-only-lock-badge hidden text-[11px] font-medium text-apple-secondary bg-apple-subtle px-2.5 py-1 rounded-full border border-apple-borderSubtle flex items-center gap-1">
 <span class="material-symbols-outlined text-[13px]">lock</span>
@@ -1999,7 +2008,7 @@ No pending employee form submissions awaiting review. Share the form link above 
   </div>
 </div>
 
-<!-- MODAL 8: APPLE BILL / DOCUMENT STYLE MONTHLY PAYSLIP VIEWER & DOWNLOADER -->
+<!-- MODAL 8: OFFICIAL MONTHLY PAYSLIP STATEMENT VIEWER & PRINT DIALOG -->
 <div id="applePayslipModal" class="fixed inset-0 z-[110] hidden bg-black/60 backdrop-blur-md p-4 sm:p-6 overflow-y-auto flex items-center justify-center">
   <div class="w-full max-w-3xl bg-apple-surface rounded-3xl apple-border apple-shadow-lg overflow-hidden my-auto">
     <!-- Top Action Toolbar -->
@@ -2010,25 +2019,17 @@ No pending employee form submissions awaiting review. Share the form link above 
         <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-apple-surface border border-apple-border text-apple-secondary">Direct Deposit · NEFT</span>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <button type="button" onclick="downloadPayslipPdf(currentViewingMonthKey)" class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" title="Download Official PDF Statement">
-          <span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
-          <span>Download PDF</span>
-        </button>
-        <button type="button" onclick="printApplePayslip()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border transition-colors flex items-center gap-1" title="Print Statement">
+        <button type="button" onclick="printPayslip()" class="h-8 px-4 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" title="Print Statement or Save as PDF">
           <span class="material-symbols-outlined text-[15px]">print</span>
-          <span>Print</span>
+          <span>Print / Save as PDF</span>
         </button>
-        <button type="button" onclick="downloadCurrentPayslipHtml()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border transition-colors flex items-center gap-1" title="Download HTML Document">
-          <span class="material-symbols-outlined text-[15px]">download</span>
-          <span>HTML</span>
-        </button>
-        <button type="button" onclick="closeApplePayslipModal()" class="w-8 h-8 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary hover:text-apple-primary transition-colors">
+        <button type="button" onclick="closePayslipModal()" class="w-8 h-8 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary hover:text-apple-primary transition-colors" title="Close">
           <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
     </div>
 
-    <!-- The Printable Apple Document Statement -->
+    <!-- The Printable Corporate Document Statement -->
     <div id="applePayslipDocument" class="p-8 sm:p-10 bg-white text-apple-primary space-y-7 text-[13px] font-sans">
       <!-- Document Header -->
       <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-apple-border pb-6">
@@ -2049,7 +2050,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Employee & Organization Metadata Block (Apple 2-Column Grid) -->
+      <!-- Employee & Organization Metadata Block (2-Column Grid) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px] bg-[#fafafc] p-4 rounded-2xl border border-apple-border">
         <div class="space-y-1.5">
           <div class="text-[10px] uppercase font-bold tracking-wider text-[#86868b]">EMPLOYEE DETAILS</div>
@@ -2120,7 +2121,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Itemized Earnings and Deductions Table (Apple Style) -->
+      <!-- Itemized Earnings and Deductions Table -->
       <div class="border border-apple-border rounded-2xl overflow-hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-apple-border">
           <!-- Left: Earnings -->
@@ -2193,7 +2194,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Net Salary Disbursed Banner (Apple Highlight Style) -->
+      <!-- Net Salary Disbursed Highlight Banner -->
       <div class="p-5 rounded-2xl bg-[#fafafc] border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span class="text-[10px] uppercase font-bold tracking-widest text-[#86868b] block">NET SALARY DISBURSED (A − B)</span>
@@ -2209,7 +2210,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         </div>
       </div>
 
-      <!-- Security Seal & Disclaimer (Apple Footer) -->
+      <!-- Security Seal & Disclaimer -->
       <div class="border-t border-apple-border pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-[#86868b]">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[16px] text-black">verified</span>
@@ -2684,14 +2685,21 @@ No pending employee form submissions awaiting review. Share the form link above 
     let loggedInEmployeeEmail = 'premkumarrss669@gmail.com';
     let loggedInEmployeePageId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
 
+    function isPremKumarSuperAdmin(email, name) {
+      const normEmail = (email || '').toLowerCase().trim();
+      const normName = (name || '').toUpperCase().trim();
+      const isEmailPrem = SUPER_ADMIN_EMAILS.indexOf(normEmail) >= 0;
+      const isNamePrem = normName.indexOf('PREM KUMAR') >= 0 || normName.indexOf('SUKUMAR PREM KUMAR') >= 0;
+      return Boolean(isEmailPrem || isNamePrem);
+    }
+
     function unlockConsole(email) {
       const normalizedEmail = (email || '').toLowerCase().trim();
       loggedInEmployeeEmail = normalizedEmail;
       const employee = APPROVED_EMPLOYEES[normalizedEmail] || (SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0 ? APPROVED_EMPLOYEES['premkumarrss669@gmail.com'] : null);
       
-      const isPremEmail = SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0;
-      const isPremName = employee && employee.name && employee.name.toUpperCase().indexOf('PREM KUMAR') >= 0;
-      isSuperAdminUser = Boolean(isPremEmail || isPremName);
+      // Strict Super Admin Enforcement: ONLY Prem Kumar Sukumar can be Super Admin
+      isSuperAdminUser = isPremKumarSuperAdmin(normalizedEmail, employee && employee.name);
       loggedInEmployeePageId = (employee && employee.pageId) || (isSuperAdminUser ? '3b63448d-38a7-8193-b60f-ffc05b1aad75' : '3b93448d-38a7-8142-871e-ea21bfa03f04');
 
       if (isSuperAdminUser) {
@@ -2707,10 +2715,10 @@ No pending employee form submissions awaiting review. Share the form link above 
       if (roleSwitcher) {
         if (isSuperAdminUser) {
           roleSwitcher.classList.remove('hidden');
-          roleSwitcher.style.display = 'inline-flex';
+          roleSwitcher.style.setProperty('display', 'inline-flex', 'important');
         } else {
           roleSwitcher.classList.add('hidden');
-          roleSwitcher.style.display = 'none';
+          roleSwitcher.style.setProperty('display', 'none', 'important');
         }
       }
 
@@ -2727,6 +2735,8 @@ No pending employee form submissions awaiting review. Share the form link above 
 
     function logoutSession() {
       sessionStorage.removeItem('nexus_hr_authenticated_email');
+      isSuperAdminUser = false;
+      currentAccessMode = 'employee';
       document.body.classList.remove('is-superadmin');
       if (totpIntervalId) clearInterval(totpIntervalId);
       document.getElementById('appConsoleWrapper').classList.add('hidden');
@@ -2818,11 +2828,16 @@ No pending employee form submissions awaiting review. Share the form link above 
       });
     }
 
-    // Tab switching for Apple-style segmented control inside Employee Profile
+    // Tab switching for segmented control inside Employee Profile
     function switchTab(tabId, el) {
-      if (tabId === 'tab-directory' && currentAccessMode !== 'superadmin') {
-        showToast('Access Restricted: Only Super Admin can view the Workforce Directory');
-        return;
+      if (tabId === 'tab-directory') {
+        if (!isSuperAdminUser) {
+          showToast('Access Restricted: Only Super Admin can view the Workforce Directory');
+          return;
+        }
+        if (currentAccessMode !== 'superadmin') {
+          setAccessMode('superadmin', true);
+        }
       }
       const empCard = document.getElementById('employeeHeaderCard');
       const banner = document.getElementById('sidebarPageBanner');
@@ -2859,9 +2874,14 @@ No pending employee form submissions awaiting review. Share the form link above 
 
     // Full-page Sidebar navigation handler
     function navigateSidebar(navKey, el) {
-      if (navKey === 'directory' && currentAccessMode !== 'superadmin') {
-        showToast('Access Restricted: Only Super Admin can view all employees');
-        return;
+      if (navKey === 'directory') {
+        if (!isSuperAdminUser) {
+          showToast('Access Restricted: Only Super Admin can view all employees');
+          return;
+        }
+        if (currentAccessMode !== 'superadmin') {
+          setAccessMode('superadmin', true);
+        }
       }
       highlightSidebar(navKey);
       const empCard = document.getElementById('employeeHeaderCard');
@@ -3079,6 +3099,7 @@ No pending employee form submissions awaiting review. Share the form link above 
         }
         document.querySelectorAll('.superadmin-only-el').forEach(function(el) {
           el.classList.remove('hidden');
+          el.style.removeProperty('display');
         });
         document.querySelectorAll('.employee-only-lock-badge').forEach(function(el) {
           el.classList.add('hidden');
@@ -3112,17 +3133,20 @@ No pending employee form submissions awaiting review. Share the form link above 
         }
         document.querySelectorAll('.superadmin-only-el').forEach(function(el) {
           el.classList.add('hidden');
+          el.style.setProperty('display', 'none', 'important');
         });
         document.querySelectorAll('.employee-only-lock-badge').forEach(function(el) {
           el.classList.remove('hidden');
         });
-        // Ensure employee cannot stay on Workforce Directory or another employee's profile
-        if (activeNotionRowId !== loggedInEmployeePageId) {
-          openEmployeeDossier(loggedInEmployeePageId);
-        } else {
-          const dirTab = document.getElementById('tab-directory');
-          if (dirTab && !dirTab.classList.contains('hidden')) {
-            navigateSidebar('employees');
+        // Ensure regular non-admin employee cannot stay on Workforce Directory or another employee's profile
+        if (!isSuperAdminUser) {
+          if (activeNotionRowId !== loggedInEmployeePageId) {
+            openEmployeeDossier(loggedInEmployeePageId);
+          } else {
+            const dirTab = document.getElementById('tab-directory');
+            if (dirTab && !dirTab.classList.contains('hidden')) {
+              navigateSidebar('employees');
+            }
           }
         }
         if (!silent && isSuperAdminUser) {
@@ -3157,8 +3181,8 @@ No pending employee form submissions awaiting review. Share the form link above 
 
     // Open & Save Employee Personal Details Modal (Super Admin Only once employee is approved)
     function openPersonalEditModal() {
-      if (currentAccessMode !== 'superadmin') {
-        showToast('Profile Locked — Once approved by Super Admin, only Super Admin can edit employee details.');
+      if (!isSuperAdminUser) {
+        showToast('Profile Locked — Only Super Admin can edit approved employee details.');
         return;
       }
       const fnInput = document.getElementById('inputFullName');
@@ -3296,8 +3320,8 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function openDocumentUploadModal(slotId) {
-      if (currentAccessMode !== 'superadmin') {
-        showToast('Document Vault Locked — Approved employees cannot modify compliance documents. Contact Super Admin.');
+      if (!isSuperAdminUser) {
+        showToast('Document Vault Locked — Only Super Admin can upload or replace documents.');
         return;
       }
       const catSelect = document.getElementById('docUploadCategorySelect');
@@ -3459,6 +3483,10 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function openSuperAdminModal() {
+      if (!isSuperAdminUser) {
+        showToast('Access Restricted: Only Super Admin can modify pay scale & organization');
+        return;
+      }
       populateSuperAdminForm();
       const banner = document.getElementById('superAdminPermissionBanner');
       const form = document.getElementById('superAdminEditForm');
@@ -3514,7 +3542,7 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     // ============================================================================
-    // 3B. APPLE-STYLE DETAILED MONTHLY PAYSLIPS ENGINE (FOR EMPLOYEE & SUPER ADMIN)
+    // 3B. ITEMIZED MONTHLY PAYSLIPS ENGINE (FOR EMPLOYEE & SUPER ADMIN)
     // ============================================================================
     const PAST_COMPLETED_MONTHS = [
       { key: '2026-09', label: 'September 2026', period: 'Sep 01 – Sep 30, 2026', disbursedOn: '30 Sep 2026', totalDays: 30, payableDays: 30, utr: 'IDFB984129482' },
@@ -3593,19 +3621,13 @@ No pending employee form submissions awaiting review. Share the form link above 
             '</td>' +
             '<td class="py-3 px-3 text-right">' +
               '<div class="flex items-center justify-end gap-1.5">' +
-                '<button type="button" onclick="viewApplePayslip(\'' + m.key + '\')" class="h-7 px-2.5 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border text-[11px] font-medium transition-colors flex items-center gap-1" title="View Statement">' +
+                '<button type="button" onclick="viewPayslip(\'' + m.key + '\')" class="h-7 px-2.5 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border text-[11px] font-medium transition-colors flex items-center gap-1" title="View Itemized Statement">' +
                   '<span class="material-symbols-outlined text-[14px]">visibility</span>' +
                   '<span>View</span>' +
                 '</button>' +
-                '<button type="button" onclick="downloadPayslipPdf(\'' + m.key + '\')" class="h-7 px-2.5 rounded-lg bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1 shadow-sm" title="Download Official PDF">' +
-                  '<span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>' +
-                  '<span>PDF</span>' +
-                '</button>' +
-                '<button type="button" onclick="printApplePayslip(\'' + m.key + '\')" class="h-7 px-2 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-secondary hover:text-apple-primary border border-apple-border text-[11px] font-medium transition-colors" title="Print Statement">' +
+                '<button type="button" onclick="printPayslip(\'' + m.key + '\')" class="h-7 px-2.5 rounded-lg bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1 shadow-sm" title="Print Statement / Save as PDF">' +
                   '<span class="material-symbols-outlined text-[14px]">print</span>' +
-                '</button>' +
-                '<button type="button" onclick="downloadApplePayslip(\'' + m.key + '\')" class="h-7 px-2 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-secondary hover:text-apple-primary border border-apple-border text-[11px] font-medium transition-colors" title="Download HTML File">' +
-                  '<span class="material-symbols-outlined text-[14px]">download</span>' +
+                  '<span>Print</span>' +
                 '</button>' +
               '</div>' +
             '</td>' +
@@ -3614,7 +3636,7 @@ No pending employee form submissions awaiting review. Share the form link above 
       }).join('');
     }
 
-    function viewApplePayslip(monthKey) {
+    function viewPayslip(monthKey) {
       currentViewingMonthKey = monthKey || '2026-09';
       const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === currentViewingMonthKey; }) || PAST_COMPLETED_MONTHS[0];
 
@@ -3675,83 +3697,94 @@ No pending employee form submissions awaiting review. Share the form link above 
       if (modal) modal.classList.remove('hidden');
     }
 
-    function closeApplePayslipModal() {
+    const viewApplePayslip = viewPayslip;
+
+    function closePayslipModal() {
       const modal = document.getElementById('applePayslipModal');
       if (modal) modal.classList.add('hidden');
     }
 
-    function downloadPayslipPdf(monthKey) {
-      viewApplePayslip(monthKey);
-      const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === (monthKey || currentViewingMonthKey); }) || PAST_COMPLETED_MONTHS[0];
-      const empName = personalData.fullName || 'Employee';
-      const cleanName = empName.replace(/[^a-zA-Z0-9]/g, '_');
-      const filename = 'Payslip_' + cleanName + '_' + m.key + '.pdf';
-      showToast('Generating official PDF statement for ' + m.label + '…');
+    const closeApplePayslipModal = closePayslipModal;
 
-      const docEl = document.getElementById('applePayslipDocument');
-      if (!docEl) return;
-
-      const clone = docEl.cloneNode(true);
-      clone.style.width = '750px';
-      clone.style.maxWidth = '750px';
-      clone.style.margin = '0 auto';
-      clone.style.background = '#ffffff';
-      clone.style.padding = '24px';
-      clone.style.boxSizing = 'border-box';
-
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.left = '-9999px';
-      container.style.top = '0';
-      container.style.width = '800px';
-      container.style.background = '#ffffff';
-      container.style.zIndex = '-1000';
-      container.appendChild(clone);
-      document.body.appendChild(container);
-
-      if (typeof html2pdf !== 'undefined') {
-        const opt = {
-          margin: [8, 8, 8, 8],
-          filename: filename,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(clone).save().then(function() {
-          if (container.parentNode) container.parentNode.removeChild(container);
-          showToast('Downloaded ' + filename);
-        }).catch(function(err) {
-          console.error('html2pdf fallback to print:', err);
-          if (container.parentNode) container.parentNode.removeChild(container);
-          printApplePayslip(monthKey);
-        });
-      } else {
-        if (container.parentNode) container.parentNode.removeChild(container);
-        printApplePayslip(monthKey);
-      }
-    }
-
-    function printApplePayslip(monthKey) {
-      if (monthKey) viewApplePayslip(monthKey);
+    function printPayslip(monthKey) {
+      if (monthKey) viewPayslip(monthKey);
       const docEl = document.getElementById('applePayslipDocument');
       if (!docEl) return;
       const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === currentViewingMonthKey; }) || PAST_COMPLETED_MONTHS[0];
       const empName = personalData.fullName || 'Employee';
-      const printWindow = window.open('', '_blank', 'width=850,height=1000');
+      const printWindow = window.open('', '_blank', 'width=880,height=1000');
       if (printWindow) {
         printWindow.document.write('<!DOCTYPE html>' +
-          '<html><head><meta charset="utf-8">' +
+          '<html lang="en"><head><meta charset="utf-8">' +
           '<title>' + empName + ' — Payslip ' + m.label + '</title>' +
           '<link rel="preconnect" href="https://fonts.googleapis.com">' +
           '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-          '<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">' +
-          '<script src="https://cdn.tailwindcss.com"><\/script>' +
+          '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">' +
           '<style>' +
-          '  @page { size: A4 portrait; margin: 10mm; }' +
-          '  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background: #ffffff !important; color: #1d1d1f; margin: 0; padding: 24px; }' +
-          '  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
+          '  @page { size: A4 portrait; margin: 12mm 10mm; }' +
+          '  * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
+          '  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif; background: #ffffff !important; color: #1d1d1f; margin: 0; padding: 24px; font-size: 13px; line-height: 1.45; }' +
+          '  .no-print { margin-bottom: 20px; padding: 12px 18px; background: #f5f5f7; border: 1px solid #e5e5ea; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }' +
+          '  .print-btn { background: #1d1d1f; color: #ffffff; border: none; padding: 8px 18px; font-size: 12px; font-weight: 600; border-radius: 9999px; cursor: pointer; }' +
+          '  .print-btn:hover { background: #000000; }' +
+          '  @media print { .no-print { display: none !important; } body { padding: 0 !important; } }' +
+          '  /* Base layout styling for the payslip document */' +
+          '  .space-y-7 > * + * { margin-top: 1.75rem; }' +
+          '  .space-y-1 > * + * { margin-top: 0.25rem; }' +
+          '  .space-y-1\.5 > * + * { margin-top: 0.375rem; }' +
+          '  .space-y-2 > * + * { margin-top: 0.5rem; }' +
+          '  .grid { display: grid; }' +
+          '  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }' +
+          '  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }' +
+          '  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }' +
+          '  .gap-3 { gap: 0.75rem; }' +
+          '  .gap-4 { gap: 1rem; }' +
+          '  .flex { display: flex; }' +
+          '  .flex-col { flex-direction: column; }' +
+          '  .items-center { align-items: center; }' +
+          '  .items-start { align-items: flex-start; }' +
+          '  .justify-between { justify-content: space-between; }' +
+          '  .text-right { text-align: right; }' +
+          '  .text-center { text-align: center; }' +
+          '  .border { border: 1px solid #e5e5ea; }' +
+          '  .border-b { border-bottom: 1px solid #e5e5ea; }' +
+          '  .border-t { border-top: 1px solid #e5e5ea; }' +
+          '  .border-2 { border-width: 2px; }' +
+          '  .rounded-2xl { border-radius: 1rem; }' +
+          '  .rounded-xl { border-radius: 0.75rem; }' +
+          '  .rounded-lg { border-radius: 0.5rem; }' +
+          '  .rounded-full { border-radius: 9999px; }' +
+          '  .p-4 { padding: 1rem; }' +
+          '  .p-5 { padding: 1.25rem; }' +
+          '  .p-8 { padding: 2rem; }' +
+          '  .pb-1 { padding-bottom: 0.25rem; }' +
+          '  .pb-6 { padding-bottom: 1.5rem; }' +
+          '  .pt-3 { padding-top: 0.75rem; }' +
+          '  .pt-5 { padding-top: 1.25rem; }' +
+          '  .px-4 { padding-left: 1rem; padding-right: 1rem; }' +
+          '  .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }' +
+          '  .bg-white { background-color: #ffffff; }' +
+          '  .bg-black { background-color: #000000; }' +
+          '  .text-white { color: #ffffff; }' +
+          '  .text-black { color: #000000; }' +
+          '  .font-mono { font-family: "JetBrains Mono", Menlo, Consolas, monospace; }' +
+          '  .font-semibold { font-weight: 600; }' +
+          '  .font-bold { font-weight: 700; }' +
+          '  .font-medium { font-weight: 500; }' +
+          '  .uppercase { text-transform: uppercase; }' +
+          '  .tracking-tight { letter-spacing: -0.025em; }' +
+          '  .tracking-wider { letter-spacing: 0.05em; }' +
+          '  .tracking-widest { letter-spacing: 0.1em; }' +
           '</style>' +
+          '<script src="https://cdn.tailwindcss.com"><\/script>' +
           '</head><body>' +
+          '<div class="no-print">' +
+          '  <div>' +
+          '    <div style="font-weight: 600; font-size: 13px;">' + empName + ' — Official Payslip (' + m.label + ')</div>' +
+          '    <div style="font-size: 11px; color: #86868b; margin-top: 2px;">Direct print preview. Choose "Save as PDF" in your print dialog destination to save as PDF.</div>' +
+          '  </div>' +
+          '  <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>' +
+          '</div>' +
           docEl.outerHTML +
           '<script>' +
           '  window.onload = function() { setTimeout(function() { window.print(); }, 400); };' +
@@ -3764,63 +3797,7 @@ No pending employee form submissions awaiting review. Share the form link above 
       }
     }
 
-    function downloadCurrentPayslipHtml() {
-      downloadApplePayslip(currentViewingMonthKey);
-    }
-
-    function downloadApplePayslip(monthKey) {
-      if (!document.getElementById('applePayslipModal') || document.getElementById('applePayslipModal').classList.contains('hidden')) {
-        viewApplePayslip(monthKey);
-      }
-      const docEl = document.getElementById('applePayslipDocument');
-      if (!docEl) return;
-      const docHtml = docEl.innerHTML;
-      const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === (monthKey || currentViewingMonthKey); }) || PAST_COMPLETED_MONTHS[0];
-      const empName = personalData.fullName || 'Employee';
-      const cleanName = empName.replace(/[^a-zA-Z0-9]/g, '_');
-      const filename = 'Payslip_' + cleanName + '_' + m.key + '.html';
-
-      const fullHtml = '<!DOCTYPE html>\n' +
-        '<html lang="en">\n' +
-        '<head>\n' +
-        '  <meta charset="UTF-8">\n' +
-        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-        '  <title>' + empName + ' — Payslip ' + m.label + ' — NexusHR</title>\n' +
-        '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-        '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-        '  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">\n' +
-        '  <script src="https://cdn.tailwindcss.com"><\/script>\n' +
-        '  <style>\n' +
-        '    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: #f5f5f7; margin: 0; padding: 32px 16px; color: #1d1d1f; }\n' +
-        '    @media print {\n' +
-        '      body { background-color: #ffffff; padding: 0; }\n' +
-        '      .no-print { display: none !important; }\n' +
-        '      #printablePayslip { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }\n' +
-        '    }\n' +
-        '  </style>\n' +
-        '</head>\n' +
-        '<body>\n' +
-        '  <div class="max-w-3xl mx-auto mb-4 flex items-center justify-between no-print">\n' +
-        '    <div class="text-[12px] text-[#86868b]">NexusHR Official Corporate Statement · ' + m.label + '</div>\n' +
-        '    <button onclick="window.print()" class="h-8 px-4 rounded-full bg-black text-white text-[12px] font-semibold cursor-pointer">Print Document</button>\n' +
-        '  </div>\n' +
-        '  <div id="printablePayslip" class="max-w-3xl mx-auto bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm space-y-7 text-[13px]">\n' +
-        docHtml +
-        '  </div>\n' +
-        '</body>\n' +
-        '</html>';
-
-      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Downloaded ' + filename);
-    }
+    const printApplePayslip = printPayslip;
 
     // ============================================================================
     // 4. APPLY FOR LEAVE WORKFLOW, QUOTA ENGINE & ROLE NOTIFICATIONS
@@ -4388,7 +4365,7 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function openAppraisalAdminModal() {
-      if (currentAccessMode !== 'superadmin') {
+      if (!isSuperAdminUser) {
         showToast('Access Restricted: Only Super Admin can modify Appraisals & Ratings');
         return;
       }
@@ -4526,7 +4503,7 @@ No pending employee form submissions awaiting review. Share the form link above 
 
     function openEmployeeDossier(pageId) {
       // Enforce strict isolation: non-Super-Admin employees can ONLY view their own profile
-      if (currentAccessMode !== 'superadmin' && pageId !== loggedInEmployeePageId) {
+      if (!isSuperAdminUser && pageId !== loggedInEmployeePageId) {
         showToast('Access Restricted: Employees can only view their own profile');
         pageId = loggedInEmployeePageId;
       }
@@ -4670,6 +4647,10 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function openAddEmployeeModal() {
+      if (!isSuperAdminUser) {
+        showToast('Access Restricted: Only Super Admin can add employees');
+        return;
+      }
       document.getElementById('addEmployeeModal').classList.remove('hidden');
     }
 
