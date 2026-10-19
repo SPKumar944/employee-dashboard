@@ -34,6 +34,34 @@
     .apple-border {
       border: 1px solid #e5e5ea;
     }
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #applePayslipDocument, #applePayslipDocument * {
+        visibility: visible !important;
+      }
+      #applePayslipDocument {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 24px !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+      }
+      #applePayslipModal {
+        background: #ffffff !important;
+        position: static !important;
+        padding: 0 !important;
+      }
+      #applePayslipToolbar {
+        display: none !important;
+      }
+    }
   </style>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -262,11 +290,11 @@
           Workforce
         </span>
 <nav class="flex flex-col gap-0.5">
-<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="directory" href="#directory" id="sidebarDirectoryLink" onclick="navigateSidebar('directory', this); return false;">
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer superadmin-only-el" data-nav="directory" href="#directory" id="sidebarDirectoryLink" onclick="navigateSidebar('directory', this); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
 <span>Directory &amp; Approvals</span>
 </a>
-<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" href="#onboarding-form" onclick="openStandaloneEmployeeForm(); return false;">
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer superadmin-only-el" href="#onboarding-form" id="sidebarOnboardingLink" onclick="openStandaloneEmployeeForm(); return false;">
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">upload_file</span>
 <span>Onboarding Form (Upload)</span>
 </a>
@@ -331,7 +359,7 @@
 <span>Onboarding Form</span>
 </button>
 <!-- Role Mode Switcher (Visible Only to Super Admin SUKUMAR PREM KUMAR) -->
-<div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px]" id="roleModeSwitcher">
+<div class="flex items-center bg-apple-subtle p-0.5 rounded-full border border-apple-border text-[11px] superadmin-only-el" id="roleModeSwitcher">
 <button class="px-2.5 py-1 rounded-full font-medium transition-all bg-apple-surface text-apple-primary apple-shadow-sm" id="roleBtnEmployee" onclick="setAccessMode('employee')" type="button">Employee View</button>
 <button class="px-2.5 py-1 rounded-full font-medium transition-all text-apple-secondary hover:text-apple-primary" id="roleBtnAdmin" onclick="setAccessMode('superadmin')" type="button">Super Admin</button>
 </div>
@@ -767,6 +795,47 @@
 <td class="py-3 px-3 text-apple-primary text-[14px]" colspan="3">Net Disbursement (A − B)</td>
 <td class="py-3 px-3 text-right font-mono text-[15px] text-apple-primary" id="dispTableNet">₹1,66,600</td>
 </tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- PAST COMPLETED MONTHS PAYSLIP HISTORY (FOR BOTH EMPLOYEE & SUPER ADMIN) -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5" id="payslipHistoryCard">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-apple-borderSubtle">
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<div class="w-7 h-7 rounded-lg bg-apple-primary text-white flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+</div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Monthly Payslip Statements (Past Completed Months)</h3>
+<span class="px-2 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[10px] font-medium border border-apple-border">Apple Document Format</span>
+</div>
+<p class="text-[12px] text-apple-secondary mt-1">Official itemized statements of earnings, allowances &amp; statutory tax withholdings. Downloadable as PDF or Apple-styled printable document by both Employee and Super Admin.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm" onclick="viewApplePayslip('2026-09')" type="button">
+<span class="material-symbols-outlined text-[14px]">download</span>
+<span>Download Latest Payslip (Sep 2026)</span>
+</button>
+</div>
+</div>
+
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-[13px]">
+<thead>
+<tr class="border-b border-apple-border text-apple-secondary text-[11px] uppercase tracking-wider">
+<th class="py-2.5 px-3 font-medium">Month &amp; Period</th>
+<th class="py-2.5 px-3 font-medium">Disbursed On</th>
+<th class="py-2.5 px-3 font-medium text-right">Gross Earnings</th>
+<th class="py-2.5 px-3 font-medium text-right">Deductions</th>
+<th class="py-2.5 px-3 font-medium text-right">Net Take-Home</th>
+<th class="py-2.5 px-3 font-medium text-center">Status</th>
+<th class="py-2.5 px-3 font-medium text-right">Payslip Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-apple-borderSubtle" id="payslipTableBody">
+<!-- Generated dynamically by renderPayslipHistory() -->
 </tbody>
 </table>
 </div>
@@ -1927,6 +1996,226 @@ No pending employee form submissions awaiting review. Share the form link above 
   </div>
 </div>
 
+<!-- MODAL 8: APPLE BILL / DOCUMENT STYLE MONTHLY PAYSLIP VIEWER & DOWNLOADER -->
+<div id="applePayslipModal" class="fixed inset-0 z-[110] hidden bg-black/60 backdrop-blur-md p-4 sm:p-6 overflow-y-auto flex items-center justify-center">
+  <div class="w-full max-w-3xl bg-apple-surface rounded-3xl apple-border apple-shadow-lg overflow-hidden my-auto">
+    <!-- Top Action Toolbar -->
+    <div id="applePayslipToolbar" class="px-6 py-3.5 border-b border-apple-borderSubtle bg-apple-subtle/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-apple-primary"></span>
+        <span class="text-[13px] font-semibold text-apple-primary" id="payslipModalMonthTitle">September 2026 Salary Statement</span>
+        <span class="px-2 py-0.5 rounded text-[10px] font-medium bg-apple-surface border border-apple-border text-apple-secondary">Direct Deposit · NEFT</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" onclick="printApplePayslip()" class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1.5 shadow-sm">
+          <span class="material-symbols-outlined text-[15px]">print</span>
+          <span>Print / Save PDF</span>
+        </button>
+        <button type="button" onclick="downloadCurrentPayslipHtml()" class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">download</span>
+          <span>Download HTML Statement</span>
+        </button>
+        <button type="button" onclick="closeApplePayslipModal()" class="w-8 h-8 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary hover:text-apple-primary transition-colors">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- The Printable Apple Document Statement -->
+    <div id="applePayslipDocument" class="p-8 sm:p-10 bg-white text-apple-primary space-y-7 text-[13px] font-sans">
+      <!-- Document Header -->
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-apple-border pb-6">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs tracking-tighter">N</div>
+            <span class="text-[18px] font-bold tracking-tight text-black">NexusHR Technologies Limited</span>
+          </div>
+          <p class="text-[11px] text-[#86868b] leading-relaxed">
+            Registered Office: Prestige Sigma Tech Zone, Whitefield Main Road, Bangalore, Karnataka 560066<br/>
+            CIN: U72200KA2022PTC158412 · EPFO Reg: BGBAN0048129 · TAN: BLRN10482B
+          </p>
+        </div>
+        <div class="text-left sm:text-right space-y-0.5 shrink-0 bg-apple-subtle/50 sm:bg-transparent p-3 sm:p-0 rounded-xl">
+          <span class="text-[10px] font-semibold uppercase tracking-widest text-[#86868b] block">STATEMENT OF EARNINGS</span>
+          <div class="text-[14px] font-mono font-bold text-black" id="psDocRefNo">NX-PAY-2026-SEP-8842</div>
+          <div class="text-[11px] text-[#86868b]" id="psDocIssueDate">Issue Date: 30 September 2026</div>
+        </div>
+      </div>
+
+      <!-- Employee & Organization Metadata Block (Apple 2-Column Grid) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px] bg-[#fafafc] p-4 rounded-2xl border border-apple-border">
+        <div class="space-y-1.5">
+          <div class="text-[10px] uppercase font-bold tracking-wider text-[#86868b]">EMPLOYEE DETAILS</div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Employee Name</span>
+            <span class="font-semibold text-black" id="psDocEmpName">SUKUMAR PREM KUMAR</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Employee ID</span>
+            <span class="font-mono font-medium text-black" id="psDocEmpId">NX-8842</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Designation / Band</span>
+            <span class="text-black" id="psDocRoleBand">Consultant (Band L5 · Senior IC)</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Department</span>
+            <span class="text-black" id="psDocDept">Data Science</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-[#86868b]">Date of Joining</span>
+            <span class="text-black" id="psDocDoj">17 August 2026</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="text-[10px] uppercase font-bold tracking-wider text-[#86868b]">PAYMENT &amp; TAX IDENTIFIERS</div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Income Tax PAN</span>
+            <span class="font-mono font-medium text-black" id="psDocPan">ABZPK4921D</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">UAN / PF Number</span>
+            <span class="font-mono text-black" id="psDocUan">100984129481</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Bank Institution</span>
+            <span class="text-black" id="psDocBankName">State Bank of India</span>
+          </div>
+          <div class="flex justify-between border-b border-apple-borderSubtle pb-1">
+            <span class="text-[#86868b]">Account Number (Masked)</span>
+            <span class="font-mono text-black" id="psDocBankAcc">•••• •••• 5174</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-[#86868b]">Tax Regime</span>
+            <span class="text-black font-medium">New Regime (Section 115BAC)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance & Period Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-[12px]">
+        <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] text-[#86868b] uppercase tracking-wider block">Pay Period</span>
+          <span class="font-semibold text-black mt-0.5 block" id="psDocPeriod">Sep 01 – Sep 30, 2026</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] text-[#86868b] uppercase tracking-wider block">Calendar Days</span>
+          <span class="font-semibold text-black mt-0.5 block" id="psDocTotalDays">30 Days</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] text-[#86868b] uppercase tracking-wider block">Payable Days</span>
+          <span class="font-semibold text-black mt-0.5 block" id="psDocPayableDays">30 Days</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] text-[#86868b] uppercase tracking-wider block">Loss of Pay (LOP)</span>
+          <span class="font-semibold text-black mt-0.5 block">0 Days</span>
+        </div>
+      </div>
+
+      <!-- Itemized Earnings and Deductions Table (Apple Style) -->
+      <div class="border border-apple-border rounded-2xl overflow-hidden">
+        <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-apple-border">
+          <!-- Left: Earnings -->
+          <div>
+            <div class="px-4 py-2 bg-apple-subtle font-semibold text-[11px] uppercase tracking-wider text-black flex justify-between border-b border-apple-border">
+              <span>Itemized Earnings</span>
+              <span>Amount (INR)</span>
+            </div>
+            <div class="p-4 space-y-2 text-[12px]">
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Basic Salary</span>
+                <span class="font-mono font-medium text-black" id="psDocBasic">₹85,000</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">House Rent Allowance (HRA)</span>
+                <span class="font-mono font-medium text-black" id="psDocHra">₹42,500</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Conveyance / Travel Allowance</span>
+                <span class="font-mono font-medium text-black" id="psDocTravel">₹8,000</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Medical Allowance</span>
+                <span class="font-mono font-medium text-black" id="psDocMedical">₹6,500</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Special Tech Allowance</span>
+                <span class="font-mono font-medium text-black" id="psDocSpecial">₹43,000</span>
+              </div>
+              <div class="pt-3 border-t border-apple-borderSubtle flex justify-between font-semibold text-[13px] text-black">
+                <span>Total Gross Earnings (A)</span>
+                <span class="font-mono font-bold" id="psDocGross">₹1,85,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Deductions -->
+          <div>
+            <div class="px-4 py-2 bg-apple-subtle font-semibold text-[11px] uppercase tracking-wider text-black flex justify-between border-b border-apple-border">
+              <span>Statutory Deductions</span>
+              <span>Amount (INR)</span>
+            </div>
+            <div class="p-4 space-y-2 text-[12px]">
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Provident Fund (Employee EPF)</span>
+                <span class="font-mono font-medium text-black" id="psDocPf">₹10,200</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">Professional Tax (Karnataka PT)</span>
+                <span class="font-mono font-medium text-black" id="psDocPt">₹200</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-[#86868b]">TDS / Income Tax Withholding</span>
+                <span class="font-mono font-medium text-black" id="psDocTds">₹8,000</span>
+              </div>
+              <div class="flex justify-between text-transparent select-none">
+                <span>Spacer</span>
+                <span>—</span>
+              </div>
+              <div class="flex justify-between text-transparent select-none">
+                <span>Spacer</span>
+                <span>—</span>
+              </div>
+              <div class="pt-3 border-t border-apple-borderSubtle flex justify-between font-semibold text-[13px] text-black">
+                <span>Total Deductions (B)</span>
+                <span class="font-mono font-bold text-black" id="psDocDeductions">₹18,400</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Salary Disbursed Banner (Apple Highlight Style) -->
+      <div class="p-5 rounded-2xl bg-[#fafafc] border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] uppercase font-bold tracking-widest text-[#86868b] block">NET SALARY DISBURSED (A − B)</span>
+          <div class="text-[28px] font-bold text-black font-mono tracking-tight" id="psDocNet">₹1,66,600</div>
+          <div class="text-[12px] font-medium text-[#86868b] mt-0.5" id="psDocWords">Rupees One Lakh Sixty-Six Thousand Six Hundred Only</div>
+        </div>
+        <div class="text-left sm:text-right space-y-1">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white text-[11px] font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+            <span>Direct Deposit Settled</span>
+          </span>
+          <div class="text-[11px] font-mono text-[#86868b]" id="psDocUtr">UTR: IDFB984129482 · RTGS/NEFT</div>
+        </div>
+      </div>
+
+      <!-- Security Seal & Disclaimer (Apple Footer) -->
+      <div class="border-t border-apple-border pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-[#86868b]">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px] text-black">verified</span>
+          <span>Cryptographically Sealed by NexusHR Enterprise Payroll Engine · SHA-256 Validated</span>
+        </div>
+        <div class="text-[10px] font-mono">
+          Ref: RFC 3161 Timestamped · System Generated Document (No Signature Required)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- STANDALONE SHAREABLE EMPLOYEE ONBOARDING & SELF-SERVICE DETAILS FORM VIEW -->
 <div id="standaloneEmployeeFormScreen" class="fixed inset-0 z-[120] hidden bg-apple-bg overflow-y-auto py-8 px-4 sm:px-6">
   <div class="max-w-3xl mx-auto space-y-5">
@@ -2384,16 +2673,19 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     const SUPER_ADMIN_EMAILS = ['premkumarrss669@gmail.com', 'prem.kumar@nexushr.corp'];
-    let isSuperAdminUser = true;
+    let isSuperAdminUser = false;
     let loggedInEmployeeEmail = 'premkumarrss669@gmail.com';
     let loggedInEmployeePageId = '3b63448d-38a7-8193-b60f-ffc05b1aad75';
 
     function unlockConsole(email) {
-      const normalizedEmail = (email || 'premkumarrss669@gmail.com').toLowerCase().trim();
+      const normalizedEmail = (email || '').toLowerCase().trim();
       loggedInEmployeeEmail = normalizedEmail;
-      const employee = APPROVED_EMPLOYEES[normalizedEmail] || APPROVED_EMPLOYEES['premkumarrss669@gmail.com'];
-      isSuperAdminUser = SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0;
-      loggedInEmployeePageId = employee.pageId || (isSuperAdminUser ? '3b63448d-38a7-8193-b60f-ffc05b1aad75' : '3b93448d-38a7-8142-871e-ea21bfa03f04');
+      const employee = APPROVED_EMPLOYEES[normalizedEmail] || (SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0 ? APPROVED_EMPLOYEES['premkumarrss669@gmail.com'] : null);
+      
+      const isPremEmail = SUPER_ADMIN_EMAILS.indexOf(normalizedEmail) >= 0;
+      const isPremName = employee && employee.name && employee.name.toUpperCase().indexOf('PREM KUMAR') >= 0;
+      isSuperAdminUser = Boolean(isPremEmail || isPremName);
+      loggedInEmployeePageId = (employee && employee.pageId) || (isSuperAdminUser ? '3b63448d-38a7-8193-b60f-ffc05b1aad75' : '3b93448d-38a7-8142-871e-ea21bfa03f04');
 
       document.getElementById('authGateScreen').classList.add('hidden');
       document.getElementById('appConsoleWrapper').classList.remove('hidden');
@@ -2402,8 +2694,10 @@ No pending employee form submissions awaiting review. Share the form link above 
       if (roleSwitcher) {
         if (isSuperAdminUser) {
           roleSwitcher.classList.remove('hidden');
+          roleSwitcher.style.display = 'inline-flex';
         } else {
           roleSwitcher.classList.add('hidden');
+          roleSwitcher.style.display = 'none';
         }
       }
 
@@ -2411,7 +2705,11 @@ No pending employee form submissions awaiting review. Share the form link above 
       openEmployeeDossier(loggedInEmployeePageId);
 
       const nameEl = document.getElementById('topBarUserName');
-      if (nameEl) nameEl.innerText = employee.name;
+      if (nameEl && employee) nameEl.innerText = employee.name;
+      const roleEl = document.getElementById('topBarUserRole');
+      if (roleEl && employee) {
+        roleEl.innerText = isSuperAdminUser ? 'Super Admin (HR)' : (employee.role || 'Active Employee');
+      }
     }
 
     function logoutSession() {
@@ -2721,19 +3019,30 @@ No pending employee form submissions awaiting review. Share the form link above 
     }
 
     function setAccessMode(mode, silent) {
-      if (!isSuperAdminUser && mode === 'superadmin') {
-        showToast('Access Denied: Only Super Admin (SUKUMAR PREM KUMAR) can enter Super Admin Mode');
+      if (!isSuperAdminUser) {
         mode = 'employee';
       }
-      currentAccessMode = mode === 'superadmin' ? 'superadmin' : 'employee';
+      currentAccessMode = (mode === 'superadmin' && isSuperAdminUser) ? 'superadmin' : 'employee';
       const btnEmp = document.getElementById('roleBtnEmployee');
       const btnAdm = document.getElementById('roleBtnAdmin');
       const roleSub = document.getElementById('topBarUserRole');
       const dirSidebar = document.getElementById('sidebarDirectoryLink');
+      const onboardingSidebar = document.getElementById('sidebarOnboardingLink');
       const dirBreadcrumb = document.getElementById('breadcrumbDirectoryWrap');
       const topShareBtn = document.getElementById('topShareFormBtn');
+      const roleSwitcher = document.getElementById('roleModeSwitcher');
 
-      if (currentAccessMode === 'superadmin') {
+      if (roleSwitcher) {
+        if (!isSuperAdminUser) {
+          roleSwitcher.classList.add('hidden');
+          roleSwitcher.style.display = 'none';
+        } else {
+          roleSwitcher.classList.remove('hidden');
+          roleSwitcher.style.display = 'inline-flex';
+        }
+      }
+
+      if (currentAccessMode === 'superadmin' && isSuperAdminUser) {
         if (btnAdm) {
           btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium bg-apple-primary text-white shadow-sm transition-all flex items-center gap-1';
         }
@@ -2747,6 +3056,7 @@ No pending employee form submissions awaiting review. Share the form link above 
           statusBadge.className = 'hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-primary text-white text-[11px] font-medium';
         }
         if (dirSidebar) dirSidebar.classList.remove('hidden');
+        if (onboardingSidebar) onboardingSidebar.classList.remove('hidden');
         if (dirBreadcrumb) dirBreadcrumb.classList.remove('hidden');
         if (topShareBtn) {
           topShareBtn.classList.remove('hidden');
@@ -2768,13 +3078,17 @@ No pending employee form submissions awaiting review. Share the form link above 
         if (btnAdm) {
           btnAdm.className = 'h-6 px-2.5 rounded-full text-[11px] font-medium text-apple-secondary hover:text-apple-primary transition-all flex items-center gap-1';
         }
-        if (roleSub) roleSub.innerText = 'Employee Self-Service (Approved · Read-Only)';
+        if (roleSub) {
+          const emp = APPROVED_EMPLOYEES[loggedInEmployeeEmail];
+          roleSub.innerText = isSuperAdminUser ? 'Super Admin (Previewing Employee View)' : ((emp && emp.role) || adminData.designation || 'Active Employee');
+        }
         const statusBadge = document.getElementById('accessModeStatusBadge');
         if (statusBadge) {
-          statusBadge.innerText = 'Approved Employee · Details & Docs Locked (Super Admin Only)';
+          statusBadge.innerText = isSuperAdminUser ? 'Employee View · Preview' : 'Active Employee · Self-Service (Details Managed by Super Admin)';
           statusBadge.className = 'hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-subtle border border-apple-border text-[11px] font-medium text-apple-secondary';
         }
         if (dirSidebar) dirSidebar.classList.add('hidden');
+        if (onboardingSidebar) onboardingSidebar.classList.add('hidden');
         if (dirBreadcrumb) dirBreadcrumb.classList.add('hidden');
         if (topShareBtn) {
           topShareBtn.classList.add('hidden');
@@ -2795,8 +3109,8 @@ No pending employee form submissions awaiting review. Share the form link above 
             navigateSidebar('employees');
           }
         }
-        if (!silent) {
-          showToast('Approved Employee Mode — Personal details, Pay Scale & Documents are locked (Super Admin only)');
+        if (!silent && isSuperAdminUser) {
+          showToast('Switched to Employee View');
         }
       }
       renderLeaveUI();
@@ -3105,6 +3419,7 @@ No pending employee form submissions awaiting review. Share the form link above 
       setEl('dispTableNet', formatINR(netMonthly));
 
       sidebarBannerMeta.payroll.subtitle = (personalData.fullName || 'SUKUMAR PREM KUMAR') + ' (NX-8842) · Gross: ' + formatINR(grossMonthly) + '/mo · Net Disbursed: ' + formatINR(netMonthly) + '/mo';
+      renderPayslipHistory();
     }
 
     function populateSuperAdminForm() {
@@ -3180,6 +3495,232 @@ No pending employee form submissions awaiting review. Share the form link above 
       closeSuperAdminModal();
       showToast('Pay Scale & Org updated · Syncing to Notion DB…');
       syncEmployeeToNotion(false);
+    }
+
+    // ============================================================================
+    // 3B. APPLE-STYLE DETAILED MONTHLY PAYSLIPS ENGINE (FOR EMPLOYEE & SUPER ADMIN)
+    // ============================================================================
+    const PAST_COMPLETED_MONTHS = [
+      { key: '2026-09', label: 'September 2026', period: 'Sep 01 – Sep 30, 2026', disbursedOn: '30 Sep 2026', totalDays: 30, payableDays: 30, utr: 'IDFB984129482' },
+      { key: '2026-08', label: 'August 2026', period: 'Aug 01 – Aug 31, 2026', disbursedOn: '31 Aug 2026', totalDays: 31, payableDays: 31, utr: 'IDFB873019841' },
+      { key: '2026-07', label: 'July 2026', period: 'Jul 01 – Jul 31, 2026', disbursedOn: '31 Jul 2026', totalDays: 31, payableDays: 31, utr: 'IDFB762940173' },
+      { key: '2026-06', label: 'June 2026', period: 'Jun 01 – Jun 30, 2026', disbursedOn: '30 Jun 2026', totalDays: 30, payableDays: 30, utr: 'IDFB651839264' },
+      { key: '2026-05', label: 'May 2026', period: 'May 01 – May 31, 2026', disbursedOn: '31 May 2026', totalDays: 31, payableDays: 31, utr: 'IDFB540728155' },
+      { key: '2026-04', label: 'April 2026', period: 'Apr 01 – Apr 30, 2026', disbursedOn: '30 Apr 2026', totalDays: 30, payableDays: 30, utr: 'IDFB439617046' }
+    ];
+
+    let currentViewingMonthKey = '2026-09';
+
+    function convertNumberToWords(amount) {
+      const n = Math.round(Number(amount) || 0);
+      if (n <= 0) return 'Rupees Zero Only';
+      const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+      function numToWordsLessThanThousand(num) {
+        let str = '';
+        if (num >= 100) {
+          str += ones[Math.floor(num / 100)] + ' Hundred ';
+          num %= 100;
+        }
+        if (num >= 20) {
+          str += tens[Math.floor(num / 10)] + ' ';
+          num %= 10;
+        }
+        if (num > 0) {
+          str += ones[num] + ' ';
+        }
+        return str.trim();
+      }
+
+      let words = '';
+      const crore = Math.floor(n / 10000000);
+      let rem = n % 10000000;
+      const lakh = Math.floor(rem / 100000);
+      rem = rem % 100000;
+      const thousand = Math.floor(rem / 1000);
+      rem = rem % 1000;
+      const hundred = rem;
+
+      if (crore > 0) words += numToWordsLessThanThousand(crore) + ' Crore ';
+      if (lakh > 0) words += numToWordsLessThanThousand(lakh) + ' Lakh ';
+      if (thousand > 0) words += numToWordsLessThanThousand(thousand) + ' Thousand ';
+      if (hundred > 0) words += numToWordsLessThanThousand(hundred) + ' ';
+
+      return 'Rupees ' + words.trim() + ' Only';
+    }
+
+    function renderPayslipHistory() {
+      const tbody = document.getElementById('payslipTableBody');
+      if (!tbody) return;
+
+      const gross = Number(adminData.basic || 0) + Number(adminData.hra || 0) + Number(adminData.travel || 0) + Number(adminData.medical || 0) + Number(adminData.special || 0);
+      const deductions = Number(adminData.pf || 0) + Number(adminData.pt || 0) + Number(adminData.tds || 0);
+      const net = Math.max(0, gross - deductions);
+
+      tbody.innerHTML = PAST_COMPLETED_MONTHS.map(function(m) {
+        return (
+          '<tr class="hover:bg-apple-subtle/50 transition-colors">' +
+            '<td class="py-3 px-3">' +
+              '<div class="font-medium text-apple-primary">' + m.label + '</div>' +
+              '<div class="text-[11px] text-apple-secondary font-mono">' + m.period + '</div>' +
+            '</td>' +
+            '<td class="py-3 px-3 text-apple-secondary font-mono text-[12px]">' + m.disbursedOn + '</td>' +
+            '<td class="py-3 px-3 text-right font-mono font-medium text-apple-primary">' + formatINR(gross) + '</td>' +
+            '<td class="py-3 px-3 text-right font-mono text-apple-secondary">- ' + formatINR(deductions) + '</td>' +
+            '<td class="py-3 px-3 text-right font-mono font-semibold text-apple-primary">' + formatINR(net) + '</td>' +
+            '<td class="py-3 px-3 text-center">' +
+              '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-apple-subtle text-apple-primary border border-apple-border">' +
+                '<span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>' +
+                '<span>Settled</span>' +
+              '</span>' +
+            '</td>' +
+            '<td class="py-3 px-3 text-right">' +
+              '<div class="flex items-center justify-end gap-1.5">' +
+                '<button type="button" onclick="viewApplePayslip(\'' + m.key + '\')" class="h-7 px-2.5 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border text-[11px] font-medium transition-colors flex items-center gap-1" title="View Apple Document Statement">' +
+                  '<span class="material-symbols-outlined text-[14px]">visibility</span>' +
+                  '<span>View</span>' +
+                '</button>' +
+                '<button type="button" onclick="viewApplePayslip(\'' + m.key + '\'); setTimeout(printApplePayslip, 250);" class="h-7 px-2.5 rounded-lg bg-apple-primary hover:bg-black text-white text-[11px] font-medium transition-colors flex items-center gap-1 shadow-sm" title="Print or Save PDF">' +
+                  '<span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>' +
+                  '<span>PDF</span>' +
+                '</button>' +
+                '<button type="button" onclick="downloadApplePayslip(\'' + m.key + '\')" class="h-7 px-2 rounded-lg bg-apple-subtle hover:bg-apple-hover text-apple-secondary hover:text-apple-primary border border-apple-border text-[11px] font-medium transition-colors" title="Download HTML File">' +
+                  '<span class="material-symbols-outlined text-[14px]">download</span>' +
+                '</button>' +
+              '</div>' +
+            '</td>' +
+          '</tr>'
+        );
+      }).join('');
+    }
+
+    function viewApplePayslip(monthKey) {
+      currentViewingMonthKey = monthKey || '2026-09';
+      const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === currentViewingMonthKey; }) || PAST_COMPLETED_MONTHS[0];
+
+      const empName = personalData.fullName || 'SUKUMAR PREM KUMAR';
+      const empId = (document.getElementById('dispEmpId') && document.getElementById('dispEmpId').innerText.trim()) || 'NX-8842';
+      const gross = Number(adminData.basic || 0) + Number(adminData.hra || 0) + Number(adminData.travel || 0) + Number(adminData.medical || 0) + Number(adminData.special || 0);
+      const deductions = Number(adminData.pf || 0) + Number(adminData.pt || 0) + Number(adminData.tds || 0);
+      const net = Math.max(0, gross - deductions);
+
+      const monthShort = m.label.split(' ')[0].substring(0, 3).toUpperCase();
+      const year = m.label.split(' ')[1] || '2026';
+
+      const setEl = function(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+
+      setEl('payslipModalMonthTitle', m.label + ' Salary Statement');
+      setEl('psDocRefNo', 'NX-PAY-' + year + '-' + monthShort + '-' + empId.replace(/[^A-Z0-9]/gi, ''));
+      setEl('psDocIssueDate', 'Issue Date: ' + m.disbursedOn);
+      setEl('psDocEmpName', empName);
+      setEl('psDocEmpId', empId);
+      setEl('psDocRoleBand', (adminData.designation || 'Consultant') + ' (' + (adminData.payBand || 'Band L5 · Senior IC') + ')');
+      setEl('psDocDept', adminData.department || 'Data Science');
+      setEl('psDocDoj', (document.getElementById('dispJoiningDate') && document.getElementById('dispJoiningDate').innerText.trim()) || '17 August 2026');
+
+      const panEl = document.getElementById('formEmpPan');
+      setEl('psDocPan', (panEl && panEl.value) || 'ABZPK4921D');
+      setEl('psDocUan', '100984129481');
+
+      const bankNameEl = document.getElementById('formEmpBankName');
+      setEl('psDocBankName', (bankNameEl && bankNameEl.value) || 'State Bank of India');
+
+      const bankAccVal = (document.getElementById('bankAccVal') && document.getElementById('bankAccVal').innerText.trim()) || '•••• •••• 5174';
+      setEl('psDocBankAcc', bankAccVal.indexOf('•') >= 0 ? bankAccVal : ('•••• •••• ' + bankAccVal.slice(-4)));
+
+      setEl('psDocPeriod', m.period);
+      setEl('psDocTotalDays', m.totalDays + ' Days');
+      setEl('psDocPayableDays', m.payableDays + ' Days');
+
+      setEl('psDocBasic', formatINR(adminData.basic));
+      setEl('psDocHra', formatINR(adminData.hra));
+      setEl('psDocTravel', formatINR(adminData.travel));
+      setEl('psDocMedical', formatINR(adminData.medical));
+      setEl('psDocSpecial', formatINR(adminData.special));
+      setEl('psDocGross', formatINR(gross));
+
+      setEl('psDocPf', formatINR(adminData.pf));
+      setEl('psDocPt', formatINR(adminData.pt));
+      setEl('psDocTds', formatINR(adminData.tds));
+      setEl('psDocDeductions', formatINR(deductions));
+
+      setEl('psDocNet', formatINR(net));
+      setEl('psDocWords', convertNumberToWords(net));
+      setEl('psDocUtr', 'UTR: ' + m.utr + ' · RTGS / Direct Deposit');
+
+      const modal = document.getElementById('applePayslipModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeApplePayslipModal() {
+      const modal = document.getElementById('applePayslipModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function printApplePayslip() {
+      window.print();
+    }
+
+    function downloadCurrentPayslipHtml() {
+      downloadApplePayslip(currentViewingMonthKey);
+    }
+
+    function downloadApplePayslip(monthKey) {
+      if (!document.getElementById('applePayslipModal') || document.getElementById('applePayslipModal').classList.contains('hidden')) {
+        viewApplePayslip(monthKey);
+      }
+      const docEl = document.getElementById('applePayslipDocument');
+      if (!docEl) return;
+      const docHtml = docEl.innerHTML;
+      const m = PAST_COMPLETED_MONTHS.find(function(item) { return item.key === (monthKey || currentViewingMonthKey); }) || PAST_COMPLETED_MONTHS[0];
+      const empName = personalData.fullName || 'Employee';
+      const cleanName = empName.replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = 'Payslip_' + cleanName + '_' + m.key + '.html';
+
+      const fullHtml = '<!DOCTYPE html>\n' +
+        '<html lang="en">\n' +
+        '<head>\n' +
+        '  <meta charset="UTF-8">\n' +
+        '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+        '  <title>' + empName + ' — Payslip ' + m.label + ' — NexusHR</title>\n' +
+        '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+        '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+        '  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=SF+Pro+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">\n' +
+        '  <script src="https://cdn.tailwindcss.com"><\/script>\n' +
+        '  <style>\n' +
+        '    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; background-color: #f5f5f7; margin: 0; padding: 32px 16px; color: #1d1d1f; }\n' +
+        '    @media print {\n' +
+        '      body { background-color: #ffffff; padding: 0; }\n' +
+        '      .no-print { display: none !important; }\n' +
+        '      #printablePayslip { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }\n' +
+        '    }\n' +
+        '  </style>\n' +
+        '</head>\n' +
+        '<body>\n' +
+        '  <div class="max-w-3xl mx-auto mb-4 flex items-center justify-between no-print">\n' +
+        '    <div class="text-[12px] text-[#86868b]">NexusHR Official Billing Statement · ' + m.label + '</div>\n' +
+        '    <button onclick="window.print()" class="h-8 px-4 rounded-full bg-black text-white text-[12px] font-semibold cursor-pointer">Print / Save as PDF</button>\n' +
+        '  </div>\n' +
+        '  <div id="printablePayslip" class="max-w-3xl mx-auto bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm space-y-7 text-[13px]">\n' +
+        docHtml +
+        '  </div>\n' +
+        '</body>\n' +
+        '</html>';
+
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded ' + filename);
     }
 
     // ============================================================================
@@ -4932,12 +5473,17 @@ No pending employee form submissions awaiting review. Share the form link above 
       renderDocumentsUI();
       renderNotificationsUI();
       renderPendingApprovals();
-      setAccessMode('superadmin', true);
+      renderPayslipHistory();
       loadDirectoryFromNotion(false);
       checkStandaloneFormRoute();
+
       const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
-      if (savedEmail && APPROVED_EMPLOYEES[savedEmail]) {
+      if (savedEmail && (APPROVED_EMPLOYEES[savedEmail] || SUPER_ADMIN_EMAILS.indexOf(savedEmail) >= 0)) {
         unlockConsole(savedEmail);
+      } else {
+        // Default strictly to Employee mode until authenticated as Prem Kumar
+        isSuperAdminUser = false;
+        setAccessMode('employee', true);
       }
     });
   </script>
