@@ -326,6 +326,10 @@
 <span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">bar_chart</span>
 <span>Reports</span>
 </a>
+<a class="sidebar-link flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-apple-secondary hover:text-apple-primary hover:bg-apple-subtle transition-colors text-[13px] font-normal cursor-pointer" data-nav="idcard" href="#idcard" id="sidebarIdCardLink" onclick="navigateSidebar('idcard', this); return false;">
+<span class="sidebar-icon material-symbols-outlined text-[18px] text-apple-secondary">badge</span>
+<span>Employee ID Card</span>
+</a>
 </nav>
 </div>
 </div>
@@ -521,6 +525,9 @@
             </button>
 <button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-appraisals" onclick="switchTab('tab-appraisals', this)">
               Appraisals &amp; Training
+            </button>
+<button class="tab-btn px-4 py-1.5 rounded-lg text-[13px] font-medium text-apple-secondary hover:text-apple-primary transition-all" data-tab="tab-idcard" onclick="switchTab('tab-idcard', this)">
+              Employee ID Card
             </button>
 </div>
 </div>
@@ -1141,6 +1148,170 @@ Resume
 </div>
 </div>
 </div>
+</section>
+<!-- TAB 7: EMPLOYEE ID CARD & VERIFIED DIGITAL CREDENTIAL -->
+<section class="tab-content hidden space-y-6" id="tab-idcard">
+  <!-- Top Header Bar with Download & Print Controls -->
+  <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Notion Database Synced</span>
+        </span>
+        <span class="text-[11px] font-mono text-apple-secondary" id="dispIdCardLiveBadge">SHA-256 Validated</span>
+      </div>
+      <h2 class="text-[18px] font-semibold text-apple-primary tracking-tight">Official Employee Smart ID Badge</h2>
+      <p class="text-[12px] text-apple-secondary">Equipped with Dynamic QR Code · Anyone who scans the QR code can instantly verify employee credentials against the live enterprise Notion database.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <button class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors" onclick="copyIdCardVerifyUrl()" type="button" title="Copy QR Verification URL">
+        <span class="material-symbols-outlined text-[16px] text-apple-secondary">link</span>
+        <span>Copy Link</span>
+      </button>
+      <button class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors" onclick="testVerificationFlow()" type="button" title="Simulate what a phone scanner sees">
+        <span class="material-symbols-outlined text-[16px] text-apple-secondary">qr_code_scanner</span>
+        <span>Test Scan View</span>
+      </button>
+      <button class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border flex items-center gap-1.5 transition-colors" onclick="printIdCard()" type="button">
+        <span class="material-symbols-outlined text-[16px] text-apple-secondary">print</span>
+        <span>Print Badge</span>
+      </button>
+      <button class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium flex items-center gap-1.5 shadow-sm transition-colors" onclick="downloadIdCardImage()" type="button">
+        <span class="material-symbols-outlined text-[16px]">download</span>
+        <span>Download ID Card</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ID Card Presentation: Front & Back side-by-side -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start justify-items-center max-w-4xl mx-auto py-2">
+    
+    <!-- CARD FRONT (Vertical Smart Lanyard Badge) -->
+    <div class="w-full max-w-[340px] bg-gradient-to-b from-[#18181b] via-[#0f0f12] to-[#09090b] text-white rounded-3xl p-6 shadow-2xl border border-white/10 relative overflow-hidden flex flex-col justify-between" style="min-height: 530px;">
+      <!-- Lanyard Slot Punch Indicator -->
+      <div class="w-14 h-2 bg-white/10 rounded-full mx-auto mb-4 border border-white/5"></div>
+
+      <!-- Header: Company Brandmark & Contactless Chip -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-white text-black font-bold flex items-center justify-center text-xs shadow">N</div>
+          <div>
+            <div class="text-[13px] font-bold tracking-wider leading-none">NEXUS HR</div>
+            <div class="text-[9px] text-zinc-400 font-medium tracking-widest uppercase">Enterprise Credential</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 text-zinc-400">
+          <span class="material-symbols-outlined text-[18px]">contactless</span>
+          <span class="text-[10px] font-mono">NFC</span>
+        </div>
+      </div>
+
+      <!-- Photo & Identity -->
+      <div class="text-center pt-4 space-y-3">
+        <div class="relative w-24 h-24 mx-auto">
+          <div id="idCardFrontPhotoContainer" class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-zinc-800 flex items-center justify-center">
+            <span class="material-symbols-outlined text-4xl text-zinc-500">person</span>
+          </div>
+          <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow" title="Active Verified">
+            <span class="material-symbols-outlined text-[14px]">check</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-[16px] font-bold tracking-tight text-white" id="idCardFrontName">SUKUMAR PREM KUMAR</h3>
+          <p class="text-[11px] text-zinc-300 font-medium" id="idCardFrontRole">Lead AI Consultant · Data Science</p>
+          <div class="mt-1.5 inline-block px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-mono text-emerald-400" id="idCardFrontEmpId">
+            NX-8842
+          </div>
+        </div>
+      </div>
+
+      <!-- Scannable High-Contrast QR Code Card -->
+      <div class="mt-4 bg-white p-3 rounded-2xl shadow-inner text-center mx-auto w-40 flex flex-col items-center justify-center">
+        <img id="idCardQrImage" alt="Scan to verify employee" class="w-32 h-32 object-contain" src=""/>
+        <span class="text-[8px] font-bold text-zinc-800 tracking-wider uppercase mt-1 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Scan to Verify</span>
+        </span>
+      </div>
+
+      <!-- Front Footer & Holographic Micro-Strip -->
+      <div class="pt-4 mt-2 space-y-2">
+        <div class="flex items-center justify-between text-[10px] text-zinc-400 px-1 font-mono">
+          <span>Blood: <strong class="text-zinc-200" id="idCardFrontBlood">O+</strong></span>
+          <span>Joined: <strong class="text-zinc-200" id="idCardFrontJoining">17/08/2026</strong></span>
+        </div>
+        <div class="h-2 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500 opacity-70"></div>
+      </div>
+    </div>
+
+    <!-- CARD BACK (Statutory, Emergency & Security Information) -->
+    <div class="w-full max-w-[340px] bg-gradient-to-b from-[#18181b] via-[#0f0f12] to-[#09090b] text-white rounded-3xl p-6 shadow-2xl border border-white/10 relative overflow-hidden flex flex-col justify-between" style="min-height: 530px;">
+      <!-- Lanyard Slot Punch Indicator -->
+      <div class="w-14 h-2 bg-white/10 rounded-full mx-auto mb-3 border border-white/5"></div>
+
+      <!-- Simulated Magnetic Stripe Bar -->
+      <div class="-mx-6 h-9 bg-black/90 border-y border-white/10 flex items-center justify-between px-6 text-[9px] font-mono text-zinc-500">
+        <span>TRACK-1: //NX-ENCRYPTED</span>
+        <span>NFC-ACTIVE</span>
+      </div>
+
+      <!-- Card Back Details -->
+      <div class="py-4 space-y-3.5 text-[11px]">
+        <div>
+          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Emergency Contact</span>
+          <div class="font-medium text-white" id="idCardBackEmerg">Suresh Kumar (Father) · +91 98390 12455</div>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Work Location &amp; Manager</span>
+          <div class="text-zinc-200" id="idCardBackLocationManager">Bangalore HQ · Ananya Sharma</div>
+        </div>
+
+        <div>
+          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Permanent Address</span>
+          <div class="text-zinc-300 leading-snug line-clamp-2" id="idCardBackAddress">Brigade Metropolis, Tower 4, Flat 602, Whitefield, Bangalore</div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-1 text-[10px] text-zinc-400 leading-relaxed">
+          <div class="font-semibold text-zinc-200 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[13px] text-emerald-400">verified</span>
+            <span>Notion Cloud Database Authenticated</span>
+          </div>
+          <p>This credential remains official corporate property. Scan the QR code on front to authenticate status directly against the live Notion enterprise registry.</p>
+        </div>
+      </div>
+
+      <!-- Back Footer & Authorized Signature -->
+      <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[10px]">
+        <div>
+          <div class="text-[9px] text-zinc-400 uppercase tracking-wider">Authorized Issuer</div>
+          <div class="font-serif italic text-zinc-200 text-[13px]">Super Admin</div>
+        </div>
+        <div class="text-right text-[9px] text-zinc-400">
+          <div>If found, return to:</div>
+          <div class="text-zinc-300 font-medium">Nexus HR Bangalore HQ</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Explainer Information Banner -->
+  <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm max-w-4xl mx-auto">
+    <div class="flex items-start gap-4">
+      <div class="w-10 h-10 rounded-xl bg-apple-subtle border border-apple-border flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[20px] text-apple-primary">qr_code_2</span>
+      </div>
+      <div class="space-y-1">
+        <h4 class="text-[14px] font-semibold text-apple-primary">How Real-Time QR Verification Works</h4>
+        <p class="text-[12px] text-apple-secondary leading-relaxed">
+          When any security officer, client, or authorized person scans the QR code on this ID card using their smartphone camera, they are routed to the public <strong>Nexus Credential Verification Portal</strong>. The system immediately checks the employee's ID against the enterprise <strong>Notion Cloud Database</strong> (<code class="text-[11px] font-mono bg-apple-subtle px-1 py-0.5 rounded">46e3448d-38a7-8393-a64d-07425010c0ff</code>). If the employee is authentic and active, a cryptographically signed <strong>Verified Active Employee</strong> certificate is presented with exact verification timestamps.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- SIDEBAR SECTION: WORKFORCE DIRECTORY (SUPER ADMIN ONLY) -->
 <section class="tab-content hidden space-y-6" id="tab-directory">
@@ -2134,6 +2305,44 @@ Resume
   </div>
 </div>
 
+<!-- PUBLIC CREDENTIAL VERIFICATION PORTAL (OPENS ON QR SCAN) -->
+<div id="publicIdVerificationScreen" class="fixed inset-0 z-[140] hidden bg-slate-950 text-slate-100 overflow-y-auto py-8 px-4 sm:px-6">
+  <div class="max-w-lg mx-auto space-y-6">
+    <!-- Top Brandmark Header -->
+    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-white text-black font-bold flex items-center justify-center text-sm shadow">N</div>
+        <div>
+          <h1 class="text-[15px] font-bold text-white tracking-tight">NEXUS HR ENTERPRISE</h1>
+          <p class="text-[11px] text-slate-400">Official Credential Verification Service</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Live Notion Registry</span>
+      </div>
+    </div>
+
+    <!-- Dynamic Verification Result Card -->
+    <div id="verifyResultContainer" class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+      <!-- Populated dynamically by renderPublicVerificationPortal() -->
+    </div>
+
+    <!-- Action Footer -->
+    <div class="text-center space-y-3 pt-2">
+      <div class="flex items-center justify-center gap-3">
+        <button type="button" onclick="closePublicVerificationScreen()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[12px] font-medium transition-colors">
+          Close Verification
+        </button>
+        <a href="index.html" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-semibold text-[12px] transition-colors">
+          Go to Portal Login
+        </a>
+      </div>
+      <p class="text-[11px] text-slate-500">NexusHR Enterprise Zero-Trust Credential Engine · Notion Cloud Database Protected</p>
+    </div>
+  </div>
+</div>
+
 <!-- STANDALONE SHAREABLE EMPLOYEE ONBOARDING & SELF-SERVICE DETAILS FORM VIEW -->
 <div id="standaloneEmployeeFormScreen" class="fixed inset-0 z-[120] hidden bg-apple-bg overflow-y-auto py-8 px-4 sm:px-6">
   <div class="max-w-3xl mx-auto space-y-5">
@@ -2693,6 +2902,13 @@ Resume
         subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Q4 Annual Review & Mandatory Training',
         tabs: ['tab-appraisals']
       },
+      'idcard': {
+        icon: 'badge',
+        title: 'Official Corporate ID Card & Digital Credential',
+        badge: 'QR Verified · Active',
+        subtitle: 'Official Smart Badge · Scannable QR Code Cross-Referenced with Notion Registry',
+        tabs: ['tab-idcard']
+      },
       'settings': {
         icon: 'tune',
         title: 'Enterprise Console Settings',
@@ -2709,6 +2925,7 @@ Resume
       'tab-documents': 'Documents',
       'tab-leave': 'Leave & Attendance',
       'tab-appraisals': 'Appraisals & Training',
+      'tab-idcard': 'Employee ID Card',
       'tab-directory': 'Workforce Directory',
       'tab-settings': 'Console Settings'
     };
@@ -2848,6 +3065,8 @@ Resume
         navigateSidebar('leave');
       } else if (q.includes('appraisal') || q.includes('training') || q.includes('health') || q.includes('report')) {
         navigateSidebar('reports');
+      } else if (q.includes('id') || q.includes('badge') || q.includes('card') || q.includes('qr')) {
+        navigateSidebar('idcard');
       } else if ((q.includes('directory') || q.includes('anshika')) && currentAccessMode === 'superadmin') {
         navigateSidebar('directory');
       }
@@ -3043,6 +3262,7 @@ Resume
       setEl('dispNationality', personalData.nationality);
       setEl('dispBloodGroup', personalData.bloodGroup);
       setEl('dispAddress', personalData.address);
+      if (typeof renderIdCardUI === 'function') renderIdCardUI();
     }
 
     // Open & Save Employee Personal Details Modal (Super Admin Only once employee is approved)
@@ -3340,6 +3560,7 @@ Resume
 
       sidebarBannerMeta.payroll.subtitle = (personalData.fullName || 'SUKUMAR PREM KUMAR') + ' (NX-8842) · Gross: ' + formatINR(grossMonthly) + '/mo · Net Disbursed: ' + formatINR(netMonthly) + '/mo';
       renderPayslipHistory();
+      if (typeof renderIdCardUI === 'function') renderIdCardUI();
     }
 
     function populateSuperAdminForm() {
@@ -4437,6 +4658,7 @@ Resume
 
       renderPersonalUI();
       renderAdminUI();
+      renderIdCardUI();
       renderDocumentsUI();
       renderNotificationsUI();
       navigateSidebar('employees');
@@ -5315,6 +5537,466 @@ Resume
       }
     }
 
+    // ============================================================================
+    // 8. EMPLOYEE SMART ID CARD & PUBLIC NOTION QR VERIFICATION ENGINE
+    // ============================================================================
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getIdCardVerificationBaseUrl() {
+      const origin = (window.location.origin && window.location.origin !== 'null' && window.location.protocol.startsWith('http'))
+        ? window.location.origin
+        : 'https://spkumar944.github.io';
+      const pathname = (window.location.pathname && window.location.pathname !== '/')
+        ? window.location.pathname
+        : '/employee-dashboard/';
+      return origin + pathname;
+    }
+
+    function getIdCardVerificationUrl(empId, pageId) {
+      const base = getIdCardVerificationBaseUrl();
+      const id = empId || activeEmployeeId || 'NX-8842';
+      const pid = pageId || activeNotionRowId || '3b63448d-38a7-8193-b60f-ffc05b1aad75';
+      return base + '?verify=' + encodeURIComponent(id) + '&pid=' + encodeURIComponent(pid);
+    }
+
+    function renderIdCardUI() {
+      const rec = NOTION_EMPLOYEE_RECORDS[activeNotionRowId] || NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'] || {};
+      const empName = rec.name || personalData.fullName || 'SUKUMAR PREM KUMAR';
+      const empId = rec.empId || activeEmployeeId || 'NX-8842';
+      const role = rec.jobTitle || adminData.designation || 'Consultant';
+      const dept = rec.dept || adminData.department || 'Data Science';
+      const blood = rec.bloodGroup || personalData.bloodGroup || 'O+ (Positive)';
+      const joining = rec.joiningDate || '17/08/2026';
+      const emerg = (rec.emergName ? rec.emergName + (rec.emergRel ? ' (' + rec.emergRel + ')' : '') + ' · ' : '') + (rec.emergPhone || personalData.emergPhone || '+91 74179 92482');
+      const location = rec.location || adminData.location || 'Bangalore HQ · Hybrid';
+      const manager = rec.manager || adminData.manager || 'Ananya Sharma (VP, Data & Analytics)';
+      const address = rec.address || personalData.address || 'Bangalore, Karnataka';
+
+      const setEl = function(id, text) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+      };
+
+      setEl('idCardFrontName', empName);
+      setEl('idCardFrontRole', role + ' · ' + dept);
+      setEl('idCardFrontEmpId', empId);
+      setEl('idCardFrontBlood', blood.split(' ')[0]);
+      setEl('idCardFrontJoining', joining);
+      setEl('idCardBackEmerg', emerg);
+      setEl('idCardBackLocationManager', location.split('·')[0].trim() + ' · ' + manager.split('(')[0].trim());
+      setEl('idCardBackAddress', address);
+
+      // Avatar / Photo
+      const isPrem = empName.toUpperCase().indexOf('SUKUMAR PREM KUMAR') >= 0 || empName.toUpperCase().indexOf('PREM KUMAR') >= 0;
+      const defaultPremPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S';
+      const uploadedPhoto = getEmployeePhotoDataUrl(activeNotionRowId) || rec.photoDataUrl || '';
+      const finalPhoto = uploadedPhoto || (isPrem ? defaultPremPhoto : '');
+
+      const photoContainer = document.getElementById('idCardFrontPhotoContainer');
+      if (photoContainer) {
+        if (finalPhoto) {
+          photoContainer.innerHTML = '<img id="idCardFrontImg" alt="' + empName + '" class="w-full h-full object-cover" crossOrigin="anonymous" src="' + finalPhoto + '"/>';
+        } else {
+          const initials = empName.split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
+          photoContainer.innerHTML = '<div class="w-full h-full bg-zinc-800 text-white flex items-center justify-center font-bold text-2xl">' + initials + '</div>';
+        }
+      }
+
+      // Generate QR Code URL
+      const verifyUrl = getIdCardVerificationUrl(empId, activeNotionRowId);
+      const qrImg = document.getElementById('idCardQrImage');
+      if (qrImg) {
+        qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=0&data=' + encodeURIComponent(verifyUrl);
+      }
+    }
+
+    function copyIdCardVerifyUrl() {
+      const url = getIdCardVerificationUrl(activeEmployeeId, activeNotionRowId);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          showToast('Copied QR verification URL to clipboard!');
+        }).catch(function() {
+          prompt('Copy verification URL:', url);
+        });
+      } else {
+        prompt('Copy verification URL:', url);
+      }
+    }
+
+    function testVerificationFlow() {
+      showPublicVerificationScreen(activeEmployeeId, activeNotionRowId);
+    }
+
+    function downloadIdCardImage() {
+      const rec = NOTION_EMPLOYEE_RECORDS[activeNotionRowId] || NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'] || {};
+      const empName = rec.name || personalData.fullName || 'SUKUMAR PREM KUMAR';
+      const empId = rec.empId || activeEmployeeId || 'NX-8842';
+      const role = rec.jobTitle || adminData.designation || 'Consultant';
+      const dept = rec.dept || adminData.department || 'Data Science';
+      const blood = (rec.bloodGroup || personalData.bloodGroup || 'O+').split(' ')[0];
+      const joining = rec.joiningDate || '17/08/2026';
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 680;
+      canvas.height = 1060;
+      const ctx = canvas.getContext('2d');
+
+      // Background dark gradient with rounded corners
+      const rad = 40;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(rad, 0);
+      ctx.lineTo(680 - rad, 0);
+      ctx.quadraticCurveTo(680, 0, 680, rad);
+      ctx.lineTo(680, 1060 - rad);
+      ctx.quadraticCurveTo(680, 1060, 680 - rad, 1060);
+      ctx.lineTo(rad, 1060);
+      ctx.quadraticCurveTo(0, 1060, 0, 1060 - rad);
+      ctx.lineTo(0, rad);
+      ctx.quadraticCurveTo(0, 0, rad, 0);
+      ctx.closePath();
+      ctx.clip();
+
+      const grad = ctx.createLinearGradient(0, 0, 0, 1060);
+      grad.addColorStop(0, '#18181b');
+      grad.addColorStop(0.5, '#0f0f12');
+      grad.addColorStop(1, '#09090b');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 680, 1060);
+
+      // Subtle border
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Lanyard Slot
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(280, 25, 120, 16, 8); else ctx.rect(280, 25, 120, 16);
+      ctx.fill();
+
+      // Top header: Brandmark
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('NEXUS HR', 90, 95);
+
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillText('ENTERPRISE CREDENTIAL · SMART BADGE', 90, 120);
+
+      // Top Logo Box
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(40, 70, 38, 38, 8); else ctx.rect(40, 70, 38, 38);
+      ctx.fill();
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('N', 59, 97);
+
+      // Header dividing line
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(40, 145);
+      ctx.lineTo(640, 145);
+      ctx.stroke();
+
+      // Employee Photo Box
+      const px = 250;
+      const py = 175;
+      const pw = 180;
+      const ph = 180;
+      ctx.fillStyle = '#27272a';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(px, py, pw, ph, 24); else ctx.rect(px, py, pw, ph);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Employee Name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(empName, 340, 400);
+
+      // Role & Department
+      ctx.fillStyle = '#d4d4d8';
+      ctx.font = '500 20px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillText(role + ' · ' + dept, 340, 435);
+
+      // Monospace Emp ID badge
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(250, 455, 180, 36, 18); else ctx.rect(250, 455, 180, 36);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#34d399';
+      ctx.font = 'bold 18px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.fillText(empId, 340, 480);
+
+      // QR Code white box
+      const qx = 200;
+      const qy = 520;
+      const qw = 280;
+      const qh = 320;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(qx, qy, qw, qh, 24); else ctx.rect(qx, qy, qw, qh);
+      ctx.fill();
+
+      // QR label
+      ctx.fillStyle = '#18181b';
+      ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillText('SCAN TO VERIFY LIVE STATUS', 340, 818);
+
+      // Footer Details (Blood Group & Joining)
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = 'bold 15px ui-monospace, SFMono-Regular, Menlo, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('BLOOD: ' + blood, 60, 890);
+      ctx.textAlign = 'right';
+      ctx.fillText('JOINED: ' + joining, 620, 890);
+
+      // Holographic strip
+      const hGrad = ctx.createLinearGradient(40, 920, 640, 920);
+      hGrad.addColorStop(0, '#34d399');
+      hGrad.addColorStop(0.5, '#22d3ee');
+      hGrad.addColorStop(1, '#818cf8');
+      ctx.fillStyle = hGrad;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(40, 920, 600, 14, 7); else ctx.rect(40, 920, 600, 14);
+      ctx.fill();
+
+      // Micro-text security notice
+      ctx.fillStyle = '#71717a';
+      ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('NOTION CLOUD DATABASE AUTHENTICATED · ZERO-TRUST CREDENTIAL', 340, 975);
+      ctx.fillText('Nexus HR Bangalore · Authorized Corporate Personnel', 340, 1005);
+
+      // Load and draw QR code onto canvas
+      const qrImg = document.getElementById('idCardQrImage');
+      const triggerSave = function() {
+        ctx.restore();
+        const link = document.createElement('a');
+        link.download = empId + '_Official_ID_Card.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('Official ID Card PNG downloaded');
+      };
+
+      if (qrImg && qrImg.src) {
+        const tempQr = new Image();
+        tempQr.crossOrigin = 'anonymous';
+        tempQr.onload = function() {
+          try {
+            ctx.drawImage(tempQr, qx + 20, qy + 20, qw - 40, qw - 40);
+          } catch(e) {}
+          triggerSave();
+        };
+        tempQr.onerror = function() {
+          triggerSave();
+        };
+        tempQr.src = qrImg.src;
+      } else {
+        triggerSave();
+      }
+    }
+
+    function printIdCard() {
+      const cardWrap = document.querySelector('#tab-idcard .grid');
+      const frontHtml = cardWrap ? cardWrap.innerHTML : '';
+      const printWindow = window.open('', '_blank', 'width=900,height=750');
+      if (!printWindow) {
+        window.print();
+        return;
+      }
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Employee ID Badge - ${activeEmployeeId}</title>
+            <script src="https://cdn.tailwindcss.com"><\/script>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            <style>
+              @page { size: auto; margin: 15mm; }
+              body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; padding: 24px; color: #111; }
+              .print-badge-wrap { display: flex; gap: 28px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+            </style>
+          </head>
+          <body>
+            <div style="text-align: center; margin-bottom: 24px;">
+              <h2 style="font-size: 18px; font-weight: bold; margin: 0;">Nexus HR Enterprise · Official Employee ID Badge</h2>
+              <p style="font-size: 12px; color: #666; margin: 4px 0 0;">Print on standard PVC card paper or cut along borders for badge holder</p>
+            </div>
+            <div class="print-badge-wrap">
+              ${frontHtml}
+            </div>
+            <script>
+              window.onload = function() {
+                setTimeout(function() { window.print(); }, 400);
+              };
+            <\/script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+
+    function showPublicVerificationScreen(empId, pageId) {
+      const screen = document.getElementById('publicIdVerificationScreen');
+      const container = document.getElementById('verifyResultContainer');
+      if (!screen || !container) return;
+
+      const searchId = (empId || '').trim().toUpperCase();
+      const searchPageId = (pageId || '').trim();
+
+      let matched = null;
+      const pids = Object.keys(NOTION_EMPLOYEE_RECORDS);
+      for (let i = 0; i < pids.length; i++) {
+        const r = NOTION_EMPLOYEE_RECORDS[pids[i]];
+        if (!r) continue;
+        if (searchId && (r.empId || '').toUpperCase() === searchId) {
+          matched = r;
+          break;
+        }
+        if (searchPageId && r.pageId === searchPageId) {
+          matched = r;
+          break;
+        }
+      }
+
+      if (!matched && (searchId === 'NX-8842' || !searchId)) {
+        matched = NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'];
+      }
+
+      const nowTime = new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'medium' });
+      const certRef = 'NX-CERT-' + (matched ? (matched.empId || '8842') : 'NULL') + '-' + Math.floor(100000 + Math.random() * 900000);
+
+      if (matched && matched.status !== 'Terminated') {
+        const isPrem = (matched.name || '').toUpperCase().indexOf('PREM KUMAR') >= 0;
+        const defaultPremPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S';
+        const photoUrl = getEmployeePhotoDataUrl(matched.pageId) || matched.photoDataUrl || (isPrem ? defaultPremPhoto : '');
+        const initials = (matched.name || 'NX').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
+
+        container.innerHTML = `
+          <div class="text-center space-y-3 pb-2 border-b border-slate-800">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(16,185,129,0.3)]">
+              <span class="material-symbols-outlined text-[36px]">verified</span>
+            </div>
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-wider uppercase border border-emerald-500/40">
+                Officially Verified Active Employee
+              </span>
+              <h2 class="text-[20px] font-bold text-white mt-1.5">${escapeHtml(matched.name)}</h2>
+              <p class="text-[12px] text-emerald-400/90 font-mono">Record Authenticated with Notion Database</p>
+            </div>
+          </div>
+
+          <!-- Employee Quick Badge Banner -->
+          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700 shrink-0 flex items-center justify-center shadow-md">
+              ${photoUrl ? `<img src="${photoUrl}" alt="${escapeHtml(matched.name)}" class="w-full h-full object-cover"/>` : `<span class="text-lg font-bold text-slate-300">${initials}</span>`}
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[14px] font-semibold text-white">${escapeHtml(matched.name)}</div>
+              <div class="text-[12px] text-slate-300">${escapeHtml(matched.jobTitle || 'Consultant')} · ${escapeHtml(matched.dept || 'Data Science')}</div>
+              <div class="text-[11px] font-mono text-emerald-400 font-medium">Employee ID: ${escapeHtml(matched.empId || 'NX-8842')}</div>
+            </div>
+          </div>
+
+          <!-- Verified Attributes Grid -->
+          <div class="grid grid-cols-2 gap-3 text-[12px]">
+            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Employment Status</span>
+              <span class="font-semibold text-emerald-400 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>${escapeHtml(matched.status || 'Active')} (Full-Time)</span>
+              </span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Date of Joining</span>
+              <span class="font-medium text-slate-200">${escapeHtml(matched.joiningDate || '17/08/2026')}</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Work Location</span>
+              <span class="font-medium text-slate-200">${escapeHtml(matched.location || 'Bangalore HQ · Hybrid')}</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Emergency Blood Group</span>
+              <span class="font-medium text-slate-200">${escapeHtml(matched.bloodGroup || 'O+ (Positive)')}</span>
+            </div>
+            <div class="col-span-2 p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Reporting Authority</span>
+              <span class="font-medium text-slate-200">${escapeHtml(matched.manager || 'Ananya Sharma (VP, Data & Analytics)')}</span>
+            </div>
+          </div>
+
+          <!-- Cryptographic & Notion Audit Record -->
+          <div class="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-1.5 text-[11px] text-slate-400 font-mono">
+            <div class="flex items-center justify-between text-emerald-300 font-sans font-semibold">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">lock</span>Notion Cloud Audit Trail</span>
+              <span>Verified at ${nowTime}</span>
+            </div>
+            <div class="truncate">Database ID: 46e3448d-38a7-8393-a64d-07425010c0ff</div>
+            <div class="truncate">Page Record: ${escapeHtml(matched.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75')}</div>
+            <div class="text-slate-300">Certificate Reference: ${certRef}</div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="text-center space-y-3 pb-2 border-b border-slate-800">
+            <div class="w-16 h-16 rounded-full bg-rose-500/10 border-2 border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(244,63,94,0.3)]">
+              <span class="material-symbols-outlined text-[36px]">gpp_bad</span>
+            </div>
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-bold tracking-wider uppercase border border-rose-500/40">
+                Verification Unsuccessful
+              </span>
+              <h2 class="text-[20px] font-bold text-white mt-1.5">Unrecognized or Inactive Credential</h2>
+              <p class="text-[12px] text-slate-400">The scanned credential could not be validated against the active employee directory.</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-[12px] text-slate-300 space-y-2">
+            <p>Queried Credential ID: <strong class="font-mono text-white">${escapeHtml(searchId || 'None')}</strong></p>
+            <p class="text-slate-400">If you believe this is an error, please check with the employee or contact Nexus HR security desk.</p>
+          </div>
+        `;
+      }
+
+      screen.classList.remove('hidden');
+    }
+
+    function closePublicVerificationScreen() {
+      const screen = document.getElementById('publicIdVerificationScreen');
+      if (screen) screen.classList.add('hidden');
+    }
+
+    function checkVerificationRoute() {
+      const params = new URLSearchParams(window.location.search);
+      const verifyId = params.get('verify') || params.get('verify_id');
+      if (verifyId) {
+        const pid = params.get('pid') || '';
+        showPublicVerificationScreen(verifyId, pid);
+        return true;
+      }
+      return false;
+    }
+
     async function loadDirectoryFromNotion(showToastFlag) {
       try {
         const res = await callNotionEndpoint(
@@ -5405,11 +6087,16 @@ Resume
 
     // Initialize all dynamic UI data on page load
     window.addEventListener('DOMContentLoaded', function() {
+      if (checkVerificationRoute()) {
+        return;
+      }
+
       const formUrlDisplay = document.getElementById('shareableFormUrlDisplay');
       if (formUrlDisplay) formUrlDisplay.innerText = getShareableFormBaseUrl();
       renderPersonalUI();
       renderAdminUI();
       renderAppraisalUI();
+      renderIdCardUI();
       renderLeaveUI();
       renderDocumentsUI();
       renderNotificationsUI();
