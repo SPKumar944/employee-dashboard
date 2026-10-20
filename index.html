@@ -2182,7 +2182,7 @@
             <h1 class="text-[17px] font-bold text-apple-primary">NexusHR · Employee Onboarding &amp; Document Upload Form</h1>
             <span class="px-2 py-0.5 rounded-full bg-apple-subtle border border-apple-border text-[10px] font-semibold text-apple-primary">Photo + 6 Compliance Documents</span>
           </div>
-          <p class="text-[12px] text-apple-secondary">Upload your <strong class="text-apple-primary">Profile Photograph</strong>, <strong class="text-apple-primary">Verified Compliance &amp; Academic Documents</strong>, and personal/bank details for Super Admin (<strong class="text-apple-primary">SUKUMAR PREM KUMAR</strong>) approval. <strong class="text-apple-primary">Once approved, all details &amp; documents are locked and can only be edited by Super Admin.</strong></p>
+          <p class="text-[12px] text-apple-secondary">Upload your <strong class="text-apple-primary">Profile Photograph</strong>, <strong class="text-apple-primary">Verified Compliance &amp; Academic Documents</strong>, and personal/bank details for <strong class="text-apple-primary">Super Admin</strong> approval. <strong class="text-apple-primary">Once approved, all details &amp; documents are locked and can only be edited by Super Admin.</strong></p>
         </div>
       </div>
       <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
@@ -2203,7 +2203,7 @@
         <span class="material-symbols-outlined text-[18px]">error</span>
         <span>Action Required: Super Admin Requested Corrections to Your Submitted Details</span>
       </div>
-      <p class="text-[12px] text-apple-secondary">Your previous submission was reviewed by <strong class="text-apple-primary">SUKUMAR PREM KUMAR (Super Admin)</strong> and requires the following corrections before approval:</p>
+      <p class="text-[12px] text-apple-secondary">Your previous submission was reviewed by <strong class="text-apple-primary">Super Admin</strong> and requires the following corrections before approval:</p>
       <div id="formCorrectionAlertText" class="p-3 rounded-xl bg-apple-subtle border border-apple-border text-[12px] font-medium text-apple-primary whitespace-pre-wrap"></div>
     </div>
 
@@ -2394,7 +2394,7 @@
         <span class="material-symbols-outlined text-[24px]">check_circle</span>
       </div>
       <h3 class="text-[16px] font-bold text-apple-primary">Details, Photograph &amp; Documents Submitted for Super Admin Approval!</h3>
-      <p class="text-[13px] text-apple-secondary max-w-md mx-auto">Your details and documents have been securely submitted. Once <strong class="text-apple-primary">SUKUMAR PREM KUMAR (Super Admin)</strong> approves your record, your profile and documents will be activated.</p>
+      <p class="text-[13px] text-apple-secondary max-w-md mx-auto">Your details and documents have been securely submitted. Once <strong class="text-apple-primary">Super Admin</strong> approves your record, your profile and documents will be activated.</p>
       <div class="pt-2 flex justify-center gap-3">
         <button type="button" onclick="resetStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[12px] font-medium border border-apple-border">Submit Another Response</button>
         <button type="button" onclick="closeStandaloneEmployeeForm()" class="h-9 px-4 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium">Return to Console</button>
@@ -5169,7 +5169,7 @@
         applicantName: item.name,
         applicantPageId: pageId,
         title: 'Your Onboarding Profile & Documents Were Approved!',
-        message: 'Super Admin SUKUMAR PREM KUMAR approved your onboarding profile & compliance documents. Your profile is now verified & locked (only Super Admin can make further edits).',
+        message: 'Super Admin approved your onboarding profile & compliance documents. Your profile is now verified & locked (only Super Admin can make further edits).',
         status: 'Approved',
         createdAt: 'Just now',
         read: false
@@ -5262,15 +5262,15 @@
       const emailSubject = 'Action Required: Please Correct Your NexusHR Employee Details (' + empName + ')';
       const emailBody =
         'Dear ' + empName + ',\n\n' +
-        'Your submitted Employee Onboarding & Self-Service Details Form was reviewed by SUKUMAR PREM KUMAR (Super Admin) and requires the following corrections before approval:\n\n' +
+        'Your submitted Employee Onboarding & Self-Service Details Form was reviewed by Super Admin and requires the following corrections before approval:\n\n' +
         '------------------------------------------------------------\n' +
         fullMistakeReport + '\n' +
         '------------------------------------------------------------\n\n' +
         'Please click your personalized Correction Form Link below to review the flagged fields, correct your details, and resubmit for Super Admin approval:\n' +
         correctionLink + '\n\n' +
         'Regards,\n' +
-        'SUKUMAR PREM KUMAR\n' +
-        'Super Admin · NexusHR Enterprise Workforce Console';
+        'Super Admin\n' +
+        'NexusHR Enterprise Workforce Console';
 
       // 1. Update Notion row with mistake note in Residential Address / Status Onboarding
       try {
@@ -5297,7 +5297,7 @@
           body: JSON.stringify({
             _subject: emailSubject,
             Employee_Name: empName,
-            Reviewed_By: 'SUKUMAR PREM KUMAR (Super Admin)',
+            Reviewed_By: 'Super Admin',
             Flagged_Mistakes: fullMistakeReport,
             Correction_Form_Link: correctionLink,
             message: emailBody
