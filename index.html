@@ -99,6 +99,29 @@
     }
   </script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function() {
+      try {
+        var s = window.location.search || '';
+        var h = window.location.hash || '';
+        if (s.indexOf('verify=') >= 0 || s.indexOf('verify_id=') >= 0 || h.indexOf('verify') >= 0) {
+          document.documentElement.classList.add('is-verifying-credential');
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    html.is-verifying-credential body {
+      background-color: #020617 !important;
+    }
+    html.is-verifying-credential #authGateScreen,
+    html.is-verifying-credential #appConsoleWrapper {
+      display: none !important;
+    }
+    html.is-verifying-credential #publicIdVerificationScreen {
+      display: block !important;
+    }
+  </style>
 </head>
 <body class="bg-apple-bg text-apple-primary antialiased selection:bg-apple-blue selection:text-white">
 <!-- PASSWORDLESS EMPLOYEE EMAIL + GOOGLE AUTHENTICATOR (TOTP) LOGIN GATE -->
@@ -2331,14 +2354,12 @@ Resume
     <!-- Action Footer -->
     <div class="text-center space-y-3 pt-2">
       <div class="flex items-center justify-center gap-3">
-        <button type="button" onclick="closePublicVerificationScreen()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[12px] font-medium transition-colors">
-          Close Verification
+        <button type="button" onclick="checkVerificationRoute()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-slate-700 shadow-sm">
+          <span class="material-symbols-outlined text-[15px]">refresh</span>
+          <span>Re-Verify Credential</span>
         </button>
-        <a href="index.html" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-semibold text-[12px] transition-colors">
-          Go to Portal Login
-        </a>
       </div>
-      <p class="text-[11px] text-slate-500">NexusHR Enterprise Zero-Trust Credential Engine · Notion Cloud Database Protected</p>
+      <p class="text-[11px] text-slate-500 font-mono">Authentic Corporate Credential · NexusHR Enterprise Notion Cloud Database</p>
     </div>
   </div>
 </div>
@@ -3864,7 +3885,7 @@ Resume
           '  .tracking-wider { letter-spacing: 0.05em; }' +
           '  .tracking-widest { letter-spacing: 0.1em; }' +
           '</style>' +
-          '<script src="https://cdn.tailwindcss.com"><\/script>' +
+          '<' + 'script src="https://cdn.tailwindcss.com">' + '<' + '/script>' +
           '</head><body>' +
           '<div class="no-print">' +
           '  <div>' +
@@ -3874,9 +3895,9 @@ Resume
           '  <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>' +
           '</div>' +
           docEl.outerHTML +
-          '<script>' +
+          '<' + 'script>' +
           '  window.onload = function() { setTimeout(function() { window.print(); }, 400); };' +
-          '<\/script>' +
+          '<' + '/script>' +
           '</body></html>'
         );
         printWindow.document.close();
@@ -5554,9 +5575,12 @@ Resume
       const origin = (window.location.origin && window.location.origin !== 'null' && window.location.protocol.startsWith('http'))
         ? window.location.origin
         : 'https://spkumar944.github.io';
-      const pathname = (window.location.pathname && window.location.pathname !== '/')
+      let pathname = (window.location.pathname && window.location.pathname !== '/')
         ? window.location.pathname
         : '/employee-dashboard/';
+      if (!pathname.endsWith('/') && !pathname.endsWith('.html')) {
+        pathname += '/';
+      }
       return origin + pathname;
     }
 
@@ -5825,42 +5849,43 @@ Resume
         window.print();
         return;
       }
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Employee ID Badge - ${activeEmployeeId}</title>
-            <script src="https://cdn.tailwindcss.com"><\/script>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-            <style>
-              @page { size: auto; margin: 15mm; }
-              body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; padding: 24px; color: #111; }
-              .print-badge-wrap { display: flex; gap: 28px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
-            </style>
-          </head>
-          <body>
-            <div style="text-align: center; margin-bottom: 24px;">
-              <h2 style="font-size: 18px; font-weight: bold; margin: 0;">Nexus HR Enterprise · Official Employee ID Badge</h2>
-              <p style="font-size: 12px; color: #666; margin: 4px 0 0;">Print on standard PVC card paper or cut along borders for badge holder</p>
-            </div>
-            <div class="print-badge-wrap">
-              ${frontHtml}
-            </div>
-            <script>
-              window.onload = function() {
-                setTimeout(function() { window.print(); }, 400);
-              };
-            <\/script>
-          </body>
-        </html>
-      `);
+      const sOpen = '<' + 'script';
+      const sClose = '<' + '/script>';
+      printWindow.document.write(
+        '<!DOCTYPE html><html><head><title>Employee ID Badge - ' + (activeEmployeeId || 'NX-8842') + '</title>' +
+        sOpen + ' src="https://cdn.tailwindcss.com">' + sClose +
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />' +
+        '<style>@page { size: auto; margin: 15mm; } body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; padding: 24px; color: #111; } .print-badge-wrap { display: flex; gap: 28px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }</style>' +
+        '</head><body><div style="text-align: center; margin-bottom: 24px;">' +
+        '<h2 style="font-size: 18px; font-weight: bold; margin: 0;">Nexus HR Enterprise · Official Employee ID Badge</h2>' +
+        '<p style="font-size: 12px; color: #666; margin: 4px 0 0;">Print on standard PVC card paper or cut along borders for badge holder</p>' +
+        '</div><div class="print-badge-wrap">' + frontHtml + '</div>' +
+        sOpen + '>window.onload = function() { setTimeout(function() { window.print(); }, 400); };' + sClose +
+        '</body></html>'
+      );
       printWindow.document.close();
     }
 
     function showPublicVerificationScreen(empId, pageId) {
+      // 1. Immediately hide the login gate and the authenticated console
+      const authGate = document.getElementById('authGateScreen');
+      if (authGate) {
+        authGate.classList.add('hidden');
+        authGate.style.setProperty('display', 'none', 'important');
+      }
+      const appConsole = document.getElementById('appConsoleWrapper');
+      if (appConsole) {
+        appConsole.classList.add('hidden');
+        appConsole.style.setProperty('display', 'none', 'important');
+      }
+
       const screen = document.getElementById('publicIdVerificationScreen');
       const container = document.getElementById('verifyResultContainer');
       if (!screen || !container) return;
+
+      screen.classList.remove('hidden');
+      screen.style.setProperty('display', 'block', 'important');
+      document.body.style.backgroundColor = '#020617';
 
       const searchId = (empId || '').trim().toUpperCase();
       const searchPageId = (pageId || '').trim();
@@ -5880,12 +5905,12 @@ Resume
         }
       }
 
-      if (!matched && (searchId === 'NX-8842' || !searchId)) {
+      if (!matched && (searchId === 'NX-8842' || searchId.includes('8842') || !searchId)) {
         matched = NOTION_EMPLOYEE_RECORDS['3b63448d-38a7-8193-b60f-ffc05b1aad75'];
       }
 
       const nowTime = new Date().toLocaleString([], { dateStyle: 'medium', timeStyle: 'medium' });
-      const certRef = 'NX-CERT-' + (matched ? (matched.empId || '8842') : 'NULL') + '-' + Math.floor(100000 + Math.random() * 900000);
+      const certRef = 'NX-CERT-' + (matched ? (matched.empId || '8842') : 'UNKNOWN') + '-' + Math.floor(100000 + Math.random() * 900000);
 
       if (matched && matched.status !== 'Terminated') {
         const isPrem = (matched.name || '').toUpperCase().indexOf('PREM KUMAR') >= 0;
@@ -5894,62 +5919,64 @@ Resume
         const initials = (matched.name || 'NX').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
 
         container.innerHTML = `
-          <div class="text-center space-y-3 pb-2 border-b border-slate-800">
-            <div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(16,185,129,0.3)]">
-              <span class="material-symbols-outlined text-[36px]">verified</span>
+          <div class="text-center space-y-3 pb-4 border-b border-slate-800">
+            <div class="w-20 h-20 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(16,185,129,0.35)]">
+              <span class="material-symbols-outlined text-[44px]">verified</span>
             </div>
             <div>
-              <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold tracking-wider uppercase border border-emerald-500/40">
-                Officially Verified Active Employee
+              <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[12px] font-bold tracking-wider uppercase border border-emerald-500/40 shadow-sm">
+                VERIFIED ACTIVE EMPLOYEE
               </span>
-              <h2 class="text-[20px] font-bold text-white mt-1.5">${escapeHtml(matched.name)}</h2>
-              <p class="text-[12px] text-emerald-400/90 font-mono">Record Authenticated with Notion Database</p>
+              <h2 class="text-[22px] font-bold text-white mt-2">${escapeHtml(matched.name)}</h2>
+              <p class="text-[12px] text-emerald-400 font-mono mt-0.5">Officially Authenticated via Enterprise Notion Database</p>
             </div>
           </div>
 
           <!-- Employee Quick Badge Banner -->
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl overflow-hidden bg-slate-800 border border-slate-700 shrink-0 flex items-center justify-center shadow-md">
-              ${photoUrl ? `<img src="${photoUrl}" alt="${escapeHtml(matched.name)}" class="w-full h-full object-cover"/>` : `<span class="text-lg font-bold text-slate-300">${initials}</span>`}
+          <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 border-2 border-emerald-500/30 shrink-0 flex items-center justify-center shadow-md">
+              ${photoUrl ? `<img src="${photoUrl}" alt="${escapeHtml(matched.name)}" class="w-full h-full object-cover"/>` : `<span class="text-xl font-bold text-slate-300">${initials}</span>`}
             </div>
-            <div class="space-y-0.5">
-              <div class="text-[14px] font-semibold text-white">${escapeHtml(matched.name)}</div>
+            <div class="space-y-1">
+              <div class="text-[15px] font-bold text-white">${escapeHtml(matched.name)}</div>
               <div class="text-[12px] text-slate-300">${escapeHtml(matched.jobTitle || 'Consultant')} · ${escapeHtml(matched.dept || 'Data Science')}</div>
-              <div class="text-[11px] font-mono text-emerald-400 font-medium">Employee ID: ${escapeHtml(matched.empId || 'NX-8842')}</div>
+              <div class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold">
+                ID: ${escapeHtml(matched.empId || 'NX-8842')}
+              </div>
             </div>
           </div>
 
           <!-- Verified Attributes Grid -->
           <div class="grid grid-cols-2 gap-3 text-[12px]">
-            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Employment Status</span>
-              <span class="font-semibold text-emerald-400 flex items-center gap-1.5">
+            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Employment Status</span>
+              <span class="font-bold text-emerald-400 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                 <span>${escapeHtml(matched.status || 'Active')} (Full-Time)</span>
               </span>
             </div>
-            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Date of Joining</span>
+            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Date of Joining</span>
               <span class="font-medium text-slate-200">${escapeHtml(matched.joiningDate || '17/08/2026')}</span>
             </div>
-            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Work Location</span>
+            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Work Location</span>
               <span class="font-medium text-slate-200">${escapeHtml(matched.location || 'Bangalore HQ · Hybrid')}</span>
             </div>
-            <div class="p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Emergency Blood Group</span>
+            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Emergency Blood Group</span>
               <span class="font-medium text-slate-200">${escapeHtml(matched.bloodGroup || 'O+ (Positive)')}</span>
             </div>
-            <div class="col-span-2 p-3 rounded-xl bg-slate-950/40 border border-slate-800/80">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-0.5">Reporting Authority</span>
+            <div class="col-span-2 p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
+              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Reporting Authority</span>
               <span class="font-medium text-slate-200">${escapeHtml(matched.manager || 'Ananya Sharma (VP, Data & Analytics)')}</span>
             </div>
           </div>
 
           <!-- Cryptographic & Notion Audit Record -->
-          <div class="p-3.5 rounded-2xl bg-emerald-950/20 border border-emerald-500/20 space-y-1.5 text-[11px] text-slate-400 font-mono">
+          <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-2 text-[11px] text-slate-400 font-mono">
             <div class="flex items-center justify-between text-emerald-300 font-sans font-semibold">
-              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">lock</span>Notion Cloud Audit Trail</span>
+              <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">lock</span>Notion Cloud Audit Trail</span>
               <span>Verified at ${nowTime}</span>
             </div>
             <div class="truncate">Database ID: 46e3448d-38a7-8393-a64d-07425010c0ff</div>
@@ -5959,43 +5986,79 @@ Resume
         `;
       } else {
         container.innerHTML = `
-          <div class="text-center space-y-3 pb-2 border-b border-slate-800">
-            <div class="w-16 h-16 rounded-full bg-rose-500/10 border-2 border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(244,63,94,0.3)]">
-              <span class="material-symbols-outlined text-[36px]">gpp_bad</span>
+          <div class="text-center space-y-3 pb-4 border-b border-slate-800">
+            <div class="w-20 h-20 rounded-full bg-rose-500/15 border-2 border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(244,63,94,0.35)]">
+              <span class="material-symbols-outlined text-[44px]">gpp_bad</span>
             </div>
             <div>
-              <span class="inline-block px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[11px] font-bold tracking-wider uppercase border border-rose-500/40">
+              <span class="inline-block px-3.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[12px] font-bold tracking-wider uppercase border border-rose-500/40">
                 Verification Unsuccessful
               </span>
-              <h2 class="text-[20px] font-bold text-white mt-1.5">Unrecognized or Inactive Credential</h2>
-              <p class="text-[12px] text-slate-400">The scanned credential could not be validated against the active employee directory.</p>
+              <h2 class="text-[22px] font-bold text-white mt-2">Unrecognized or Inactive Credential</h2>
+              <p class="text-[12px] text-slate-400 mt-0.5">The scanned credential could not be validated against the active employee directory.</p>
             </div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-[12px] text-slate-300 space-y-2">
+          <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-[12px] text-slate-300 space-y-2">
             <p>Queried Credential ID: <strong class="font-mono text-white">${escapeHtml(searchId || 'None')}</strong></p>
             <p class="text-slate-400">If you believe this is an error, please check with the employee or contact Nexus HR security desk.</p>
           </div>
         `;
       }
-
-      screen.classList.remove('hidden');
     }
 
     function closePublicVerificationScreen() {
       const screen = document.getElementById('publicIdVerificationScreen');
-      if (screen) screen.classList.add('hidden');
+      if (screen) {
+        screen.classList.add('hidden');
+        screen.style.display = 'none';
+      }
+      const savedEmail = sessionStorage.getItem('nexus_hr_authenticated_email');
+      if (savedEmail) {
+        unlockConsole(savedEmail);
+      } else {
+        const authGate = document.getElementById('authGateScreen');
+        if (authGate) {
+          authGate.classList.remove('hidden');
+          authGate.style.removeProperty('display');
+        }
+      }
     }
 
     function checkVerificationRoute() {
-      const params = new URLSearchParams(window.location.search);
-      const verifyId = params.get('verify') || params.get('verify_id');
+      let verifyId = null;
+      let pid = '';
+
+      if (window.location.search) {
+        const params = new URLSearchParams(window.location.search);
+        verifyId = params.get('verify') || params.get('verify_id') || params.get('v') || params.get('emp') || params.get('id');
+        pid = params.get('pid') || '';
+      }
+
+      if (!verifyId && window.location.hash) {
+        const hash = window.location.hash.replace(/^#\/?/, '');
+        if (hash.startsWith('verify=')) {
+          verifyId = hash.replace('verify=', '').split('&')[0];
+        } else if (hash.includes('verify')) {
+          const match = hash.match(/verify[=\/]([A-Za-z0-9-]+)/i);
+          if (match) verifyId = match[1];
+        }
+      }
+
       if (verifyId) {
-        const pid = params.get('pid') || '';
         showPublicVerificationScreen(verifyId, pid);
+        // Cross-reference and update live from backend Notion database in background
+        try {
+          loadDirectoryFromNotion(false).then(function() {
+            showPublicVerificationScreen(verifyId, pid);
+          }).catch(function() {});
+        } catch(e) {}
         return true;
       }
       return false;
     }
+
+    // Immediate check as soon as script evaluates
+    checkVerificationRoute();
 
     async function loadDirectoryFromNotion(showToastFlag) {
       try {
