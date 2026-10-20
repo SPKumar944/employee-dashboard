@@ -1069,9 +1069,9 @@
 </section>
 <!-- TAB 6: APPRAISALS & TRAINING -->
 <section class="tab-content hidden space-y-6" id="tab-appraisals">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<!-- Appraisal Review (7 cols) -->
-<div class="lg:col-span-7 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+<!-- Left Card: Performance Appraisal Review & Rating -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
 <div class="flex flex-wrap items-center justify-between gap-2 pb-1">
 <div>
 <h3 class="text-[15px] font-semibold text-apple-primary">Performance Appraisals</h3>
@@ -1096,20 +1096,25 @@
 <span class="text-apple-secondary" id="dispAppraisalDate">Published: 15/01/2026</span>
 </div>
 <p class="text-[13px] text-apple-primary leading-relaxed italic border-l-2 border-apple-primary pl-3" id="dispAppraisalQuote">
-                  “Exceptional delivery on predictive machine learning architectures and collaborative leadership. Prem consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”
-                </p>
+“Exceptional delivery on predictive machine learning architectures and collaborative leadership. Consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”
+</p>
 <div class="text-[12px] text-apple-secondary flex justify-between pt-1">
-<span>Evaluator: <strong class="text-apple-primary font-medium" id="dispAppraisalEvaluator">SUKUMAR PREM KUMAR (Super Admin)</strong></span>
+<span>Evaluator: <strong class="text-apple-primary font-medium" id="dispAppraisalEvaluator">Super Admin</strong></span>
 <span class="font-mono" id="dispAppraisalPct">Score: 96%</span>
 </div>
 </div>
-<!-- Training Modules -->
-<div class="pt-3 border-t border-apple-border space-y-3">
-<div class="flex justify-between items-center">
-<h4 class="text-[13px] font-semibold text-apple-primary">Mandatory Compliance Training</h4>
-<span class="text-[11px] text-apple-secondary">2 of 3 Completed</span>
 </div>
-<div class="space-y-2 text-[13px]">
+
+<!-- Right Card: Mandatory Compliance Training -->
+<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-5">
+<div class="flex justify-between items-center pb-1">
+<div>
+<h3 class="text-[15px] font-semibold text-apple-primary">Mandatory Compliance Training</h3>
+<p class="text-[12px] text-apple-secondary">Annual enterprise certifications &amp; regulatory courses</p>
+</div>
+<span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary border border-apple-borderSubtle">2 of 3 Completed</span>
+</div>
+<div class="space-y-2.5 text-[13px]">
 <div class="p-3 bg-apple-subtle rounded-xl flex items-center justify-between">
 <div>
 <div class="font-medium text-apple-primary">MT 2024: Information Security &amp; Data Privacy</div>
@@ -1130,46 +1135,9 @@
 <span class="text-[11px] text-apple-secondary">Enrolled · Due: October 2026</span>
 </div>
 <button class="h-7 px-3 bg-apple-primary text-white rounded-full text-[11px] font-medium hover:bg-black transition-colors" type="button">
-                      Resume
-                    </button>
+Resume
+</button>
 </div>
-</div>
-</div>
-</div>
-<!-- Health & Occupational (5 cols) -->
-<div class="lg:col-span-5 bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-5">
-<div class="space-y-4">
-<h3 class="text-[15px] font-semibold text-apple-primary">Occupational Health &amp; Safety</h3>
-<div class="space-y-2.5 text-[13px]">
-<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
-<div class="flex items-center justify-between">
-<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Executive Health Check</span>
-<span class="text-[11px] text-apple-primary font-medium">Cleared</span>
-</div>
-<div class="font-medium text-apple-primary">Max Healthcare Bangalore</div>
-<span class="text-[11px] text-apple-secondary">Valid through August 2027</span>
-</div>
-<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
-<div class="flex items-center justify-between">
-<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Vaccinations</span>
-<span class="text-[11px] text-apple-primary font-medium">Up to Date</span>
-</div>
-<div class="font-medium text-apple-primary">COVID-19 Booster &amp; Annual Flu</div>
-<span class="text-[11px] text-apple-secondary">Administered Sept 2025</span>
-</div>
-<div class="p-3 bg-apple-subtle rounded-xl space-y-0.5">
-<div class="flex items-center justify-between">
-<span class="text-[11px] font-medium uppercase tracking-wider text-apple-secondary">Ergonomic Provision</span>
-<span class="text-[11px] text-apple-primary font-medium">Approved</span>
-</div>
-<div class="font-medium text-apple-primary">Home Office Setup Dispatched</div>
-<span class="text-[11px] text-apple-secondary">Lumbar support chair + dual monitor arms</span>
-</div>
-</div>
-</div>
-<div class="p-3.5 bg-apple-subtle rounded-xl border border-apple-borderSubtle flex items-center justify-between text-[12px]">
-<span class="text-apple-secondary font-medium">Group Medical Insurance Cover</span>
-<span class="font-semibold text-apple-primary" id="dispHealthInsuranceCover">₹15,00,000</span>
 </div>
 </div>
 </div>
@@ -1798,7 +1766,7 @@
         <span class="material-symbols-outlined text-[18px] text-apple-primary">admin_panel_settings</span>
         <div>
           <h3 class="text-[15px] font-semibold text-apple-primary">Super Admin · Modify Appraisal &amp; Rating</h3>
-          <p class="text-[11px] text-apple-secondary">Only Super Admin can edit performance scores, review notes &amp; insurance cover</p>
+          <p class="text-[11px] text-apple-secondary">Only Super Admin can edit performance scores &amp; review notes</p>
         </div>
       </div>
       <button type="button" onclick="closeAppraisalAdminModal()" class="w-7 h-7 rounded-full hover:bg-apple-hover flex items-center justify-center text-apple-secondary">
@@ -1806,7 +1774,7 @@
       </button>
     </div>
     <form id="superAdminAppraisalForm" onsubmit="saveAppraisalAdminDetails(event)" class="p-6 space-y-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
         <div>
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Cumulative Score (out of 5.0)</label>
           <input id="editAppraisalScore" type="text" required value="4.8 / 5.0" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-semibold text-apple-primary outline-none"/>
@@ -1824,14 +1792,10 @@
           <label class="block text-[11px] font-medium text-apple-secondary mb-1">Percentage Score</label>
           <input id="editAppraisalPct" type="text" required value="Score: 96%" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-mono text-apple-primary outline-none"/>
         </div>
-        <div>
-          <label class="block text-[11px] font-medium text-apple-secondary mb-1">Group Medical Insurance Cover</label>
-          <input id="editHealthInsuranceCover" type="text" required value="₹15,00,000" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] font-semibold text-apple-primary outline-none"/>
-        </div>
       </div>
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Evaluator Name &amp; Title</label>
-        <input id="editAppraisalEvaluator" type="text" required value="SUKUMAR PREM KUMAR (Super Admin)" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
+        <input id="editAppraisalEvaluator" type="text" required value="Super Admin" class="w-full h-9 px-3 bg-apple-subtle focus:bg-apple-surface border border-apple-border rounded-xl text-[13px] text-apple-primary outline-none"/>
       </div>
       <div>
         <label class="block text-[11px] font-medium text-apple-secondary mb-1">Official Appraisal Review Remarks</label>
@@ -2724,9 +2688,9 @@
       },
       'reports': {
         icon: 'bar_chart',
-        title: 'Performance, Appraisals & Health Reports',
+        title: 'Performance Appraisals & Training',
         badge: 'Score: 4.8 / 5.0',
-        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Q4 Annual Review, Mandatory Training & OHS',
+        subtitle: 'SUKUMAR PREM KUMAR (NX-8842) · Q4 Annual Review & Mandatory Training',
         tabs: ['tab-appraisals']
       },
       'settings': {
@@ -4246,9 +4210,8 @@
       score: '4.8 / 5.0',
       badge: 'Exceeds Expectations',
       pct: 'Score: 96%',
-      evaluator: 'SUKUMAR PREM KUMAR (Super Admin)',
-      quote: '“Exceptional delivery on predictive machine learning architectures and collaborative leadership. Consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”',
-      insuranceCover: '₹15,00,000'
+      evaluator: 'Super Admin',
+      quote: '“Exceptional delivery on predictive machine learning architectures and collaborative leadership. Consistently solves edge-case model drift challenges and acts as an anchor for junior consultants.”'
     };
 
     let appraisalData = Object.assign({}, DEFAULT_APPRAISAL_DATA, JSON.parse(localStorage.getItem('nexus_appraisal_data_v1') || 'null') || {});
@@ -4263,8 +4226,9 @@
       setEl('dispAppraisalPct', appraisalData.pct);
       setEl('dispAppraisalEvaluator', appraisalData.evaluator);
       setEl('dispAppraisalQuote', appraisalData.quote);
-      setEl('dispHealthInsuranceCover', appraisalData.insuranceCover);
-      sidebarBannerMeta.reports.badge = 'Score: ' + appraisalData.score;
+      if (sidebarBannerMeta && sidebarBannerMeta.reports) {
+        sidebarBannerMeta.reports.badge = 'Score: ' + appraisalData.score;
+      }
     }
 
     function openAppraisalAdminModal() {
@@ -4277,7 +4241,6 @@
       document.getElementById('editAppraisalPct').value = appraisalData.pct;
       document.getElementById('editAppraisalEvaluator').value = appraisalData.evaluator;
       document.getElementById('editAppraisalQuote').value = appraisalData.quote;
-      document.getElementById('editHealthInsuranceCover').value = appraisalData.insuranceCover;
       const modal = document.getElementById('superAdminAppraisalModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -4300,8 +4263,7 @@
         badge: document.getElementById('editAppraisalBadge').value,
         pct: document.getElementById('editAppraisalPct').value.trim(),
         evaluator: document.getElementById('editAppraisalEvaluator').value.trim(),
-        quote: document.getElementById('editAppraisalQuote').value.trim(),
-        insuranceCover: document.getElementById('editHealthInsuranceCover').value.trim()
+        quote: document.getElementById('editAppraisalQuote').value.trim()
       };
       localStorage.setItem('nexus_appraisal_data_v1', JSON.stringify(appraisalData));
       renderAppraisalUI();
