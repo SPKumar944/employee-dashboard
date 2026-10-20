@@ -446,12 +446,6 @@
 <p class="text-[13px] text-apple-secondary mt-0.5" id="bannerSubtitle">Employee: SUKUMAR PREM KUMAR (NX-8842) · Band L5 (Consultant)</p>
 </div>
 </div>
-<div class="flex items-center gap-2.5">
-<button class="h-8 px-3.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary rounded-full text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-apple-border" onclick="navigateSidebar('employees')" type="button">
-<span class="material-symbols-outlined text-[15px] text-apple-secondary">person</span>
-<span>Back to Employee Profile</span>
-</button>
-</div>
 </div>
 </div>
 <!-- 1. Employee Profile Header Card -->
@@ -1182,50 +1176,51 @@
 </section>
 <!-- SIDEBAR SECTION: WORKFORCE DIRECTORY (SUPER ADMIN ONLY) -->
 <section class="tab-content hidden space-y-6" id="tab-directory">
-<!-- Employee Onboarding & Self-Service Form Action Card -->
-<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm">
-<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-<div class="space-y-1">
-<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle border border-apple-borderSubtle text-[11px] font-semibold text-apple-primary">
-<span class="material-symbols-outlined text-[14px]">how_to_reg</span>
-<span>Employee Onboarding &amp; Registration</span>
-</div>
-<h3 class="text-[15px] font-semibold text-apple-primary">Employee Onboarding &amp; Self-Service Details</h3>
-<p class="text-[12px] text-apple-secondary">Employees submit their Personal Details, Emergency Contact, Residential Address, Bank &amp; Tax PAN. Submissions arrive directly into your <strong>Super Admin Review Queue</strong> below to <strong>Approve</strong> or <strong>Reject</strong>.</p>
-</div>
-<div class="flex flex-wrap items-center gap-2 shrink-0">
-<button class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1.5 transition-colors" onclick="copyShareableFormLink()" type="button">
-<span class="material-symbols-outlined text-[15px]">content_copy</span>
-<span>Copy Form Link</span>
-</button>
-<button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors" onclick="openStandaloneEmployeeForm()" type="button">
-<span class="material-symbols-outlined text-[15px]">open_in_new</span>
-<span>Open Onboarding Form</span>
-</button>
-</div>
-</div>
-</div>
+<!-- Horizontal Parallel 2-Column Grid: Onboarding Action Card & Pending Review Queue -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+  <!-- Box 1: Employee Onboarding & Self-Service Form Action Card -->
+  <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-4">
+    <div class="space-y-2">
+      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle border border-apple-borderSubtle text-[11px] font-semibold text-apple-primary">
+        <span class="material-symbols-outlined text-[14px]">how_to_reg</span>
+        <span>Employee Onboarding &amp; Registration</span>
+      </div>
+      <h3 class="text-[15px] font-semibold text-apple-primary">Employee Onboarding &amp; Self-Service Details</h3>
+      <p class="text-[12px] text-apple-secondary">Employees submit their Personal Details, Emergency Contact, Residential Address, Bank &amp; Tax PAN. Submissions arrive directly into your <strong>Super Admin Review Queue</strong> to <strong>Approve</strong> or <strong>Reject</strong>.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-apple-borderSubtle">
+      <button class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1.5 transition-colors" onclick="copyShareableFormLink()" type="button">
+        <span class="material-symbols-outlined text-[15px]">content_copy</span>
+        <span>Copy Form Link</span>
+      </button>
+      <button class="h-8 px-3.5 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors" onclick="openStandaloneEmployeeForm()" type="button">
+        <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+        <span>Open Onboarding Form</span>
+      </button>
+    </div>
+  </div>
 
-<!-- Super Admin Pending Employee Form Submissions & Review Queue -->
-<div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm space-y-4" id="superAdminApprovalPanel">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-<div>
-<div class="flex items-center gap-2">
-<h3 class="text-[15px] font-semibold text-apple-primary">Pending Employee Form Submissions (Super Admin Review &amp; Approval)</h3>
-<span class="px-2 py-0.5 rounded-full bg-apple-primary text-white text-[11px] font-semibold" id="pendingApprovalCountBadge">0 Pending</span>
-</div>
-<p class="text-[12px] text-apple-secondary">Review details submitted via the Employee Form Link. Approve to activate the employee profile or Reject to notify the employee with specific mistakes to fix.</p>
-</div>
-<button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors self-start sm:self-auto" onclick="loadDirectoryFromNotion(true)" type="button">
-<span class="material-symbols-outlined text-[14px]">refresh</span>
-<span>Refresh Submissions</span>
-</button>
-</div>
-<div class="space-y-3" id="pendingApprovalsList">
-<div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[12px] text-apple-secondary text-center">
-No pending employee form submissions awaiting review. Share the form link above or click <strong>Open Employee Form View</strong> to test submitting a new employee record.
-</div>
-</div>
+  <!-- Box 2: Super Admin Pending Employee Form Submissions & Review Queue -->
+  <div class="bg-apple-surface rounded-2xl apple-border p-6 apple-shadow-sm flex flex-col justify-between space-y-4" id="superAdminApprovalPanel">
+    <div class="space-y-2">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <h3 class="text-[15px] font-semibold text-apple-primary">Pending Employee Form Submissions</h3>
+          <span class="px-2 py-0.5 rounded-full bg-apple-primary text-white text-[11px] font-semibold" id="pendingApprovalCountBadge">0 Pending</span>
+        </div>
+        <button class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-medium border border-apple-border flex items-center gap-1 transition-colors self-start sm:self-auto shrink-0" onclick="loadDirectoryFromNotion(true)" type="button">
+          <span class="material-symbols-outlined text-[14px]">refresh</span>
+          <span>Refresh</span>
+        </button>
+      </div>
+      <p class="text-[12px] text-apple-secondary">Review details submitted via the Employee Form Link. Approve to activate profile or Reject to notify employee.</p>
+    </div>
+    <div class="space-y-3" id="pendingApprovalsList">
+      <div class="p-4 rounded-xl bg-apple-subtle border border-apple-borderSubtle text-[12px] text-apple-secondary text-center">
+        No pending employee form submissions awaiting review. Share the form link or click <strong>Open Onboarding Form</strong> to test.
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Enterprise Workforce Directory Table -->
