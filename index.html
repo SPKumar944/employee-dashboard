@@ -113,8 +113,8 @@
   <style>
     html.is-verifying-credential,
     html.is-verifying-credential body {
-      background-color: #020617 !important;
-      color: #f8fafc !important;
+      background-color: #f5f5f7 !important;
+      color: #1d1d1f !important;
       overflow-x: hidden !important;
     }
     html.is-verifying-credential #authGateScreen,
@@ -1217,110 +1217,104 @@ Resume
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start justify-items-center max-w-4xl mx-auto py-2">
     
     <!-- CARD FRONT (Vertical Smart Lanyard Badge) -->
-    <div class="w-full max-w-[340px] bg-gradient-to-b from-[#18181b] via-[#0f0f12] to-[#09090b] text-white rounded-3xl p-6 shadow-2xl border border-white/10 relative overflow-hidden flex flex-col justify-between" style="min-height: 530px;">
+    <div class="w-full max-w-[340px] bg-white text-apple-primary rounded-3xl p-6 apple-shadow-sm border border-apple-border relative overflow-hidden flex flex-col justify-between" style="min-height: 520px;">
       <!-- Lanyard Slot Punch Indicator -->
-      <div class="w-14 h-2 bg-white/10 rounded-full mx-auto mb-4 border border-white/5"></div>
+      <div class="w-14 h-2 bg-apple-border rounded-full mx-auto mb-4"></div>
 
-      <!-- Header: Company Brandmark & Contactless Chip -->
-      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+      <!-- Header: Company Brandmark & Status Badge -->
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
         <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-white text-black font-bold flex items-center justify-center text-xs shadow">N</div>
+          <div class="w-7 h-7 rounded-lg bg-apple-primary text-white font-bold flex items-center justify-center text-xs shadow-sm">N</div>
           <div>
-            <div class="text-[13px] font-bold tracking-wider leading-none">NEXUS HR</div>
-            <div class="text-[9px] text-zinc-400 font-medium tracking-widest uppercase">Enterprise Credential</div>
+            <div class="text-[13px] font-bold text-apple-primary tracking-tight leading-none">Nexus HR</div>
+            <div class="text-[9px] text-apple-secondary font-medium tracking-wider uppercase mt-0.5">Corporate Identity</div>
           </div>
         </div>
-        <div class="flex items-center gap-1 text-zinc-400">
-          <span class="material-symbols-outlined text-[18px]">contactless</span>
-          <span class="text-[10px] font-mono">NFC</span>
-        </div>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span>Active</span>
+        </span>
       </div>
 
       <!-- Photo & Identity -->
-      <div class="text-center pt-4 space-y-3">
+      <div class="text-center pt-3 space-y-2">
         <div class="relative w-24 h-24 mx-auto">
-          <div id="idCardFrontPhotoContainer" class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg bg-zinc-800 flex items-center justify-center">
-            <span class="material-symbols-outlined text-4xl text-zinc-500">person</span>
-          </div>
-          <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow" title="Active Verified">
-            <span class="material-symbols-outlined text-[14px]">check</span>
+          <div id="idCardFrontPhotoContainer" class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-apple-border shadow-sm bg-apple-subtle flex items-center justify-center">
+            <span class="material-symbols-outlined text-4xl text-apple-secondary">person</span>
           </div>
         </div>
 
         <div>
-          <h3 class="text-[16px] font-bold tracking-tight text-white" id="idCardFrontName">SUKUMAR PREM KUMAR</h3>
-          <p class="text-[11px] text-zinc-300 font-medium" id="idCardFrontRole">Lead AI Consultant · Data Science</p>
-          <div class="mt-1.5 inline-block px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-mono text-emerald-400" id="idCardFrontEmpId">
+          <h3 class="text-[16px] font-bold tracking-tight text-apple-primary" id="idCardFrontName">SUKUMAR PREM KUMAR</h3>
+          <p class="text-[12px] text-apple-secondary font-medium" id="idCardFrontRole">Consultant · Data Science</p>
+          <div class="mt-1 inline-block px-2.5 py-0.5 rounded-full bg-apple-subtle border border-apple-border text-[11px] font-mono font-medium text-apple-primary" id="idCardFrontEmpId">
             NX-8842
           </div>
         </div>
       </div>
 
       <!-- Scannable High-Contrast QR Code Card -->
-      <div class="mt-4 bg-white p-3 rounded-2xl shadow-inner text-center mx-auto w-40 flex flex-col items-center justify-center">
-        <img id="idCardQrImage" alt="Scan to verify employee" class="w-32 h-32 object-contain" src=""/>
-        <span class="text-[8px] font-bold text-zinc-800 tracking-wider uppercase mt-1 flex items-center gap-1">
+      <div class="my-3 bg-apple-subtle p-3 rounded-2xl border border-apple-border text-center mx-auto w-36 flex flex-col items-center justify-center">
+        <img id="idCardQrImage" alt="Scan to verify employee" class="w-28 h-28 object-contain" src=""/>
+        <span class="text-[9px] font-semibold text-apple-secondary tracking-wider uppercase mt-1 flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
           <span>Scan to Verify</span>
         </span>
       </div>
 
-      <!-- Front Footer & Holographic Micro-Strip -->
-      <div class="pt-4 mt-2 space-y-2">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 px-1 font-mono">
-          <span>Blood: <strong class="text-zinc-200" id="idCardFrontBlood">O+</strong></span>
-          <span>Joined: <strong class="text-zinc-200" id="idCardFrontJoining">17/08/2026</strong></span>
-        </div>
-        <div class="h-2 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-500 opacity-70"></div>
+      <!-- Front Footer -->
+      <div class="pt-3 border-t border-apple-border flex items-center justify-between text-[11px] text-apple-secondary font-mono">
+        <span>Blood: <strong class="text-apple-primary font-sans" id="idCardFrontBlood">O+</strong></span>
+        <span>Joined: <strong class="text-apple-primary font-sans" id="idCardFrontJoining">17/08/2026</strong></span>
       </div>
     </div>
 
     <!-- CARD BACK (Statutory, Emergency & Security Information) -->
-    <div class="w-full max-w-[340px] bg-gradient-to-b from-[#18181b] via-[#0f0f12] to-[#09090b] text-white rounded-3xl p-6 shadow-2xl border border-white/10 relative overflow-hidden flex flex-col justify-between" style="min-height: 530px;">
+    <div class="w-full max-w-[340px] bg-white text-apple-primary rounded-3xl p-6 apple-shadow-sm border border-apple-border relative overflow-hidden flex flex-col justify-between" style="min-height: 520px;">
       <!-- Lanyard Slot Punch Indicator -->
-      <div class="w-14 h-2 bg-white/10 rounded-full mx-auto mb-3 border border-white/5"></div>
+      <div class="w-14 h-2 bg-apple-border rounded-full mx-auto mb-4"></div>
 
-      <!-- Simulated Magnetic Stripe Bar -->
-      <div class="-mx-6 h-9 bg-black/90 border-y border-white/10 flex items-center justify-between px-6 text-[9px] font-mono text-zinc-500">
-        <span>TRACK-1: //NX-ENCRYPTED</span>
-        <span>NFC-ACTIVE</span>
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-apple-border">
+        <div class="text-[12px] font-bold text-apple-primary tracking-tight">Security &amp; Emergency Details</div>
+        <span class="text-[10px] font-mono text-apple-secondary">Official ID</span>
       </div>
 
       <!-- Card Back Details -->
-      <div class="py-4 space-y-3.5 text-[11px]">
+      <div class="py-3 space-y-3 text-[11px]">
         <div>
-          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Emergency Contact</span>
-          <div class="font-medium text-white" id="idCardBackEmerg">Suresh Kumar (Father) · +91 98390 12455</div>
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary tracking-wider block mb-0.5">Emergency Contact</span>
+          <div class="font-medium text-apple-primary" id="idCardBackEmerg">Suresh Kumar (Father) · +91 98390 12455</div>
         </div>
 
         <div>
-          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Work Location &amp; Manager</span>
-          <div class="text-zinc-200" id="idCardBackLocationManager">Bangalore HQ · Ananya Sharma</div>
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary tracking-wider block mb-0.5">Work Location &amp; Manager</span>
+          <div class="text-apple-primary" id="idCardBackLocationManager">Bangalore HQ · Ananya Sharma</div>
         </div>
 
         <div>
-          <span class="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider block mb-0.5">Permanent Address</span>
-          <div class="text-zinc-300 leading-snug line-clamp-2" id="idCardBackAddress">Brigade Metropolis, Tower 4, Flat 602, Whitefield, Bangalore</div>
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary tracking-wider block mb-0.5">Permanent Address</span>
+          <div class="text-apple-secondary leading-snug line-clamp-2" id="idCardBackAddress">Brigade Metropolis, Tower 4, Flat 602, Whitefield, Bangalore</div>
         </div>
 
-        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-1 text-[10px] text-zinc-400 leading-relaxed">
-          <div class="font-semibold text-zinc-200 flex items-center gap-1">
-            <span class="material-symbols-outlined text-[13px] text-emerald-400">verified</span>
+        <div class="p-2.5 rounded-xl bg-apple-subtle border border-apple-border space-y-1 text-[10px] text-apple-secondary leading-relaxed">
+          <div class="font-semibold text-apple-primary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[13px] text-emerald-600">verified</span>
             <span>Notion Cloud Database Authenticated</span>
           </div>
-          <p>This credential remains official corporate property. Scan the QR code on front to authenticate status directly against the live Notion enterprise registry.</p>
+          <p>This credential remains official corporate property. Scan the front QR code to verify real-time status directly against the live Notion enterprise registry.</p>
         </div>
       </div>
 
       <!-- Back Footer & Authorized Signature -->
-      <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[10px]">
+      <div class="pt-3 border-t border-apple-border flex items-center justify-between text-[11px]">
         <div>
-          <div class="text-[9px] text-zinc-400 uppercase tracking-wider">Authorized Issuer</div>
-          <div class="font-serif italic text-zinc-200 text-[13px]">Super Admin</div>
+          <div class="text-[9px] text-apple-secondary uppercase tracking-wider">Authorized Issuer</div>
+          <div class="font-medium text-apple-primary text-[12px]">Super Admin</div>
         </div>
-        <div class="text-right text-[9px] text-zinc-400">
-          <div>If found, return to:</div>
-          <div class="text-zinc-300 font-medium">Nexus HR Bangalore HQ</div>
+        <div class="text-right text-[10px] text-apple-secondary">
+          <div>Return if found to:</div>
+          <div class="text-apple-primary font-medium">Nexus HR Bangalore HQ</div>
         </div>
       </div>
     </div>
@@ -2336,100 +2330,103 @@ Resume
 </div> <!-- End #appConsoleWrapper -->
 
 <!-- PUBLIC CREDENTIAL VERIFICATION PORTAL (OPENS ON QR SCAN) -->
-<div id="publicIdVerificationScreen" class="fixed inset-0 z-[140] hidden bg-slate-950 text-slate-100 overflow-y-auto py-8 px-4 sm:px-6">
+<div id="publicIdVerificationScreen" class="fixed inset-0 z-[140] hidden bg-apple-bg text-apple-primary overflow-y-auto py-10 px-4 sm:px-6">
   <div class="max-w-lg mx-auto space-y-6">
     <!-- Top Brandmark Header -->
-    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div class="flex items-center justify-between border-b border-apple-border pb-4">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-white text-black font-bold flex items-center justify-center text-sm shadow">N</div>
+        <div class="w-8 h-8 rounded-xl bg-apple-primary text-white font-bold flex items-center justify-center text-sm shadow-sm">N</div>
         <div>
-          <h1 class="text-[15px] font-bold text-white tracking-tight">NEXUS HR ENTERPRISE</h1>
-          <p class="text-[11px] text-slate-400">Official Credential Verification Service</p>
+          <h1 class="text-[15px] font-bold text-apple-primary tracking-tight">Nexus HR</h1>
+          <p class="text-[11px] text-apple-secondary">Official Credential Verification Service</p>
         </div>
       </div>
-      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span>Live Notion Registry</span>
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-apple-subtle border border-apple-border text-emerald-700 text-[11px] font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Notion Registry</span>
       </div>
     </div>
 
     <!-- Verification Result Card (Pre-rendered for instant display on QR scan) -->
-    <div id="verifyResultContainer" class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-      <div class="text-center space-y-3 pb-4 border-b border-slate-800">
-        <div class="w-20 h-20 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(16,185,129,0.35)]">
-          <span class="material-symbols-outlined text-[44px]">verified</span>
+    <div id="verifyResultContainer" class="bg-white border border-apple-border rounded-3xl p-6 sm:p-8 apple-shadow-sm space-y-5">
+      <!-- Top: Simple Verified Information at the top -->
+      <div class="flex items-center justify-between border-b border-apple-border pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">verified</span>
+          </div>
+          <div>
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold tracking-wider uppercase">
+              VERIFIED ACTIVE EMPLOYEE
+            </span>
+            <div class="text-[11px] text-apple-secondary mt-0.5">Authentic Record in Enterprise Notion Database</div>
+          </div>
         </div>
-        <div>
-          <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[12px] font-bold tracking-wider uppercase border border-emerald-500/40 shadow-sm">
-            VERIFIED ACTIVE EMPLOYEE
-          </span>
-          <h2 class="text-[22px] font-bold text-white mt-2" id="pvEmployeeName">SUKUMAR PREM KUMAR</h2>
-          <p class="text-[12px] text-emerald-400 font-mono mt-0.5">Officially Authenticated via Enterprise Notion Database</p>
+        <div class="text-right">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block">Employee ID</span>
+          <span class="text-[14px] font-mono font-bold text-apple-primary" id="pvEmployeeIdBadge">NX-8842</span>
         </div>
       </div>
 
       <!-- Employee Quick Badge Banner -->
-      <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center gap-4">
-        <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 border-2 border-emerald-500/30 shrink-0 flex items-center justify-center shadow-md">
+      <div class="p-3.5 rounded-2xl bg-apple-subtle border border-apple-border flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl overflow-hidden bg-white border border-apple-border shrink-0 flex items-center justify-center shadow-sm">
           <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkSdqBpuJ-aVo5FaZ7vI8iTHlEjnorKx4nCigAUd_gY4gEtFFJ_zK1Q3TlPtMZt-jbeAVycHT2Ih1p8Gzcrw-qDKxWLu_6DQrOJzqt9HPYh1exTuaojOi6ceR_iKbCiWZ36UpSL01tAXynPrw99QWtHRO1mOtq0JoCS2wiZlEuLAs3ZZYx1Dj8pa-SIj_vmThDIiwvjRltvq7Af5V0AzMzjvjU27nJyx9CrE7_ElsC42R3fQ2_G9S" alt="SUKUMAR PREM KUMAR" class="w-full h-full object-cover" id="pvEmployeeImg"/>
         </div>
-        <div class="space-y-1">
-          <div class="text-[15px] font-bold text-white" id="pvEmployeeTitleName">SUKUMAR PREM KUMAR</div>
-          <div class="text-[12px] text-slate-300" id="pvEmployeeRoleDept">Consultant · Data Science</div>
-          <div class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold" id="pvEmployeeIdBadge">
-            ID: NX-8842
-          </div>
+        <div class="space-y-0.5">
+          <h2 class="text-[17px] font-bold text-apple-primary tracking-tight" id="pvEmployeeName">SUKUMAR PREM KUMAR</h2>
+          <div class="text-[12px] text-apple-secondary font-medium" id="pvEmployeeRoleDept">Consultant · Data Science</div>
         </div>
       </div>
 
       <!-- Verified Attributes Grid -->
       <div class="grid grid-cols-2 gap-3 text-[12px]">
-        <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Employment Status</span>
-          <span class="font-bold text-emerald-400 flex items-center gap-1.5" id="pvEmployeeStatus">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Employment Status</span>
+          <span class="font-bold text-emerald-600 flex items-center gap-1.5" id="pvEmployeeStatus">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             <span>Active (Full-Time)</span>
           </span>
         </div>
-        <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Date of Joining</span>
-          <span class="font-medium text-slate-200" id="pvEmployeeDoj">17/08/2026</span>
+        <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Date of Joining</span>
+          <span class="font-medium text-apple-primary" id="pvEmployeeDoj">17/08/2026</span>
         </div>
-        <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Work Location</span>
-          <span class="font-medium text-slate-200" id="pvEmployeeLocation">Bangalore HQ · Hybrid</span>
+        <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Work Location</span>
+          <span class="font-medium text-apple-primary" id="pvEmployeeLocation">Bangalore HQ · Hybrid</span>
         </div>
-        <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Emergency Blood Group</span>
-          <span class="font-medium text-slate-200" id="pvEmployeeBlood">O+ (Positive)</span>
+        <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Emergency Blood Group</span>
+          <span class="font-medium text-apple-primary" id="pvEmployeeBlood">O+ (Positive)</span>
         </div>
-        <div class="col-span-2 p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Reporting Authority</span>
-          <span class="font-medium text-slate-200" id="pvEmployeeManager">Ananya Sharma (VP, Data &amp; Analytics)</span>
+        <div class="col-span-2 p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+          <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Reporting Authority</span>
+          <span class="font-medium text-apple-primary" id="pvEmployeeManager">Ananya Sharma (VP, Data &amp; Analytics)</span>
         </div>
       </div>
 
       <!-- Cryptographic & Notion Audit Record -->
-      <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-2 text-[11px] text-slate-400 font-mono">
-        <div class="flex items-center justify-between text-emerald-300 font-sans font-semibold">
-          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">lock</span>Notion Cloud Audit Trail</span>
-          <span id="pvEmployeeAuditTime">Verified Live</span>
+      <div class="p-3.5 rounded-2xl bg-apple-subtle border border-apple-border space-y-1.5 text-[11px] text-apple-secondary font-mono">
+        <div class="flex items-center justify-between text-apple-primary font-sans font-semibold">
+          <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-emerald-600">lock</span>Notion Cloud Audit Trail</span>
+          <span id="pvEmployeeAuditTime" class="text-apple-secondary text-[11px] font-normal">Verified Live</span>
         </div>
         <div class="truncate">Database ID: 46e3448d-38a7-8393-a64d-07425010c0ff</div>
         <div class="truncate" id="pvEmployeePageRecord">Page Record: 3b63448d-38a7-8193-b60f-ffc05b1aad75</div>
-        <div class="text-slate-300" id="pvEmployeeCertRef">Certificate Reference: NX-CERT-8842-VALIDATED</div>
+        <div class="text-apple-primary font-medium" id="pvEmployeeCertRef">Certificate Reference: NX-CERT-8842-VALIDATED</div>
       </div>
     </div>
 
     <!-- Action Footer -->
     <div class="text-center space-y-3 pt-2">
       <div class="flex items-center justify-center gap-3">
-        <button type="button" onclick="checkVerificationRoute()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[12px] font-medium transition-colors flex items-center gap-1.5 border border-slate-700 shadow-sm">
+        <button type="button" onclick="checkVerificationRoute()" class="px-5 py-2.5 rounded-xl bg-apple-primary hover:bg-black text-white text-[12px] font-medium transition-colors flex items-center gap-1.5 shadow-sm">
           <span class="material-symbols-outlined text-[15px]">refresh</span>
           <span>Re-Verify Credential</span>
         </button>
       </div>
-      <p class="text-[11px] text-slate-500 font-mono">Authentic Corporate Credential · NexusHR Enterprise Notion Cloud Database</p>
+      <p class="text-[11px] text-apple-secondary">Authentic Corporate Credential · NexusHR Enterprise Notion Cloud Database</p>
     </div>
   </div>
 </div>
@@ -5736,7 +5733,7 @@ Resume
           photoContainer.innerHTML = '<img id="idCardFrontImg" alt="' + empName + '" class="w-full h-full object-cover" crossOrigin="anonymous" src="' + finalPhoto + '"/>';
         } else {
           const initials = empName.split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
-          photoContainer.innerHTML = '<div class="w-full h-full bg-zinc-800 text-white flex items-center justify-center font-bold text-2xl">' + initials + '</div>';
+          photoContainer.innerHTML = '<div class="w-full h-full bg-apple-subtle text-apple-primary border border-apple-border flex items-center justify-center font-bold text-2xl">' + initials + '</div>';
         }
       }
 
@@ -5780,6 +5777,7 @@ Resume
       const ctx = canvas.getContext('2d');
 
       // Background dark gradient with rounded corners
+      // Clean Apple White Card Background with rounded corners
       const rad = 40;
       ctx.save();
       ctx.beginPath();
@@ -5795,128 +5793,125 @@ Resume
       ctx.closePath();
       ctx.clip();
 
-      const grad = ctx.createLinearGradient(0, 0, 0, 1060);
-      grad.addColorStop(0, '#18181b');
-      grad.addColorStop(0.5, '#0f0f12');
-      grad.addColorStop(1, '#09090b');
-      ctx.fillStyle = grad;
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, 680, 1060);
 
-      // Subtle border
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      // Subtle Apple Card Border
+      ctx.strokeStyle = '#d2d2d7';
       ctx.lineWidth = 4;
       ctx.stroke();
 
       // Lanyard Slot
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillStyle = '#e5e5ea';
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(280, 25, 120, 16, 8); else ctx.rect(280, 25, 120, 16);
       ctx.fill();
 
       // Top header: Brandmark
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#1d1d1f';
       ctx.font = 'bold 28px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('NEXUS HR', 90, 95);
+      ctx.fillText('Nexus HR', 90, 95);
 
-      ctx.fillStyle = '#a1a1aa';
-      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillText('ENTERPRISE CREDENTIAL · SMART BADGE', 90, 120);
+      ctx.fillStyle = '#86868b';
+      ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
+      ctx.fillText('CORPORATE IDENTITY · OFFICIAL CREDENTIAL', 90, 118);
 
       // Top Logo Box
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#1d1d1f';
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(40, 70, 38, 38, 8); else ctx.rect(40, 70, 38, 38);
+      if (ctx.roundRect) ctx.roundRect(40, 70, 38, 38, 10); else ctx.rect(40, 70, 38, 38);
       ctx.fill();
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 20px -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('N', 59, 97);
 
       // Header dividing line
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.strokeStyle = '#e5e5ea';
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(40, 145);
-      ctx.lineTo(640, 145);
+      ctx.moveTo(40, 140);
+      ctx.lineTo(640, 140);
       ctx.stroke();
 
       // Employee Photo Box
       const px = 250;
-      const py = 175;
+      const py = 168;
       const pw = 180;
       const ph = 180;
-      ctx.fillStyle = '#27272a';
+      ctx.fillStyle = '#f5f5f7';
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(px, py, pw, ph, 24); else ctx.rect(px, py, pw, ph);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#d2d2d7';
+      ctx.lineWidth = 2;
       ctx.stroke();
 
       // Employee Name
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#1d1d1f';
       ctx.font = 'bold 32px -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(empName, 340, 400);
+      ctx.fillText(empName, 340, 395);
 
       // Role & Department
-      ctx.fillStyle = '#d4d4d8';
+      ctx.fillStyle = '#86868b';
       ctx.font = '500 20px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillText(role + ' · ' + dept, 340, 435);
+      ctx.fillText(role + ' · ' + dept, 340, 430);
 
       // Monospace Emp ID badge
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+      ctx.fillStyle = '#f5f5f7';
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(250, 455, 180, 36, 18); else ctx.rect(250, 455, 180, 36);
+      if (ctx.roundRect) ctx.roundRect(250, 450, 180, 36, 18); else ctx.rect(250, 450, 180, 36);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+      ctx.strokeStyle = '#d2d2d7';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.fillStyle = '#34d399';
+      ctx.fillStyle = '#1d1d1f';
       ctx.font = 'bold 18px ui-monospace, SFMono-Regular, Menlo, monospace';
-      ctx.fillText(empId, 340, 480);
+      ctx.fillText(empId, 340, 475);
 
-      // QR Code white box
+      // QR Code Box
       const qx = 200;
-      const qy = 520;
+      const qy = 510;
       const qw = 280;
       const qh = 320;
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#f5f5f7';
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(qx, qy, qw, qh, 24); else ctx.rect(qx, qy, qw, qh);
       ctx.fill();
+      ctx.strokeStyle = '#e5e5ea';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
 
       // QR label
-      ctx.fillStyle = '#18181b';
+      ctx.fillStyle = '#86868b';
       ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
-      ctx.fillText('SCAN TO VERIFY LIVE STATUS', 340, 818);
+      ctx.fillText('SCAN TO VERIFY LIVE STATUS', 340, 808);
 
       // Footer Details (Blood Group & Joining)
-      ctx.fillStyle = '#a1a1aa';
+      ctx.fillStyle = '#86868b';
       ctx.font = 'bold 15px ui-monospace, SFMono-Regular, Menlo, monospace';
       ctx.textAlign = 'left';
-      ctx.fillText('BLOOD: ' + blood, 60, 890);
+      ctx.fillText('BLOOD: ' + blood, 60, 880);
       ctx.textAlign = 'right';
-      ctx.fillText('JOINED: ' + joining, 620, 890);
+      ctx.fillText('JOINED: ' + joining, 620, 880);
 
-      // Holographic strip
-      const hGrad = ctx.createLinearGradient(40, 920, 640, 920);
-      hGrad.addColorStop(0, '#34d399');
-      hGrad.addColorStop(0.5, '#22d3ee');
-      hGrad.addColorStop(1, '#818cf8');
-      ctx.fillStyle = hGrad;
+      // Subtle dividing line
+      ctx.strokeStyle = '#e5e5ea';
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(40, 920, 600, 14, 7); else ctx.rect(40, 920, 600, 14);
-      ctx.fill();
+      ctx.moveTo(40, 915);
+      ctx.lineTo(640, 915);
+      ctx.stroke();
 
       // Micro-text security notice
-      ctx.fillStyle = '#71717a';
+      ctx.fillStyle = '#86868b';
       ctx.font = '500 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('NOTION CLOUD DATABASE AUTHENTICATED · ZERO-TRUST CREDENTIAL', 340, 975);
-      ctx.fillText('Nexus HR Bangalore · Authorized Corporate Personnel', 340, 1005);
+      ctx.fillText('NOTION CLOUD DATABASE AUTHENTICATED · NEXUS HR TECH LTD', 340, 965);
+      ctx.fillText('Bangalore HQ · Official Corporate Credential', 340, 995);
 
       // Load and draw QR code onto canvas
       const qrImg = document.getElementById('idCardQrImage');
@@ -5991,7 +5986,7 @@ Resume
 
       screen.classList.remove('hidden');
       screen.style.setProperty('display', 'block', 'important');
-      document.body.style.backgroundColor = '#020617';
+      document.body.style.backgroundColor = '#f5f5f7';
 
       const searchId = (empId || '').trim().toUpperCase();
       const searchPageId = (pageId || '').trim();
@@ -6025,88 +6020,91 @@ Resume
         const initials = (matched.name || 'NX').split(' ').filter(Boolean).slice(0, 2).map(function(w) { return w[0].toUpperCase(); }).join('');
 
         container.innerHTML = `
-          <div class="text-center space-y-3 pb-4 border-b border-slate-800">
-            <div class="w-20 h-20 rounded-full bg-emerald-500/15 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(16,185,129,0.35)]">
-              <span class="material-symbols-outlined text-[44px]">verified</span>
+          <!-- Top: Simple Verified Information at the top -->
+          <div class="flex items-center justify-between border-b border-apple-border pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[24px]">verified</span>
+              </div>
+              <div>
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold tracking-wider uppercase">
+                  VERIFIED ACTIVE EMPLOYEE
+                </span>
+                <div class="text-[11px] text-apple-secondary mt-0.5">Authentic Record in Enterprise Notion Database</div>
+              </div>
             </div>
-            <div>
-              <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[12px] font-bold tracking-wider uppercase border border-emerald-500/40 shadow-sm">
-                VERIFIED ACTIVE EMPLOYEE
-              </span>
-              <h2 class="text-[22px] font-bold text-white mt-2">${escapeHtml(matched.name)}</h2>
-              <p class="text-[12px] text-emerald-400 font-mono mt-0.5">Officially Authenticated via Enterprise Notion Database</p>
+            <div class="text-right">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block">Employee ID</span>
+              <span class="text-[14px] font-mono font-bold text-apple-primary" id="pvEmployeeIdBadge">${escapeHtml(matched.empId || 'NX-8842')}</span>
             </div>
           </div>
 
-          <!-- Employee Quick Badge Banner -->
-          <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center gap-4">
-            <div class="w-16 h-16 rounded-2xl overflow-hidden bg-slate-800 border-2 border-emerald-500/30 shrink-0 flex items-center justify-center shadow-md">
-              ${photoUrl ? `<img src="${photoUrl}" alt="${escapeHtml(matched.name)}" class="w-full h-full object-cover"/>` : `<span class="text-xl font-bold text-slate-300">${initials}</span>`}
+          <!-- Employee Quick Summary Banner -->
+          <div class="p-3.5 rounded-2xl bg-apple-subtle border border-apple-border flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl overflow-hidden bg-white border border-apple-border shrink-0 flex items-center justify-center shadow-sm">
+              ${photoUrl ? `<img src="${photoUrl}" alt="${escapeHtml(matched.name)}" class="w-full h-full object-cover"/>` : `<span class="text-lg font-bold text-apple-secondary">${initials}</span>`}
             </div>
-            <div class="space-y-1">
-              <div class="text-[15px] font-bold text-white">${escapeHtml(matched.name)}</div>
-              <div class="text-[12px] text-slate-300">${escapeHtml(matched.jobTitle || 'Consultant')} · ${escapeHtml(matched.dept || 'Data Science')}</div>
-              <div class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400 font-semibold">
-                ID: ${escapeHtml(matched.empId || 'NX-8842')}
-              </div>
+            <div class="space-y-0.5">
+              <h2 class="text-[17px] font-bold text-apple-primary tracking-tight">${escapeHtml(matched.name)}</h2>
+              <div class="text-[12px] text-apple-secondary font-medium">${escapeHtml(matched.jobTitle || 'Consultant')} · ${escapeHtml(matched.dept || 'Data Science')}</div>
             </div>
           </div>
 
           <!-- Verified Attributes Grid -->
           <div class="grid grid-cols-2 gap-3 text-[12px]">
-            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Employment Status</span>
-              <span class="font-bold text-emerald-400 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Employment Status</span>
+              <span class="font-bold text-emerald-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 <span>${escapeHtml(matched.status || 'Active')} (Full-Time)</span>
               </span>
             </div>
-            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Date of Joining</span>
-              <span class="font-medium text-slate-200">${escapeHtml(matched.joiningDate || '17/08/2026')}</span>
+            <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Date of Joining</span>
+              <span class="font-medium text-apple-primary">${escapeHtml(matched.joiningDate || '17/08/2026')}</span>
             </div>
-            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Work Location</span>
-              <span class="font-medium text-slate-200">${escapeHtml(matched.location || 'Bangalore HQ · Hybrid')}</span>
+            <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Work Location</span>
+              <span class="font-medium text-apple-primary">${escapeHtml(matched.location || 'Bangalore HQ · Hybrid')}</span>
             </div>
-            <div class="p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Emergency Blood Group</span>
-              <span class="font-medium text-slate-200">${escapeHtml(matched.bloodGroup || 'O+ (Positive)')}</span>
+            <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Emergency Blood Group</span>
+              <span class="font-medium text-apple-primary">${escapeHtml(matched.bloodGroup || 'O+ (Positive)')}</span>
             </div>
-            <div class="col-span-2 p-3.5 rounded-xl bg-slate-950/50 border border-slate-800">
-              <span class="text-[10px] uppercase font-semibold text-slate-400 block mb-1">Reporting Authority</span>
-              <span class="font-medium text-slate-200">${escapeHtml(matched.manager || 'Ananya Sharma (VP, Data & Analytics)')}</span>
+            <div class="col-span-2 p-3.5 rounded-xl bg-apple-subtle border border-apple-border">
+              <span class="text-[10px] uppercase font-semibold text-apple-secondary block mb-1">Reporting Authority</span>
+              <span class="font-medium text-apple-primary">${escapeHtml(matched.manager || 'Ananya Sharma (VP, Data & Analytics)')}</span>
             </div>
           </div>
 
           <!-- Cryptographic & Notion Audit Record -->
-          <div class="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-2 text-[11px] text-slate-400 font-mono">
-            <div class="flex items-center justify-between text-emerald-300 font-sans font-semibold">
-              <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">lock</span>Notion Cloud Audit Trail</span>
-              <span>Verified at ${nowTime}</span>
+          <div class="p-3.5 rounded-2xl bg-apple-subtle border border-apple-border space-y-1.5 text-[11px] text-apple-secondary font-mono">
+            <div class="flex items-center justify-between text-apple-primary font-sans font-semibold">
+              <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-emerald-600">lock</span>Notion Cloud Audit Trail</span>
+              <span class="text-apple-secondary text-[11px] font-normal">Verified at ${nowTime}</span>
             </div>
             <div class="truncate">Database ID: 46e3448d-38a7-8393-a64d-07425010c0ff</div>
             <div class="truncate">Page Record: ${escapeHtml(matched.pageId || '3b63448d-38a7-8193-b60f-ffc05b1aad75')}</div>
-            <div class="text-slate-300">Certificate Reference: ${certRef}</div>
+            <div class="text-apple-primary font-medium">Certificate Reference: ${certRef}</div>
           </div>
         `;
       } else {
         container.innerHTML = `
-          <div class="text-center space-y-3 pb-4 border-b border-slate-800">
-            <div class="w-20 h-20 rounded-full bg-rose-500/15 border-2 border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(244,63,94,0.35)]">
-              <span class="material-symbols-outlined text-[44px]">gpp_bad</span>
+          <div class="text-center space-y-3 pb-4 border-b border-apple-border">
+            <div class="w-12 h-12 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto">
+              <span class="material-symbols-outlined text-[26px]">gpp_bad</span>
             </div>
             <div>
-              <span class="inline-block px-3.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-[12px] font-bold tracking-wider uppercase border border-rose-500/40">
+              <span class="inline-block px-3 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[11px] font-bold tracking-wider uppercase border border-rose-200">
                 Verification Unsuccessful
               </span>
-              <h2 class="text-[22px] font-bold text-white mt-2">Unrecognized or Inactive Credential</h2>
-              <p class="text-[12px] text-slate-400 mt-0.5">The scanned credential could not be validated against the active employee directory.</p>
+              <h2 class="text-[18px] font-bold text-apple-primary mt-2">Unrecognized Credential</h2>
+              <p class="text-[12px] text-apple-secondary mt-0.5">The scanned credential could not be validated against the active employee directory.</p>
             </div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-[12px] text-slate-300 space-y-2">
-            <p>Queried Credential ID: <strong class="font-mono text-white">${escapeHtml(searchId || 'None')}</strong></p>
-            <p class="text-slate-400">If you believe this is an error, please check with the employee or contact Nexus HR security desk.</p>
+          <div class="p-3.5 rounded-xl bg-apple-subtle border border-apple-border text-[12px] text-apple-secondary space-y-1.5">
+            <p>Queried Credential ID: <strong class="font-mono text-apple-primary">${escapeHtml(searchId || 'None')}</strong></p>
+            <p>Please check with the employee or contact Nexus HR security desk.</p>
           </div>
         `;
       }
