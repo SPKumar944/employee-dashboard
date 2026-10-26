@@ -4748,31 +4748,118 @@ Resume
       } catch (e) {}
     }
 
+    let pendingSubmissionsMap = {};
+    try {
+      pendingSubmissionsMap = JSON.parse(localStorage.getItem('agt_pending_submissions_v1') || localStorage.getItem('nexus_pending_submissions_v1') || '{}') || {};
+    } catch (e) {
+      pendingSubmissionsMap = {};
+    }
+
+    function savePendingSubmissionsMap() {
+      try {
+        localStorage.setItem('agt_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
+        localStorage.setItem('nexus_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
+      } catch (e) {}
+    }
+
     function loadStoredEmployeeRecords() {
       try {
-        const saved = JSON.parse(localStorage.getItem('agt_all_employee_records_v1') || '{}') || {};
+        const saved = JSON.parse(localStorage.getItem('agt_all_employee_records_v1') || localStorage.getItem('nexus_all_employee_records_v1') || '{}') || {};
         Object.keys(saved).forEach(function(pid) {
           NOTION_EMPLOYEE_RECORDS[pid] = Object.assign({}, NOTION_EMPLOYEE_RECORDS[pid] || {}, saved[pid]);
         });
       } catch (e) {}
 
-      // Also recover any approved items from pendingSubmissionsMap
+      // Also recover items from pendingSubmissionsMap into NOTION_EMPLOYEE_RECORDS
       try {
         Object.keys(pendingSubmissionsMap).forEach(function(pid) {
           const item = pendingSubmissionsMap[pid];
-          if (item && (item.reviewStatus === 'Approved' || item.status === 'Active')) {
+          if (item) {
             NOTION_EMPLOYEE_RECORDS[pid] = Object.assign({}, NOTION_EMPLOYEE_RECORDS[pid] || {}, item);
           }
         });
       } catch (e) {}
 
-      // Sync active employees to APPROVED_EMPLOYEES
+      // Guaranteed reconciliation: Detect any unapproved / pending employee
       Object.keys(NOTION_EMPLOYEE_RECORDS).forEach(function(pid) {
         const emp = NOTION_EMPLOYEE_RECORDS[pid];
-        if (emp && emp.email && emp.status === 'Active') {
+        if (!emp) return;
+        const isCoreSeeded = (emp.empId === 'NX-8842' || emp.empId === 'NX-8845' || (emp.empId === 'NX-8852' && emp.reviewStatus === 'Approved'));
+        const isPendingRole = (emp.jobTitle || '').toLowerCase().indexOf('pending') >= 0;
+        const isPendingStatus = (emp.status === 'Onboarding' || emp.status === 'Pending Approval');
+        const isNotApproved = emp.reviewStatus !== 'Approved' && !isCoreSeeded;
+
+        if (isPendingRole || isPendingStatus || isNotApproved) {
+          emp.status = 'Pending Approval';
+          emp.reviewStatus = 'Pending Super Admin Review';
+          if (!pendingSubmissionsMap[pid] || pendingSubmissionsMap[pid].reviewStatus === 'Approved') {
+            pendingSubmissionsMap[pid] = Object.assign({}, emp, {
+              pageId: pid,
+              reviewStatus: 'Pending Super Admin Review',
+              status: 'Pending Approval',
+              submittedAt: emp.submittedAt || emp.joiningDate || 'Today'
+            });
+          }
+        } else if (emp.status === 'Active' && emp.email) {
           registerApprovedEmployeeLogin(emp);
         }
       });
+
+      // Explicitly check for premkumar sukumar (premgeo38@gmail.com / NX-8964)
+      const premGeoKey = Object.keys(NOTION_EMPLOYEE_RECORDS).find(function(k) {
+        const r = NOTION_EMPLOYEE_RECORDS[k];
+        return r && (r.email === 'premgeo38@gmail.com' || r.empId === 'NX-8964' || (r.name && r.name.toLowerCase().indexOf('premkumar sukumar') >= 0));
+      });
+      if (premGeoKey) {
+        const premRec = NOTION_EMPLOYEE_RECORDS[premGeoKey];
+        if (premRec.reviewStatus !== 'Approved') {
+          premRec.status = 'Pending Approval';
+          premRec.reviewStatus = 'Pending Super Admin Review';
+          pendingSubmissionsMap[premGeoKey] = Object.assign({}, premRec, {
+            reviewStatus: 'Pending Super Admin Review',
+            status: 'Pending Approval',
+            submittedAt: premRec.submittedAt || 'Today'
+          });
+        }
+      } else {
+        // Seed premkumar sukumar as pending submission so Super Admin can review and approve him immediately!
+        const demoPremGeoId = 'agt-emp-premkumar-sukumar';
+        const demoPremGeo = {
+          pageId: demoPremGeoId,
+          name: 'premkumar sukumar',
+          empId: 'NX-8964',
+          email: 'premgeo38@gmail.com',
+          phone: '+91 94444 89640',
+          jobTitle: 'Pending Super Admin Assignment',
+          band: 'Band L4 · Consultant',
+          dept: 'Data Science',
+          status: 'Pending Approval',
+          reviewStatus: 'Pending Super Admin Review',
+          submittedAt: 'Today',
+          location: 'Bangalore HQ · Hybrid',
+          manager: 'SUKUMAR PREM KUMAR',
+          bloodGroup: 'O+ (Positive)',
+          nationality: 'Indian',
+          emergName: 'Sukumar',
+          emergRel: 'Father',
+          emergPhone: '+91 94444 89641',
+          address: '42, Tech Park Boulevard, Whitefield, Bangalore, Karnataka — 560066',
+          bankName: 'HDFC Bank',
+          bankAccount: '501008964012',
+          bankIfsc: 'HDFC0001092',
+          pan: 'ABZPK8964M',
+          uploadedDocs: [
+            { id: 'doc-aadhaar', title: 'National Identity Card (Aadhaar / National ID)', fileName: 'aadhaar_premkumar.pdf', status: 'Pending Verification', uploadedByOnboarding: true },
+            { id: 'doc-pan', title: 'Income Tax Permanent Account Number (PAN)', fileName: 'pan_card_premkumar.pdf', status: 'Pending Verification', uploadedByOnboarding: true },
+            { id: 'doc-cheque', title: 'Bank Account Proof (Cancelled Cheque / Passbook)', fileName: 'cheque_premkumar.pdf', status: 'Pending Verification', uploadedByOnboarding: true }
+          ]
+        };
+        NOTION_EMPLOYEE_RECORDS[demoPremGeoId] = demoPremGeo;
+        pendingSubmissionsMap[demoPremGeoId] = demoPremGeo;
+      }
+
+      savePendingSubmissionsMap();
+      saveAllEmployeeRecords();
     }
 
     function saveAllEmployeeRecords() {
@@ -4996,11 +5083,30 @@ Resume
         ? '<img alt="' + (emp.name || 'Employee') + '" class="w-7 h-7 rounded-full object-cover border border-apple-border" src="' + rowPhotoSrc + '"/>'
         : '<div class="w-7 h-7 rounded-full bg-apple-subtle border border-apple-border flex items-center justify-center text-[11px] font-semibold text-apple-primary">' + initials + '</div>';
       const shortBand = (emp.band || 'Band L5').split('·')[0].trim();
-      const statusBadge = (emp.status === 'Active')
-        ? '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active</span>'
-        : '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">' + (emp.status || 'Active') + '</span>';
-      const cleanPageId = (emp.pageId || '').replace(/-/g, '');
-      const actionHtml = '<button class="h-7 px-3 ' + (isPrem ? 'bg-apple-primary hover:bg-black text-white' : 'bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border') + ' rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View Dossier</button>';
+
+      const isCoreSeeded = (emp.empId === 'NX-8842' || emp.empId === 'NX-8845' || (emp.empId === 'NX-8852' && emp.reviewStatus === 'Approved'));
+      const isPendingApproval = !isCoreSeeded && (
+        emp.status === 'Onboarding' ||
+        emp.status === 'Pending Approval' ||
+        emp.reviewStatus === 'Pending Super Admin Review' ||
+        (emp.jobTitle || '').toLowerCase().indexOf('pending') >= 0 ||
+        emp.reviewStatus !== 'Approved'
+      );
+
+      const statusBadge = isPendingApproval
+        ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-apple-subtle text-apple-primary text-[11px] font-semibold border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Pending Approval</span>'
+        : (emp.status === 'Active')
+          ? '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-surface text-apple-primary text-[11px] font-medium border border-apple-border"><span class="w-1.5 h-1.5 rounded-full bg-apple-primary"></span>Active</span>'
+          : '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-apple-subtle text-apple-secondary text-[11px] font-medium border border-apple-borderSubtle">' + (emp.status || 'Active') + '</span>';
+
+      const actionHtml = isPendingApproval
+        ? '<div class="inline-flex items-center gap-1.5" onclick="event.stopPropagation()">' +
+            '<button class="h-7 px-3 bg-apple-primary hover:bg-black text-white rounded-full text-[11px] font-semibold transition-colors inline-flex items-center gap-1 shadow-sm" onclick="approveEmployeeSubmission(\'' + safePageId + '\')" type="button">' +
+              '<span class="material-symbols-outlined text-[13px]">check_circle</span><span>Approve</span>' +
+            '</button>' +
+            '<button class="h-7 px-2.5 bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View</button>' +
+          '</div>'
+        : '<button class="h-7 px-3 ' + (isPrem ? 'bg-apple-primary hover:bg-black text-white' : 'bg-apple-subtle hover:bg-apple-hover text-apple-primary border border-apple-border') + ' rounded-full text-[11px] font-medium transition-colors" onclick="openEmployeeDossier(\'' + safePageId + '\')" type="button">View Dossier</button>';
 
       return '<tr class="' + (isPrem ? 'bg-apple-subtle/60 hover:bg-apple-subtle' : 'hover:bg-apple-subtle/40') + ' transition-colors cursor-pointer" data-notion-page-id="' + safePageId + '" onclick="openEmployeeDossier(\'' + safePageId + '\')">' +
         '<td class="py-3 px-3 font-medium text-apple-primary flex items-center gap-2.5">' +
@@ -5154,12 +5260,7 @@ Resume
     // ============================================================================
     // 8. SHAREABLE EMPLOYEE ONBOARDING FORM (PHOTO + DOCS) & SUPER ADMIN APPROVAL
     // ============================================================================
-    let pendingSubmissionsMap = JSON.parse(localStorage.getItem('nexus_pending_submissions_v1') || '{}') || {};
     let onboardingUploadedDocsMap = {};
-
-    function savePendingSubmissionsMap() {
-      localStorage.setItem('nexus_pending_submissions_v1', JSON.stringify(pendingSubmissionsMap));
-    }
 
     function handleNewEmpModalPhotoSelect(event) {
       const file = event && event.target && event.target.files && event.target.files[0];
@@ -5525,19 +5626,32 @@ Resume
       const badge = document.getElementById('pendingApprovalCountBadge');
       if (!container) return;
 
-      // Merge any Notion records with Status === 'Onboarding' into pendingSubmissionsMap
+      // Merge any records in NOTION_EMPLOYEE_RECORDS requiring Super Admin approval
       Object.keys(NOTION_EMPLOYEE_RECORDS).forEach(function(pid) {
         const r = NOTION_EMPLOYEE_RECORDS[pid];
-        if (r && r.status === 'Onboarding' && !pendingSubmissionsMap[pid]) {
-          pendingSubmissionsMap[pid] = Object.assign({}, r, {
-            reviewStatus: 'Pending Super Admin Review',
-            submittedAt: r.joiningDate || 'Enterprise Directory Sync'
-          });
+        if (!r) return;
+        const isCoreSeeded = (r.empId === 'NX-8842' || r.empId === 'NX-8845' || (r.empId === 'NX-8852' && r.reviewStatus === 'Approved'));
+        const isPendingRole = (r.jobTitle || '').toLowerCase().indexOf('pending') >= 0;
+        const isPendingStatus = (r.status === 'Onboarding' || r.status === 'Pending Approval');
+        const isNotApproved = r.reviewStatus !== 'Approved' && !isCoreSeeded;
+
+        if (isPendingRole || isPendingStatus || isNotApproved) {
+          if (!pendingSubmissionsMap[pid] || pendingSubmissionsMap[pid].reviewStatus === 'Approved') {
+            pendingSubmissionsMap[pid] = Object.assign({}, r, {
+              pageId: pid,
+              reviewStatus: 'Pending Super Admin Review',
+              status: 'Pending Approval',
+              submittedAt: r.submittedAt || r.joiningDate || 'Today'
+            });
+          }
         }
       });
 
       const items = Object.keys(pendingSubmissionsMap).map(function(k) { return pendingSubmissionsMap[k]; }).filter(function(item) {
-        return item && item.reviewStatus !== 'Approved';
+        if (!item) return false;
+        const isCoreSeeded = (item.empId === 'NX-8842' || item.empId === 'NX-8845' || (item.empId === 'NX-8852' && item.reviewStatus === 'Approved'));
+        if (isCoreSeeded) return false;
+        return item.reviewStatus !== 'Approved' || item.status === 'Pending Approval' || item.status === 'Onboarding' || (item.jobTitle || '').toLowerCase().indexOf('pending') >= 0;
       });
 
       if (badge) {
@@ -5637,7 +5751,7 @@ Resume
       item.status = 'Active';
       item.reviewStatus = 'Approved';
       item.lockedAfterApproval = true;
-      if (item.jobTitle === 'Pending Super Admin Assignment' || !item.jobTitle) {
+      if (item.jobTitle === 'Pending Super Admin Assignment' || !item.jobTitle || (item.jobTitle || '').toLowerCase().indexOf('pending') >= 0) {
         item.jobTitle = 'Consultant';
       }
       item.band = item.band || 'Band L4 · Consultant';
@@ -6355,8 +6469,14 @@ Resume
               const gross = (props['Monthly Gross (INR)'] && props['Monthly Gross (INR)'].number) || (isPrem ? 185000 : 45000);
               const basic = (props['Basic Salary (INR)'] && props['Basic Salary (INR)'].number) || Math.round(gross * 0.5);
               const hra = (props['HRA (INR)'] && props['HRA (INR)'].number) || Math.round(gross * 0.2);
-              const special = (props['Special Allowance (INR)'] && props['Special Allowance (INR)'].number) || (gross - basic - hra);
-              const status = (props['Status'] && props['Status'].status && props['Status'].status.name) || 'Active';
+              const existingRec = NOTION_EMPLOYEE_RECORDS[page.id];
+              const isLocallyPending = existingRec && (
+                existingRec.reviewStatus === 'Pending Super Admin Review' ||
+                existingRec.status === 'Pending Approval' ||
+                existingRec.status === 'Onboarding' ||
+                (existingRec.jobTitle || '').toLowerCase().indexOf('pending') >= 0
+              ) && (existingRec.reviewStatus !== 'Approved');
+              const status = isLocallyPending ? 'Pending Approval' : ((props['Status'] && props['Status'].status && props['Status'].status.name) || (existingRec && existingRec.status) || 'Active');
               const addrArr = (props['Residential Address'] && props['Residential Address'].rich_text) || [];
               const address = addrArr.length ? addrArr[0].plain_text : '';
               const emergArr = (props['Emergency Contact Name'] && props['Emergency Contact Name'].rich_text) || [];
@@ -6383,7 +6503,7 @@ Resume
                 bankName: bankRaw || (NOTION_EMPLOYEE_RECORDS[page.id] && NOTION_EMPLOYEE_RECORDS[page.id].bankName) || ''
               });
               NOTION_EMPLOYEE_RECORDS[page.id] = recObj;
-              if (status === 'Active') {
+              if (status === 'Active' && !isLocallyPending) {
                 registerApprovedEmployeeLogin(recObj);
               }
 
