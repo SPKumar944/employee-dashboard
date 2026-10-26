@@ -1356,6 +1356,10 @@ Resume
         <span class="material-symbols-outlined text-[15px]">open_in_new</span>
         <span>Open Onboarding Form</span>
       </button>
+      <button class="h-8 px-3.5 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1.5 transition-colors" onclick="openStandaloneEmployeeForm(); fillDemoEmployeeData();" type="button" title="Open form with pre-filled dummy employee data">
+        <span class="material-symbols-outlined text-[15px]">auto_fix_high</span>
+        <span>Test Dummy Signup</span>
+      </button>
     </div>
   </div>
 
@@ -2448,6 +2452,10 @@ Resume
         </div>
       </div>
       <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+        <button type="button" onclick="fillDemoEmployeeData()" class="h-8 px-3 rounded-full bg-apple-primary hover:bg-black text-white text-[11px] font-semibold flex items-center gap-1 shadow-sm transition-colors" title="Auto-fill complete dummy employee details for testing">
+          <span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+          <span>Fill Dummy Data</span>
+        </button>
         <button type="button" onclick="copyShareableFormLink()" class="h-8 px-3 rounded-full bg-apple-subtle hover:bg-apple-hover text-apple-primary text-[11px] font-semibold border border-apple-border flex items-center gap-1">
           <span class="material-symbols-outlined text-[14px]">content_copy</span>
           <span>Copy Link</span>
@@ -2697,6 +2705,14 @@ Resume
         pan: 'ABZPK4921D',
         role: 'Geospatial Data Science Intern (Band L3)',
         secret: 'JBSWY3DPEHPK3PXP'
+      },
+      'vikram.malhotra@agtintelligence.com': {
+        name: 'Vikram Malhotra',
+        id: 'NX-8852',
+        pan: 'ABZPM9821K',
+        role: 'Consultant (Band L4)',
+        secret: 'JBSWY3DPEHPK3PXP',
+        pageId: '3b73448d-38a7-8142-9999-ea21bfa08852'
       }
     };
 
@@ -4669,6 +4685,39 @@ Resume
         bankAccount: '501004829104',
         bankIfsc: 'HDFC0001092',
         pan: 'ABZPK4921D'
+      },
+      '3b73448d-38a7-8142-9999-ea21bfa08852': {
+        pageId: '3b73448d-38a7-8142-9999-ea21bfa08852',
+        name: 'Vikram Malhotra',
+        empId: 'NX-8852',
+        email: 'vikram.malhotra@agtintelligence.com',
+        phone: '+91 98765 43210',
+        jobTitle: 'Consultant',
+        band: 'Band L4 · Consultant',
+        dept: 'Data Science',
+        status: 'Active',
+        reviewStatus: 'Approved',
+        lockedAfterApproval: true,
+        joiningDate: '26/10/2026',
+        location: 'Bangalore HQ · Hybrid',
+        manager: 'Ananya Sharma (VP, Data & Analytics)',
+        basic: 65000,
+        hra: 26000,
+        travel: 6000,
+        medical: 4000,
+        special: 19000,
+        pf: 7800,
+        pt: 200,
+        tds: 5000,
+        emergName: 'Sunita Malhotra',
+        emergRel: 'Mother',
+        emergPhone: '+91 98765 43211',
+        bloodGroup: 'O+ (Positive)',
+        address: 'Flat 402, Prestige Palms, Whitefield Main Road, Bangalore, Karnataka — 560066',
+        bankName: 'HDFC Bank',
+        bankAccount: '501004829104',
+        bankIfsc: 'HDFC0001092',
+        pan: 'ABZPM9821K'
       }
     };
 
@@ -5264,6 +5313,61 @@ Resume
         formEl.classList.remove('hidden');
       }
       if (successCard) successCard.classList.add('hidden');
+    }
+
+    function fillDemoEmployeeData() {
+      const setVal = function(id, v) {
+        const el = document.getElementById(id);
+        if (el) el.value = v;
+      };
+      setVal('formEmpFullName', 'Rohan Sharma');
+      setVal('formEmpEmail', 'rohan.sharma@agtintelligence.com');
+      setVal('formEmpPhone', '+91 98112 33445');
+      setVal('formEmpDob', '1996-08-22');
+      setVal('formEmpBlood', 'B+ (Positive)');
+      setVal('formEmpNationality', 'Indian');
+      setVal('formEmpEmergencyName', 'Kavita Sharma (Mother)');
+      setVal('formEmpEmergencyPhone', '+91 98112 33446');
+      setVal('formEmpAddress', 'Apartment 704, Godrej Air, Hoodi Circle, Whitefield, Bangalore, Karnataka — 560048');
+      setVal('formEmpBankName', 'ICICI Bank');
+      setVal('formEmpBankAccount', '001205018932');
+      setVal('formEmpBankIfsc', 'ICIC0000012');
+      setVal('formEmpPan', 'ABZPR7729L');
+
+      // Pre-fill and attach all 6 compliance documents
+      DEFAULT_COMPLIANCE_DOCS.forEach(function(doc) {
+        onboardingUploadedDocsMap[doc.id] = {
+          id: doc.id,
+          title: doc.title,
+          subtitle: doc.title + ' (Verified Attachment · 1.4 MB)',
+          fileName: doc.fileName || (doc.id + '.pdf'),
+          status: 'Uploaded',
+          uploadedOn: 'Today',
+          uploadedByOnboarding: true
+        };
+        const statusSpan = document.getElementById('status_' + doc.id);
+        if (statusSpan) {
+          statusSpan.innerText = 'Attached ✓';
+          statusSpan.className = 'text-[10px] font-semibold text-apple-primary px-2 py-0.5 rounded bg-apple-surface border border-apple-border';
+        }
+      });
+
+      // Sample avatar photo (clean SVG data URL)
+      const mockPhoto = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><rect width='200' height='200' fill='%231d1d1f'/><circle cx='100' cy='75' r='38' fill='%23ffffff'/><path d='M35 175 C35 130 65 115 100 115 C135 115 165 130 165 175 Z' fill='%23ffffff'/></svg>";
+      const hiddenPhoto = document.getElementById('formEmpPhotoDataUrl');
+      const previewImg = document.getElementById('formEmpPhotoPreviewImg');
+      const placeholder = document.getElementById('formEmpPhotoPlaceholderIcon');
+      const photoStatus = document.getElementById('formEmpPhotoStatusText');
+
+      if (hiddenPhoto) hiddenPhoto.value = mockPhoto;
+      if (previewImg) { previewImg.src = mockPhoto; previewImg.classList.remove('hidden'); }
+      if (placeholder) placeholder.classList.add('hidden');
+      if (photoStatus) {
+        photoStatus.innerText = 'Photo Attached';
+        photoStatus.classList.remove('hidden');
+      }
+
+      showToast('Dummy employee details auto-filled! Click "Submit Form & Verified Documents" to submit.');
     }
 
     async function submitStandaloneEmployeeForm(e) {
