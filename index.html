@@ -4439,10 +4439,10 @@ Resume
     // 5. ENTERPRISE CLOUD DATA SOURCE LIVE SYNC ENGINE
     // ============================================================================
     const NOTION_CONFIG = {
-      dataSourceId: '46e3448d-38a7-8393-a64d-07425010c0ff',
-      targetDataSourceId: '46e3448d-38a7-8393-a64d-07425010c0ff',
+      dataSourceId: '5313448d-38a7-82b3-9ec3-816f042abf6f',
+      targetDataSourceId: '5313448d-38a7-82b3-9ec3-816f042abf6f',
       premRowId: '3b63448d-38a7-8193-b60f-ffc05b1aad75',
-      encodedToken: ['bnRuXzE0MDM1MDA3NjU1', 'NWVOMGdhbE9tWXV5V1RP', 'MWd4QXNXMDFLWU1OdnA1bWFyMQ=='].join('')
+      encodedToken: 'bnRuXzE0MDM1MDA3NjU1NWVHMGxHYWxPbVl1eVdUTzFneEFzVzAxS1lNTnZwNW1hcjE='
     };
 
     async function callNotionEndpoint(url, method, bodyObj, apiVersion) {
@@ -5154,8 +5154,7 @@ Resume
 
       const newPagePayload = {
         parent: {
-          type: 'data_source_id',
-          data_source_id: NOTION_CONFIG.targetDataSourceId
+          database_id: NOTION_CONFIG.targetDataSourceId
         },
         properties: {
           'Name': { title: [{ text: { content: name } }] },
@@ -5534,7 +5533,7 @@ Resume
             'https://api.notion.com/v1/pages',
             'POST',
             {
-              parent: { type: 'data_source_id', data_source_id: NOTION_CONFIG.targetDataSourceId },
+              parent: { database_id: NOTION_CONFIG.targetDataSourceId },
               properties: notionProperties
             },
             '2025-09-03'
@@ -6442,10 +6441,10 @@ Resume
     async function loadDirectoryFromNotion(showToastFlag) {
       try {
         const res = await callNotionEndpoint(
-          'https://api.notion.com/v1/data_sources/' + NOTION_CONFIG.targetDataSourceId + '/query',
+          'https://api.notion.com/v1/databases/' + NOTION_CONFIG.targetDataSourceId + '/query',
           'POST',
           { page_size: 50 },
-          '2025-09-03'
+          '2022-06-28'
         );
         if (res && Array.isArray(res.results) && res.results.length > 0) {
           const tbody = document.getElementById('directoryTableBody');
